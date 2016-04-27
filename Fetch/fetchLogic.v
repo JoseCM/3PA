@@ -53,13 +53,8 @@ module fetchLogic(
        .PCStall(PCStall),
        .Predict(Predict),
        .PCSource(PCSource),
-       .JmpAddr(JmpAddr)
-    );
-        
-    InstrFetch instfetch(
-       .Clk(Clk),
-       .Rst(Rst),
-       .InstrAddr(InstrAddr),
+       .JmpAddr(JmpAddr),
+       
        .IF_ID_Flush(IF_ID_Flush),
        .IF_ID_Stall(IF_ID_Stall),
        .IR(IR),
