@@ -31,7 +31,8 @@ module ControlUnit(
         output reg RS2_Sel,
         output reg [14:0] EXStage,
         output reg [1:0] MAStage,
-        output reg [2:0] WBStage
+        output reg [2:0] WBStage,
+        output reg IFid__Need_Rs2
     );
     
 always @(opcode or bit16 or CondBits) 
@@ -41,6 +42,7 @@ begin
         begin
             SignExt <= 2'bx;
             RS2_Sel <= 1'bx;
+            IFid__Need_Rs2 <= 0;
             
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -65,6 +67,8 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
+
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
             EXStage[`EX_ALUCTRL] <= 3'b001;
@@ -89,6 +93,8 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
+            
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
             EXStage[`EX_ALUCTRL] <= 3'b010;
@@ -112,6 +118,7 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
 
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -136,6 +143,8 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
+            
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
             EXStage[`EX_ALUCTRL] <= 3'b100;
@@ -159,6 +168,7 @@ begin
         begin
             SignExt <= 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 0;
            
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -183,6 +193,7 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
             
             /* EX */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -207,6 +218,7 @@ begin
         begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
             
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -231,6 +243,7 @@ begin
         begin
             SignExt <= 2'b11;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 0;
         
             /* Ex */
             EXStage[`EX_CondBits] <= CondBits;
@@ -255,6 +268,7 @@ begin
         begin
             SignExt <= 2'b00;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 0;
         
             /* EX */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -279,6 +293,7 @@ begin
         begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 0;
         
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -303,6 +318,7 @@ begin
         begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 0;
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -327,6 +343,7 @@ begin
         begin
             SignExt <= 2'b01;
             RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= 1;//?
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -337,7 +354,7 @@ begin
             EXStage[`EX_JMP] <= 0;
             EXStage[`EX_BXX ] <= 0;
             EXStage[`EX_NEED_RS1] <= 1;
-            EXStage[`EX_NEED_RS2] <= 0;
+            EXStage[`EX_NEED_RS2] <= 0;//?
             
             /* MA */
             MAStage[`MA_RW] <= 0; 
@@ -351,6 +368,7 @@ begin
         begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b1;
+            IFid__Need_Rs2 <= 0;
         
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -375,6 +393,7 @@ begin
         begin
             SignExt <= 2'b01;
             RS2_Sel <= 1'b1;
+            IFid__Need_Rs2 <= 1;
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;

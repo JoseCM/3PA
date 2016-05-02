@@ -38,6 +38,11 @@ module idStage(
     input clk,
     input reset,
     
+    /*Forward signals*/
+    input [31:0]fwdRS2,
+    input fwdRS2_Sel,
+
+    
     /*for testing without ctrl_unit*/
     //*
     input iR2Select,
@@ -52,26 +57,28 @@ module idStage(
     /*output R2_Select*/
     /*output [1:0]SignExtCtrl*/
     /*output [x:0]CTRL*/
+   
+    wire [31:0]RfRs2;
     
     
-    
+    wire [4:0] Rs2 = iIR[`RS2];
+    wire [4:0] Rst = iIR[`RST];
+    assign woRs1Addr = iIR[`RS1];
+    assign woRs2Addr = (iR2Select) ? Rst : Rs2; //mux
+    assign woOP2 = (fwdRS2_Sel) ? fwdRS2 : RfRs2;
+    assign woRdsAddr = iIR[`RDst];
+        
     registerFile regF(
         .iRAddr1(woRs1Addr),
         .iRAddr2(woRs2Addr),
         .oData1(woOP1),
-        .oData2(woOP2),
+        .oData2(RfRs2),
         .iWAddr(WAddr),
         .iWData(WData),
         .we(rf_we),
         .clk(clk),
         .reset(reset)
     );
-        
-    wire [4:0] Rs2 = iIR[`RS2];
-    wire [4:0] Rst = iIR[`RST];
-    assign woRs1Addr = iIR[`RS1];
-    assign woRs2Addr = (iR2Select) ? Rst : Rs2; //mux
-    assign woRdsAddr = iIR[`RDst];
     
     signExtend sext(
         .msb(iSignExtCtrl),

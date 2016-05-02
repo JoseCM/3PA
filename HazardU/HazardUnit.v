@@ -26,6 +26,7 @@ module HazardUnit(
     //FORWARD UNIT
     input IDex__Need_Rs2,
     input IDex__Need_Rs1,
+    input IFid__Need_Rs2,
     input [4:0] IDex__Rs1,
     input [4:0] IDex__Rs2,
     input EXmem__RW_MEM,
@@ -37,6 +38,7 @@ module HazardUnit(
     input MEMwb__R_WE,
     output [1:0] OP1_ExS,
     output [1:0] OP2_ExS,
+    output OP2_IdS,
     
     //BRANCH UNIT
     input   PcMatchValid,
@@ -71,6 +73,8 @@ module HazardUnit(
     FU ForwardUnit(
         .clk(clk),
         .rst(rst),
+        ///////////////////////////IF_ID
+        .IFid__Need_Rs2(IFid__Need_Rs2),
         //////////////////////ID_EX REG
         .IDex__Need_Rs2(IDex__Need_Rs2),
         .IDex__Need_Rs1(IDex__Need_Rs1),
@@ -89,6 +93,7 @@ module HazardUnit(
         //////////////////////OUTPUT
         .OP1_ExS(OP1_ExS),
         .OP2_ExS(OP2_ExS),
+        .OP2_IdS(OP2_IdS),
         .Need_Stall(Need_Stall)
         );
     

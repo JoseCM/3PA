@@ -38,6 +38,10 @@ module IDControlUnit(
     /*Input to stall or flush*/
     input stall,
     input flush,
+    /*input forward unit*/
+    input [31:0]fwdRS2,
+    input fwdRS2_Sel,
+    
     /*Output pipeline registers to execute*/
         /*Fowarded from fetch*/
     output [`IC_WIDTH-1:0] oIC,
@@ -54,7 +58,10 @@ module IDControlUnit(
     
     output [`EX_WIDTH-1:0] oEX,   
     output [`MA_WIDTH-1:0] oMA,
-    output [`WB_WIDTH-1:0] oWB
+    output [`WB_WIDTH-1:0] oWB,
+    
+    /*forward unit signal*/
+    output IFid__Need_Rs2
     );
     
     wire [`IDEX_WIDTH-1:0] idStageOutBus;
@@ -70,9 +77,10 @@ module IDControlUnit(
     .RS2_Sel(iR2Select),
     .EXStage(idStageOutBus[`IDEX_EX]),
     .MAStage(idStageOutBus[`IDEX_MA]),
-    .WBStage(idStageOutBus[`IDEX_WB])
-    );
+    .WBStage(idStageOutBus[`IDEX_WB]),
     
+    .IFid__Need_Rs2(IFid__Need_Rs2)
+    );
     
     idStage idStage(
     .iIR(iIR),
@@ -88,6 +96,9 @@ module IDControlUnit(
     /*Normal Clk and reset*/
     .clk(Clk),
     .reset(reset),
+    /*forward unit signals*/
+    .fwdRS2(fwdRS2),
+    .fwdRS2_Sel(fwdRS2_Sel),
     
     .iR2Select(iR2Select),
     .iSignExtCtrl(iSignExtCtrl)

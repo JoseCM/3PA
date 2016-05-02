@@ -131,17 +131,22 @@ module processor(
          .rf_we(WB_RWE),
          .WAddr(WB_RdsAddr),
          .WData(DataFromWB),
-        /*Input pipeline registers from fetch*/
+         /*Input pipeline registers from fetch*/
          .iIC(ID_IAddr),
          .iPPCCB(ID_PPCCB),
          .iPC(ID_PC), 
          .iValid(ID_PCSrc),
          .iIR(ID_IR),
-        /*Input to stall or flush*/
+         /*Input to stall or flush*/
          .stall(IDEX_Stall),
          .flush(IDEX_Flush),
-        /*Output pipeline registers to execute*/
-            /*Fowarded from fetch*/
+         /*forward unit signals from wb*/
+         .fwdRS2(DataFromWB),
+         .fwdRS2_Sel(fwdRS2_Sel),
+         /*forward unit signals from decode*/
+         .IFid__Need_Rs2(IFid__Need_Rs2),
+         /*Output pipeline registers to execute*/
+         /*Fowarded from fetch*/
 
          .oIC(EX_IC),
          .oPPCCB(EX_PPCCB),
@@ -297,6 +302,8 @@ module processor(
          
          .IDex__Need_Rs2(w_need_Rs2),
          .IDex__Need_Rs1(w_need_Rs1),
+         .IFid__Need_Rs2(IFid__Need_Rs2),
+         
          .IDex__Rs1(w_Rs1_addr),
          .IDex__Rs2(w_Rs2_addr),
          .EXmem__RW_MEM(HU_MEM_RW[`MA_RW]),
@@ -308,6 +315,7 @@ module processor(
          .MEMwb__R_WE(WB_RWE),
          .OP1_ExS(EX_Op1_ExS),
          .OP2_ExS(EX_Op2_ExS),
+         .OP2_IdS(fwdRS2_Sel),
 
          //BRANCH UNIT
          .PcMatchValid(BR_Valid),
