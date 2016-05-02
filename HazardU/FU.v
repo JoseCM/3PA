@@ -51,7 +51,8 @@ module FU(
                                                                                                                              2'b00;                                                                                
                                                                                                                                                                                                                                           
     assign OP2_ExS = ( (EXmem__R_WE) && (EXmem__RDst_S!=`MemtoReg) && (IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2) )            ?   2'b10:
-                     ( (MEMwb__R_WE) && (IDex__Need_Rs2) && (EXmem__Rdst!=IDex__Rs2 | (BubbleMA && EXmem__Rdst == 0)) && (MEMwb__Rdst==IDex__Rs2) )   ?   2'b01:    
+                     ( (MEMwb__R_WE) && (IDex__Need_Rs2) && (EXmem__Rdst!=IDex__Rs2 | (BubbleMA && EXmem__Rdst == 0)) && (MEMwb__Rdst==IDex__Rs2) )   ?   2'b01: 
+                     ( EXmem__R_WE && IDex__Need_Rs2 && (MEMwb__Rdst==IDex__Rs2) ) ? 2'b01 : 
                                                                                                                                     2'b00;
                                                                                                                             
     assign Need_Stall = ( (!EXmem__RW_MEM && EXmem__MemEnable) && ( ((IDex__Need_Rs1) && (EXmem__Rdst==IDex__Rs1)) || ((IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2)) ))     ?   1'b1:
