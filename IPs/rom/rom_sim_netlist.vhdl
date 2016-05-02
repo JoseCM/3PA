@@ -1,9 +1,9 @@
 -- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
--- Date        : Tue Apr 26 10:45:08 2016
--- Host        : DESKTOP-ONL2NNM running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim D:/3PA_Processor/IPs/rom/rom_sim_netlist.vhdl
+-- Date        : Sun May 01 11:00:02 2016
+-- Host        : Regd running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim C:/Users/rafael/Desktop/git/3PA_v2/3PA/IPs/rom/rom_sim_netlist.vhdl
 -- Design      : rom
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -103,10 +103,7 @@ end rom_dist_mem_gen_v8_0_9;
 
 architecture STRUCTURE of rom_dist_mem_gen_v8_0_9 is
   signal \<const0>\ : STD_LOGIC;
-  signal \^spo\ : STD_LOGIC_VECTOR ( 31 downto 22 );
-  attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of \spo[27]_INST_0\ : label is "soft_lutpair0";
-  attribute SOFT_HLUTNM of \spo[3]_INST_0\ : label is "soft_lutpair0";
+  signal \^spo\ : STD_LOGIC_VECTOR ( 31 downto 0 );
 begin
   dpo(31) <= \<const0>\;
   dpo(30) <= \<const0>\;
@@ -204,18 +201,18 @@ begin
   qspo(2) <= \<const0>\;
   qspo(1) <= \<const0>\;
   qspo(0) <= \<const0>\;
-  spo(31) <= \^spo\(31);
-  spo(30) <= \^spo\(28);
-  spo(29) <= \^spo\(31);
-  spo(28) <= \^spo\(28);
-  spo(27) <= \^spo\(28);
-  spo(26 downto 22) <= \^spo\(26 downto 22);
+  spo(31 downto 27) <= \^spo\(31 downto 27);
+  spo(26) <= \<const0>\;
+  spo(25) <= \<const0>\;
+  spo(24) <= \<const0>\;
+  spo(23) <= \<const0>\;
+  spo(22) <= \^spo\(22);
   spo(21) <= \<const0>\;
   spo(20) <= \<const0>\;
   spo(19) <= \<const0>\;
   spo(18) <= \<const0>\;
-  spo(17) <= \<const0>\;
-  spo(16) <= \<const0>\;
+  spo(17) <= \^spo\(16);
+  spo(16) <= \^spo\(16);
   spo(15) <= \<const0>\;
   spo(14) <= \<const0>\;
   spo(13) <= \<const0>\;
@@ -227,86 +224,109 @@ begin
   spo(7) <= \<const0>\;
   spo(6) <= \<const0>\;
   spo(5) <= \<const0>\;
-  spo(4 downto 0) <= \^spo\(26 downto 22);
+  spo(4) <= \^spo\(4);
+  spo(3) <= \^spo\(4);
+  spo(2) <= \^spo\(2);
+  spo(1) <= \^spo\(16);
+  spo(0) <= \^spo\(0);
 GND: unisim.vcomponents.GND
      port map (
       G => \<const0>\
     );
 \spo[0]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"00070F0F00000000"
+      INIT => X"0000000000000009"
     )
         port map (
-      I0 => a(1),
-      I1 => a(2),
+      I0 => a(0),
+      I1 => a(1),
       I2 => a(5),
-      I3 => a(3),
-      I4 => a(4),
-      I5 => a(0),
-      O => \^spo\(22)
+      I3 => a(4),
+      I4 => a(3),
+      I5 => a(2),
+      O => \^spo\(0)
     );
 \spo[1]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"00070F0F00000000"
+      INIT => X"0001000000000000"
+    )
+        port map (
+      I0 => a(2),
+      I1 => a(3),
+      I2 => a(4),
+      I3 => a(5),
+      I4 => a(1),
+      I5 => a(0),
+      O => \^spo\(16)
+    );
+\spo[22]_INST_0\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0000000300000004"
     )
         port map (
       I0 => a(0),
       I1 => a(2),
-      I2 => a(5),
-      I3 => a(3),
-      I4 => a(4),
+      I2 => a(3),
+      I3 => a(4),
+      I4 => a(5),
       I5 => a(1),
-      O => \^spo\(23)
+      O => \^spo\(22)
     );
-\spo[27]_INST_0\: unisim.vcomponents.LUT3
+\spo[27]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"07"
+      INIT => X"000000040000000F"
     )
         port map (
-      I0 => a(4),
-      I1 => a(3),
-      I2 => a(5),
+      I0 => a(2),
+      I1 => a(0),
+      I2 => a(3),
+      I3 => a(4),
+      I4 => a(5),
+      I5 => a(1),
+      O => \^spo\(27)
+    );
+\spo[28]_INST_0\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0000000400000003"
+    )
+        port map (
+      I0 => a(1),
+      I1 => a(0),
+      I2 => a(3),
+      I3 => a(4),
+      I4 => a(5),
+      I5 => a(2),
       O => \^spo\(28)
     );
 \spo[29]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0020000000000000"
+      INIT => X"0000000300000002"
     )
         port map (
-      I0 => a(1),
-      I1 => a(3),
-      I2 => a(4),
-      I3 => a(5),
-      I4 => a(0),
+      I0 => a(0),
+      I1 => a(1),
+      I2 => a(5),
+      I3 => a(4),
+      I4 => a(3),
       I5 => a(2),
-      O => \^spo\(31)
+      O => \^spo\(29)
     );
 \spo[2]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0515151500000000"
+      INIT => X"0000000000000001"
     )
         port map (
-      I0 => a(5),
+      I0 => a(2),
       I1 => a(3),
       I2 => a(4),
-      I3 => a(1),
-      I4 => a(0),
-      I5 => a(2),
-      O => \^spo\(24)
+      I3 => a(5),
+      I4 => a(1),
+      I5 => a(0),
+      O => \^spo\(2)
     );
-\spo[3]_INST_0\: unisim.vcomponents.LUT3
+\spo[30]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"10"
-    )
-        port map (
-      I0 => a(5),
-      I1 => a(4),
-      I2 => a(3),
-      O => \^spo\(25)
-    );
-\spo[4]_INST_0\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"00000000007F0000"
+      INIT => X"0000000000000037"
     )
         port map (
       I0 => a(0),
@@ -315,7 +335,33 @@ GND: unisim.vcomponents.GND
       I3 => a(5),
       I4 => a(4),
       I5 => a(3),
-      O => \^spo\(26)
+      O => \^spo\(30)
+    );
+\spo[31]_INST_0\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0000000200000000"
+    )
+        port map (
+      I0 => a(2),
+      I1 => a(3),
+      I2 => a(4),
+      I3 => a(5),
+      I4 => a(1),
+      I5 => a(0),
+      O => \^spo\(31)
+    );
+\spo[3]_INST_0\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0000000100000006"
+    )
+        port map (
+      I0 => a(0),
+      I1 => a(2),
+      I2 => a(3),
+      I3 => a(4),
+      I4 => a(5),
+      I5 => a(1),
+      O => \^spo\(4)
     );
 end STRUCTURE;
 library IEEE;

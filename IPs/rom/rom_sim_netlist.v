@@ -1,9 +1,9 @@
 // Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
-// Date        : Tue Apr 26 10:45:07 2016
-// Host        : DESKTOP-ONL2NNM running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim D:/3PA_Processor/IPs/rom/rom_sim_netlist.v
+// Date        : Sun May 01 11:00:02 2016
+// Host        : Regd running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim C:/Users/rafael/Desktop/git/3PA_v2/3PA/IPs/rom/rom_sim_netlist.v
 // Design      : rom
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -127,7 +127,7 @@ module rom_dist_mem_gen_v8_0_9
 
   wire \<const0> ;
   wire [5:0]a;
-  wire [31:22]\^spo ;
+  wire [31:0]\^spo ;
 
   assign dpo[31] = \<const0> ;
   assign dpo[30] = \<const0> ;
@@ -225,18 +225,18 @@ module rom_dist_mem_gen_v8_0_9
   assign qspo[2] = \<const0> ;
   assign qspo[1] = \<const0> ;
   assign qspo[0] = \<const0> ;
-  assign spo[31] = \^spo [31];
-  assign spo[30] = \^spo [28];
-  assign spo[29] = \^spo [31];
-  assign spo[28] = \^spo [28];
-  assign spo[27] = \^spo [28];
-  assign spo[26:22] = \^spo [26:22];
+  assign spo[31:27] = \^spo [31:27];
+  assign spo[26] = \<const0> ;
+  assign spo[25] = \<const0> ;
+  assign spo[24] = \<const0> ;
+  assign spo[23] = \<const0> ;
+  assign spo[22] = \^spo [22];
   assign spo[21] = \<const0> ;
   assign spo[20] = \<const0> ;
   assign spo[19] = \<const0> ;
   assign spo[18] = \<const0> ;
-  assign spo[17] = \<const0> ;
-  assign spo[16] = \<const0> ;
+  assign spo[17] = \^spo [16];
+  assign spo[16] = \^spo [16];
   assign spo[15] = \<const0> ;
   assign spo[14] = \<const0> ;
   assign spo[13] = \<const0> ;
@@ -248,75 +248,113 @@ module rom_dist_mem_gen_v8_0_9
   assign spo[7] = \<const0> ;
   assign spo[6] = \<const0> ;
   assign spo[5] = \<const0> ;
-  assign spo[4:0] = \^spo [26:22];
+  assign spo[4] = \^spo [4];
+  assign spo[3] = \^spo [4];
+  assign spo[2] = \^spo [2];
+  assign spo[1] = \^spo [16];
+  assign spo[0] = \^spo [0];
   GND GND
        (.G(\<const0> ));
   LUT6 #(
-    .INIT(64'h00070F0F00000000)) 
+    .INIT(64'h0000000000000009)) 
     \spo[0]_INST_0 
-       (.I0(a[1]),
-        .I1(a[2]),
-        .I2(a[5]),
-        .I3(a[3]),
-        .I4(a[4]),
-        .I5(a[0]),
-        .O(\^spo [22]));
-  LUT6 #(
-    .INIT(64'h00070F0F00000000)) 
-    \spo[1]_INST_0 
        (.I0(a[0]),
-        .I1(a[2]),
+        .I1(a[1]),
         .I2(a[5]),
-        .I3(a[3]),
-        .I4(a[4]),
-        .I5(a[1]),
-        .O(\^spo [23]));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
-  LUT3 #(
-    .INIT(8'h07)) 
-    \spo[27]_INST_0 
-       (.I0(a[4]),
-        .I1(a[3]),
-        .I2(a[5]),
-        .O(\^spo [28]));
+        .I3(a[4]),
+        .I4(a[3]),
+        .I5(a[2]),
+        .O(\^spo [0]));
   LUT6 #(
-    .INIT(64'h0020000000000000)) 
-    \spo[29]_INST_0 
-       (.I0(a[1]),
+    .INIT(64'h0001000000000000)) 
+    \spo[1]_INST_0 
+       (.I0(a[2]),
         .I1(a[3]),
         .I2(a[4]),
         .I3(a[5]),
-        .I4(a[0]),
-        .I5(a[2]),
-        .O(\^spo [31]));
+        .I4(a[1]),
+        .I5(a[0]),
+        .O(\^spo [16]));
   LUT6 #(
-    .INIT(64'h0515151500000000)) 
+    .INIT(64'h0000000300000004)) 
+    \spo[22]_INST_0 
+       (.I0(a[0]),
+        .I1(a[2]),
+        .I2(a[3]),
+        .I3(a[4]),
+        .I4(a[5]),
+        .I5(a[1]),
+        .O(\^spo [22]));
+  LUT6 #(
+    .INIT(64'h000000040000000F)) 
+    \spo[27]_INST_0 
+       (.I0(a[2]),
+        .I1(a[0]),
+        .I2(a[3]),
+        .I3(a[4]),
+        .I4(a[5]),
+        .I5(a[1]),
+        .O(\^spo [27]));
+  LUT6 #(
+    .INIT(64'h0000000400000003)) 
+    \spo[28]_INST_0 
+       (.I0(a[1]),
+        .I1(a[0]),
+        .I2(a[3]),
+        .I3(a[4]),
+        .I4(a[5]),
+        .I5(a[2]),
+        .O(\^spo [28]));
+  LUT6 #(
+    .INIT(64'h0000000300000002)) 
+    \spo[29]_INST_0 
+       (.I0(a[0]),
+        .I1(a[1]),
+        .I2(a[5]),
+        .I3(a[4]),
+        .I4(a[3]),
+        .I5(a[2]),
+        .O(\^spo [29]));
+  LUT6 #(
+    .INIT(64'h0000000000000001)) 
     \spo[2]_INST_0 
-       (.I0(a[5]),
+       (.I0(a[2]),
         .I1(a[3]),
         .I2(a[4]),
-        .I3(a[1]),
-        .I4(a[0]),
-        .I5(a[2]),
-        .O(\^spo [24]));
-  (* SOFT_HLUTNM = "soft_lutpair0" *) 
-  LUT3 #(
-    .INIT(8'h10)) 
-    \spo[3]_INST_0 
-       (.I0(a[5]),
-        .I1(a[4]),
-        .I2(a[3]),
-        .O(\^spo [25]));
+        .I3(a[5]),
+        .I4(a[1]),
+        .I5(a[0]),
+        .O(\^spo [2]));
   LUT6 #(
-    .INIT(64'h00000000007F0000)) 
-    \spo[4]_INST_0 
+    .INIT(64'h0000000000000037)) 
+    \spo[30]_INST_0 
        (.I0(a[0]),
         .I1(a[1]),
         .I2(a[2]),
         .I3(a[5]),
         .I4(a[4]),
         .I5(a[3]),
-        .O(\^spo [26]));
+        .O(\^spo [30]));
+  LUT6 #(
+    .INIT(64'h0000000200000000)) 
+    \spo[31]_INST_0 
+       (.I0(a[2]),
+        .I1(a[3]),
+        .I2(a[4]),
+        .I3(a[5]),
+        .I4(a[1]),
+        .I5(a[0]),
+        .O(\^spo [31]));
+  LUT6 #(
+    .INIT(64'h0000000100000006)) 
+    \spo[3]_INST_0 
+       (.I0(a[0]),
+        .I1(a[2]),
+        .I2(a[3]),
+        .I3(a[4]),
+        .I4(a[5]),
+        .I5(a[1]),
+        .O(\^spo [4]));
 endmodule
 `ifndef GLBL
 `define GLBL
