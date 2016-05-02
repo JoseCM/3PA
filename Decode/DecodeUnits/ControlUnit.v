@@ -317,7 +317,7 @@ begin
             
             /* MA */
             MAStage[`MA_RW] <= 0;
-            MAStage[`MA_EN] <= 1;               
+            MAStage[`MA_EN] <= 0;               
             
             /* WB */ 
             WBStage[`WB_R_WE] <= 1;
