@@ -21,8 +21,8 @@
 
 
 module registerFile(
-    input [4:0] oRAddr1,
-    input [4:0] oRAddr2,
+    input [4:0] iRAddr1,
+    input [4:0] iRAddr2,
     output [31:0] oData1,
     output [31:0] oData2,
     input [4:0] iWAddr,
@@ -34,8 +34,10 @@ module registerFile(
     
 	reg [31:0] buff[31:0];
    
-	assign oData1 = buff[oRAddr1];
-	assign oData2 = buff[oRAddr2];
+	assign oData1 = (we && (iRAddr1 == iWAddr)) ? iWData :
+                       buff[iRAddr1];
+	assign oData2 = (we && (iRAddr1 == iWAddr)) ? iWData :
+	                   buff[iRAddr2];
    
 always@ (posedge clk) 
 begin
