@@ -53,9 +53,11 @@ module idStage(
     /*output [1:0]SignExtCtrl*/
     /*output [x:0]CTRL*/
     
+    
+    
     registerFile regF(
-        .oRAddr1(woRs1Addr),
-        .oRAddr2(woRs2Addr),
+        .iRAddr1(woRs1Addr),
+        .iRAddr2(woRs2Addr),
         .oData1(woOP1),
         .oData2(woOP2),
         .iWAddr(WAddr),
