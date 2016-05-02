@@ -43,7 +43,7 @@ module PCUpdate(
     
     assign new_InstrAddr = (Rst)            ?  32'b0:
                            (FlushPipeandPC) ?  JmpAddr:
-                           (PCStall)        ?  InstrAddr:                           
+                           (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
                            (PCSource)       ?  Predict:
                                                PC;
          
@@ -64,7 +64,7 @@ module PCUpdate(
             InstrAddr <= 32'b0;
             IR = 0;
     end
-    else
+    else if (!IF_ID_Stall)
     begin
             InstrAddr = new_InstrAddr; 
             PC =  InstrAddr +4'b0100;

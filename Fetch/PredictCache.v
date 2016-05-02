@@ -36,8 +36,8 @@
 
 `define CacheWidth      (`IAddrWidth + `PPCWidth + `CBWidth + `ValidWidth)             //Cache width
 
-`define CacheNumLines   128               //Number of cache lines 
-`define CacheAddrBits   7:0             //Cache Addressing bits
+`define CacheNumLines   8               //Number of cache lines 
+`define CacheAddrBits   2:0             //Cache Addressing bits
 
 module PredictCache(
     input Rst,
@@ -48,7 +48,8 @@ module PredictCache(
     input [1:0] Instr_new_CB,   //Novos valores da estrat?gia de previs?o a ser usada para a instru??o a ser escrita
     input [31:0] Data,          //Endere?o destino relativo ? instru??o de salto a ser escrita 
     output wire [33:0] PPC_CB,  //PPC and CB
-    output PC_Source            //1-Usar o Prediction PC 0-Usar o PC+4
+    output PC_Source,            //1-Usar o Prediction PC 0-Usar o PC+4
+    output PCMatch              //PCMatch && valid value
     );
 
 reg [`CacheWidth-1:0] cache [`CacheNumLines-1:0];   //cache de CacheWidth bits com CacheLines linhas(endere??vel a 3 bits)
@@ -59,6 +60,8 @@ wire [`CacheWidth-1:0] RcacheLine;               //Cache line que est? a ser lid
 assign RcacheLine = cache[RAddr[`CacheAddrBits]];     //Conter? sempre o valor lido da cache line respetiva aos LSB CacheAddrBits de RAddr 
 
 assign PC_Source = ((RAddr == RcacheLine[`IAddr]) && ((RcacheLine[`CB] == 2'b10) || (RcacheLine[`CB] == 2'b11)) && (RcacheLine[`Valid]));
+     
+assign PCMatch =  (RAddr == RcacheLine[`IAddr]) && (RcacheLine[`Valid]);
                                                                                                                    
 assign PPC_CB = {RcacheLine[`PPC],RcacheLine[`CB]};
 
