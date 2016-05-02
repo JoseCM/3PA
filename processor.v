@@ -43,7 +43,7 @@ module processor(
         /*wire [3:0] condCodes;
         wire [3:0] condBits;*/
         
-                wire [31:0] DataFromWB;
+        wire [31:0] DataFromWB;
         wire [31:0] ALU_Rslt_MA_WB;              
         wire [1:0] EX_Op1_ExS;
         wire [1:0] EX_Op2_ExS;
@@ -187,7 +187,7 @@ module processor(
         .i_MEM_Ctrl(EX_MA),
         
         .i_EX_Ctrl(EX_ExCtrl),
-        .i_PC_Match(EX_Valid),
+        .i_PC_Match(EX_Valid),//What? two valid bits?
         .i_Valid_Bit(EX_Valid),
         .i_Rs1(EX_Op1),             //OP1
         .i_Rs2(EX_Op2),             //OP2

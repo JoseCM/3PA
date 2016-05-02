@@ -25,6 +25,7 @@
 module IDControlUnit(
     input Clk,
     input reset,
+    /*Input pipeline registers from writeback*/
     input rf_we,
     input [4:0] WAddr,
     input [31:0] WData,

@@ -52,26 +52,26 @@ module branch_unit(
         
         7'b1x010xx: 
         begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b01;       
+        NPC <= 2'b00;       
         end
         
         7'b1x011xx:   
         begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b0;
         WriteEnable <= 1'b1;
-        NPC <= 2'b01;       
+        NPC <= 2'b00;       
         end
         
         7'b0x01xxx: 
         begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b01;       
+        NPC <= 2'b00;       
         end       
         
         7'b0010xxx: 
@@ -79,16 +79,16 @@ module branch_unit(
         CtrlOut <= 2'b00;
         FlushPipePC <= 1'b0;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b01;       
         end   
         
         
         7'b0110xxx: 
         begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b00;       
         end 
                 
         7'b1010x00: 
@@ -96,23 +96,23 @@ module branch_unit(
         CtrlOut <= 2'b00;
         FlushPipePC <= 1'b0;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
-        end 
-        
-        7'b1010x10: 
-        begin
-        CtrlOut <= 2'b00;
-        FlushPipePC <= 1'b0;
-        WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b01;       
         end 
         
         7'b1010x01: 
         begin
+        CtrlOut <= 2'b00;
+        FlushPipePC <= 1'b0;
+        WriteEnable <= 1'b1;
+        NPC <= 2'b01;       
+        end 
+        
+        7'b1010x10: 
+        begin
         CtrlOut <= 2'b11;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b00;       
+        NPC <= 2'b01;       
         end 
         
         7'b1010x11:
@@ -120,40 +120,40 @@ module branch_unit(
         CtrlOut <= 2'b00;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b00;       
+        NPC <= 2'b01;       
         end  
         
         7'b1110x00: 
         begin
+        CtrlOut <= 2'b01;
+        FlushPipePC <= 1'b1;
+        WriteEnable <= 1'b1;
+        NPC <= 2'b00;       
+        end  
+        
+        7'b1110x01: 
+        begin
         CtrlOut <= 2'b10;
         FlushPipePC <= 1'b1;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b00;       
         end  
         
-        7'b1110x10: 
+        7'b1110x10:
         begin
-        CtrlOut <= 2'b01;
-        FlushPipePC <= 1'b1;
-        WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
-        end  
-        
-        7'b1110x01:
-        begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b0;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b00;       
         end  
         
         
         7'b1110x11:
         begin
-        CtrlOut <= 2'b01;
+        CtrlOut <= 2'b10;
         FlushPipePC <= 1'b0;
         WriteEnable <= 1'b1;
-        NPC <= 2'b10;       
+        NPC <= 2'b00;       
         end         
         
 //        7'b0x01xxx: 
@@ -164,7 +164,7 @@ module branch_unit(
 //        NPC <= 2'b01;       
 //        end     
            
-//        7'b0010xxx: 
+//        7'b0110xxx: 
 //        begin
 //        CtrlOut <= 2'b00;
 //        FlushPipePC <= 1'b0;

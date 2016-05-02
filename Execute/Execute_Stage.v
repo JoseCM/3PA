@@ -47,7 +47,7 @@ module EX_Stage(
         input [`WB_WIDTH-1:0] i_WB_Ctrl,
         input [`MA_WIDTH-1:0] i_MEM_Ctrl,
         input [`EX_WIDTH-1:0] i_EX_Ctrl,
-        input i_PC_Match,  //----
+        input i_PC_Match,  //----the same as the below one???
         input i_Valid_Bit,
         input [`OP1_WIDTH-1:0] i_Rs1,                      // OP1
         input [`OP2_WIDTH-1:0] i_Rs2,                     //OP2

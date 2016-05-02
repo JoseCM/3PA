@@ -43,6 +43,7 @@ module IF(
     output [31:0] InstrAddr,
     output PCSource,
     output [33:0] PPCCB
+    
 );
 
     wire [31:0] IR_w, PC_w, InstrAddr_w, Predict_w;
@@ -66,12 +67,13 @@ module IF(
         .InstrAddr(InstrAddr_w),         
         .PCSource(PCSource_w),      
         .Predict(Predict_w),       
-        .CB(CB_w)            
+        .CB(CB_w),
+        .PC_Match(PCMatch_w)            
     );
 
     wire [`IFID_WIDTH-1:0]in;
     assign in = (Rst)          ?      0:
-                                      {InstrAddr_w,CB_w,Predict_w,PC_w,PCSource_w,IR_w};
+                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w};
 
     wire [`IFID_WIDTH-1:0]out;
     assign IR = (Rst)          ?      0:

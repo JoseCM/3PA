@@ -41,7 +41,8 @@ module fetchLogic(
     output [31:0] InstrAddr,
     output PCSource,
     output [31:0] Predict,
-    output [1:0] CB
+    output [1:0] CB,
+    output PC_Match
     );
     
    PCUpdate pcupdate(
@@ -72,7 +73,8 @@ module fetchLogic(
         .Instr_new_CB(CB_o),
         .PPC_CB(PPC_CB),
         .Data(JmpAddr),
-        .PC_Source(PCSource)
+        .PC_Source(PCSource),
+        .PCMatch(PC_Match)
     );
     
    assign CB=PPC_CB[1:0];
