@@ -154,6 +154,7 @@ Alu_Op_Selection OpSelection(
     );
 
 ALU alu(
+                 .clk(clk),
                  .i_Op1(w_ALU_Op1),
                  .i_Op2(w_ALU_Op2),
                  .i_CC_WE(i_CC_WE),

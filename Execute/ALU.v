@@ -37,6 +37,7 @@
 `define OVERFLOW 3 
 
 module ALU(
+    input clk,
     /* Input Operands */
     input [`WIDTH-1:0] i_Op1,
     input [`WIDTH-1:0] i_Op2,
@@ -58,15 +59,22 @@ module ALU(
  
 
    
-    always@(*)
+    always@(posedge clk)
     begin
-        /*CARRY -> UNSIGNEDS........OVERFLOWS -> SIGNEDS*/
-        if(i_CC_WE | reset )
+        if (reset)
         begin
-            ro_CCodes[`ZERO] <=  ~reset & (~( |ro_ALU_rslt[`WIDTH-1:0]));
-            ro_CCodes[`NEGATIVE] <=  ~reset & ro_ALU_rslt[`WIDTH-1];
-            ro_CCodes[`CARRY] <= ~reset & c & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
-            ro_CCodes[`OVERFLOW] <= ~reset  & ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
+            ro_CCodes[`ZERO]        <= 0;
+            ro_CCodes[`NEGATIVE]    <= 0;
+            ro_CCodes[`CARRY]       <= 0;
+            ro_CCodes[`OVERFLOW]    <= 0;        
+        end
+        /*CARRY -> UNSIGNEDS........OVERFLOWS -> SIGNEDS*/
+        else if(i_CC_WE)
+        begin
+            ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
+            ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
+            ro_CCodes[`CARRY] <= c & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
+            ro_CCodes[`OVERFLOW] <=  ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
             //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
         end
     end
