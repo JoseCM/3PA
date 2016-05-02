@@ -210,7 +210,7 @@ begin
             
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
-            EXStage[`EX_ALUCTRL] <= 3'b011;
+            EXStage[`EX_ALUCTRL] <= 3'b010;
             EXStage[`EX_ALU_SRC1] <= 2'b00;
             EXStage[`EX_ALU_SRC2] <= bit16;
             EXStage[`EX_CC_WE] <= 1;
