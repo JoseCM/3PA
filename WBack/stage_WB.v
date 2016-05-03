@@ -34,10 +34,24 @@ module stage_wb(
     output [4:0]o_wb_rdst,// output of Rdst
     output o_wb_reg_write_rf,//output of the third input control bit
     output [`WIDTH-1:0] o_wb_mux,// Data for the input of the register file
-    output [1:0]o_wb_reg_dst_s// select mux out
+    output [1:0]o_wb_reg_dst_s,// select mux out
+    output [4:0]o_vwb_rdst,               // Register to save data in RegFile one clock late
+    output o_vwb_reg_write_rf,            // Control signal that allows the writing in the RegFile one clock late
+    output [`WIDTH-1:0] o_vwb_mux        // Output of the WB one clock late
 );
 
     wire [1:0]mux_sel = i_wb_cntrl[`WB_RDST_MUX];
+    
+    VirtualWB vWB(
+            .clk(clk),
+            .rst(rst),
+            .i_vwb_rdst(o_wb_rdst),               // Register to save data in RegFile
+            .i_vwb_reg_write_rf(o_wb_reg_write_rf),            // Control signal that allows the writing in the RegFile
+            .i_vwb_mux(o_wb_mux),        // Output of the WB
+            .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
+            .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
+            .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
+        );
     
   //MUX  
   assign o_wb_mux = mux_sel[1]? ( mux_sel[0]? 32'h00000000 : i_wb_pc ) : 

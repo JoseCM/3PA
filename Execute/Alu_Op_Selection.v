@@ -27,6 +27,7 @@ module Alu_Op_Selection(
     	/*Inputs from ID/EX registers*/
 	input [`WIDTH-1:0] i_Data_From_MEM,
 	input [`WIDTH-1:0] i_Data_From_WB,  
+	input [`WIDTH-1:0] i_Data_From_vWB,  
 	input [`WIDTH-1:0] i_Rs1,
 	input [`WIDTH-1:0] i_Rs2,
 	input [`WIDTH-1:0] i_Immediate,  
@@ -63,6 +64,7 @@ always @(*)
             2'b00   :   r_Alu_Src1 <= i_Rs1;
             2'b01   :   r_Alu_Src1 <= i_Data_From_WB;
             2'b10   :   r_Alu_Src1 <= i_Data_From_MEM;
+            2'b11   :   r_Alu_Src1 <= i_Data_From_vWB;
             default: r_Alu_Src1 <= 0;
         endcase
 
@@ -70,6 +72,7 @@ always @(*)
             2'b00   :   r_Alu_Src2 <= i_Rs2;
             2'b01   :   r_Alu_Src2 <= i_Data_From_WB;
             2'b10   :   r_Alu_Src2 <= i_Data_From_MEM;
+            2'b11   :   r_Alu_Src2 <= i_Data_From_vWB;
             default: r_Alu_Src2 <= 0;
         endcase
 

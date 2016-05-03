@@ -41,6 +41,9 @@ module FU(
     ////////////////////////////MEM_WB REG
     input [4:0] MEMwb__Rdst,
     input MEMwb__R_WE,
+    ///////////////////////////virtualWB
+    input [4:0] VWB__Rdst,
+    input VWB__R_WE, 
     ////////////////////////////OUTPUT
     output [1:0] OP1_ExS,
     output [1:0] OP2_ExS,
@@ -51,11 +54,13 @@ module FU(
     reg BubbleMA;
     
     assign OP1_ExS = ( (EXmem__R_WE) && (EXmem__RDst_S!=`MemtoReg) && (IDex__Need_Rs1) && (EXmem__Rdst==IDex__Rs1) )     ?   2'b10:
-                     ( (MEMwb__R_WE) && (IDex__Need_Rs1)  && (MEMwb__Rdst==IDex__Rs1) )                                  ?   2'b01:  
+                     ( (MEMwb__R_WE) && (IDex__Need_Rs1)  && (MEMwb__Rdst==IDex__Rs1) )                                  ?   2'b01:       
+                     ( (VWB__R_WE) &&   (IDex__Need_Rs1)  && (VWB__Rdst==IDex__Rs1) )                                    ?   2'b11:                  
                                                                                                                              2'b00;                                                                                
                                                                                                                                                                                                                                           
-    assign OP2_ExS = ( (EXmem__R_WE) && (EXmem__RDst_S!=`MemtoReg) && (IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2) )     ?   2'b10:
-                     ( (MEMwb__R_WE) && (IDex__Need_Rs2)  && (MEMwb__Rdst==IDex__Rs2) )                                  ?   2'b01: 
+    assign OP2_ExS = ( (EXmem__R_WE) && (EXmem__RDst_S!=`MemtoReg) && (IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2) )     ?   2'b10: 
+                     ( (MEMwb__R_WE) && (IDex__Need_Rs2)  && (MEMwb__Rdst==IDex__Rs2) )                                  ?   2'b01:  
+                     ( (VWB__R_WE)   && (IDex__Need_Rs2)  && (VWB__Rdst==IDex__Rs2))                                     ?   2'b11:                  
                                                                                                                              2'b00;
                                                                                                                              
     assign OP2_IdS = (MEMwb__R_WE && IFid__Need_Rs2 && (MEMwb__Rdst==IFid__Rs2))  ? 1'b1 : //forward RS2 from write back to decde

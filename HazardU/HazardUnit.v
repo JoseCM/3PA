@@ -37,9 +37,12 @@ module HazardUnit(
     input [1:0] EXmem__RDst_S,
     input [4:0] MEMwb__Rdst,
     input MEMwb__R_WE,
+    input [4:0] VWB__Rdst,  //virtual
+    input VWB__R_WE,        //virtual
     output [1:0] OP1_ExS,
     output [1:0] OP2_ExS,
     output OP2_IdS,
+    
     
     //BRANCH UNIT
     input   PcMatchValid,
@@ -92,6 +95,9 @@ module HazardUnit(
         //////////////////////MEM_WB REG
         .MEMwb__Rdst(MEMwb__Rdst),
         .MEMwb__R_WE(MEMwb__R_WE),
+        ///////////////////////////virtualWB
+        .VWB__Rdst(VWB__Rdst),
+        .VWB__R_WE(VWB__R_WE), 
         //////////////////////OUTPUT
         .OP1_ExS(OP1_ExS),
         .OP2_ExS(OP2_ExS),

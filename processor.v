@@ -31,6 +31,10 @@ module processor(
         wire [1:0] HU_MEM_RW;
         wire [1:0] MA_EX_MA;
         //wire [2:0] WB_RWE;
+        
+        wire [4:0] o_vwb_rdst;               // Register to save data in RegFile one clock late
+        wire o_vwb_reg_write_rf;           // Control signal that allows the writing in the RegFile one clock late
+        wire [31:0] o_vwb_mux;       // Output of the WB one clock late
     
        /* wire [4:0] w_Rs1_addr;
         wire [4:0] w_Rs2_addr;
@@ -178,6 +182,7 @@ module processor(
         /*Fowarding data from WB and MEM Stage*/
         .i_Data_From_WB(DataFromWB),
         .i_Data_From_MEM(ALUrslt_EX_MA),
+        .i_Data_From_vWB(o_vwb_mux),
         
         /*Foward Unit Control Signals*/
         .i_Fwrd_Ctrl1(EX_Op1_ExS),
@@ -294,7 +299,10 @@ module processor(
         .o_wb_rdst(WB_RdsAddr),// output of Rdst to forward
         .o_wb_reg_write_rf(WB_RWE),//output of the third input control bit
         .o_wb_mux(DataFromWB),// Data for the input of the register file
-        .o_wb_reg_dst_s()// select mux out
+        .o_wb_reg_dst_s(),// select mux out <-------------------------------------- <------------------------------------
+        .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
+        .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
+        .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
     );
 
 
@@ -318,6 +326,8 @@ module processor(
          .EXmem__RDst_S(WB_EX_MA[`WB_RDST_MUX]),
          .MEMwb__Rdst(WB_RdsAddr),
          .MEMwb__R_WE(WB_RWE),
+         .VWB__Rdst(o_vwb_rdst),
+         .VWB__R_WE(o_vwb_reg_write_rf), 
          .OP1_ExS(EX_Op1_ExS),
          .OP2_ExS(EX_Op2_ExS),
          .OP2_IdS(fwdRS2_Sel),

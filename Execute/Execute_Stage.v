@@ -31,6 +31,7 @@ module EX_Stage(
         /*Fowarding data from WB and MEM Stage*/
         input [`WIDTH-1:0] i_Data_From_WB,         
         input [`WIDTH-1:0] i_Data_From_MEM,
+        input [`WIDTH-1:0] i_Data_From_vWB,   
         
         /*Foward Unit Control Signals*/
         input [1:0] i_Fwrd_Ctrl1,      //OP1_ExS
@@ -144,6 +145,7 @@ Alu_Op_Selection OpSelection(
                 .i_Rs2(i_Rs2),
                 .i_Data_From_WB(i_Data_From_WB),
                 .i_Data_From_MEM(i_Data_From_MEM),
+                .i_Data_From_vWB(i_Data_From_vWB),
                 .i_Immediate(i_Immediate),
                 .i_PC(i_PC),
                 .i_Fwrd_Ctrl1(i_Fwrd_Ctrl1),
