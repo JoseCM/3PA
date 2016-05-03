@@ -224,7 +224,7 @@ begin
             MAStage[`MA_EN] <= 0;               
             
             /* WB */ 
-            WBStage[`WB_R_WE] <= 1;
+            WBStage[`WB_R_WE] <= 0;              
             WBStage[`WB_RDST_MUX] <= 2'b01; 
         end
         `BXX :

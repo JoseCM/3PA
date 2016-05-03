@@ -41,16 +41,17 @@ module PCUpdate(
     wire [31:0] newIR;
  
     
-    assign new_InstrAddr = (Rst)            ?  32'b0:
-                           (FlushPipeandPC) ?  JmpAddr:
+    assign new_InstrAddr = (Rst)                           ?  32'b0:
+                           (FlushPipeandPC)                ?  JmpAddr:
                            (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
-                           (PCSource)       ?  Predict:
-                                               PC;
+                           (PCSource)                      ?  Predict:
+ 
+                                                           PC;
          
     ROM inst_mem(
      .Clk(Clk),                                                   
      .Rst(Rst),                                                   
-     .En(~(IF_ID_Flush | IF_ID_Stall)),                                                  
+     .En(1),                                                  
      .Addr(new_InstrAddr),                                                    
      .Data(newIR),
      .Imiss(Imiss)                                                         
@@ -64,7 +65,7 @@ module PCUpdate(
             InstrAddr <= 32'b0;
             IR = 0;
     end
-    else if (!IF_ID_Stall)
+    else if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
     begin
             InstrAddr = new_InstrAddr; 
             PC =  InstrAddr +4'b0100;
