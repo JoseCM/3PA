@@ -29,6 +29,7 @@ module HazardUnit(
     input IFid__Need_Rs2,
     input [4:0] IDex__Rs1,
     input [4:0] IDex__Rs2,
+    input [4:0] IFid__Rs2,
     input EXmem__RW_MEM,
     input EXmem__MemEnable,
     input EXmem__R_WE,
@@ -75,6 +76,7 @@ module HazardUnit(
         .rst(rst),
         ///////////////////////////IF_ID
         .IFid__Need_Rs2(IFid__Need_Rs2),
+        .IFid__Rs2(IFid__Rs2),
         //////////////////////ID_EX REG
         .IDex__Need_Rs2(IDex__Need_Rs2),
         .IDex__Need_Rs1(IDex__Need_Rs1),

@@ -145,6 +145,7 @@ module processor(
          .fwdRS2_Sel(fwdRS2_Sel),
          /*forward unit signals from decode*/
          .IFid__Need_Rs2(IFid__Need_Rs2),
+         .IFid__Rs2(IFid__Rs2),
          /*Output pipeline registers to execute*/
          /*Fowarded from fetch*/
 
@@ -306,6 +307,7 @@ module processor(
          
          .IDex__Rs1(w_Rs1_addr),
          .IDex__Rs2(w_Rs2_addr),
+         .IFid__Rs2(IFid__Rs2),
          .EXmem__RW_MEM(HU_MEM_RW[`MA_RW]),
          .EXmem__MemEnable(HU_MEM_RW[`MA_EN]),
          .EXmem__R_WE(WB_EX_MA[`WB_R_WE]),

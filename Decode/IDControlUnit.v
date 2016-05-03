@@ -61,7 +61,8 @@ module IDControlUnit(
     output [`WB_WIDTH-1:0] oWB,
     
     /*forward unit signal*/
-    output IFid__Need_Rs2
+    output IFid__Need_Rs2,
+    output [4:0] IFid__Rs2
     );
     
     wire [`IDEX_WIDTH-1:0] idStageOutBus;
@@ -104,7 +105,7 @@ module IDControlUnit(
     .iSignExtCtrl(iSignExtCtrl)
     );
     
-    
+    assign IFid__Rs2 = idStageOutBus[`IDEX_RS2ADDR];
     assign idStageOutBus[`IDEX_VALID] = iValid;
     assign idStageOutBus[`IDEX_PC]    = iPC;
     assign idStageOutBus[`IDEX_PPCCB] = iPPCCB;

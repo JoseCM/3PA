@@ -46,7 +46,7 @@ module idStage(
     /*for testing without ctrl_unit*/
     //*
     input iR2Select,
-    input [1:0] iSignExtCtrl
+    input [1:0] iSignExtCtrl    
     //*/
     );
     
