@@ -36,7 +36,7 @@ module registerFile(
    
 	assign oData1 = (we && (iRAddr1 == iWAddr)) ? iWData :
                        buff[iRAddr1];
-	assign oData2 = (we && (iRAddr1 == iWAddr)) ? iWData :
+	assign oData2 = (we && (iRAddr2 == iWAddr)) ? iWData :
 	                   buff[iRAddr2];
    
 always@ (posedge clk) 
