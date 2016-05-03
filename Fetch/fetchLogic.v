@@ -34,6 +34,7 @@ module fetchLogic(
     output Imiss,
     //========================= From Execute 
     input [31:0] JmpAddr,
+    input [31:0] CHJmpAddr,
     input [31:0] JmpInstrAddr,
     //========================= To Pipeline Registers
     output [31:0] IR,
@@ -72,7 +73,7 @@ module fetchLogic(
         .WE(WriteEnable),
         .Instr_new_CB(CB_o),
         .PPC_CB(PPC_CB),
-        .Data(JmpAddr),
+        .Data(CHJmpAddr),
         .PC_Source(PCSource),
         .PCMatch(PC_Match)
     );

@@ -81,6 +81,7 @@ module processor(
     wire [31:0] ID_PC;
     wire [31:0] ID_IAddr;
     wire [33:0] ID_PPCCB;
+    wire [31:0] w_CHJumpAddr;
 
     IF fetch(
         //General
@@ -96,6 +97,7 @@ module processor(
          .IF_ID_Flush(IF_ID_Flush),
          .Imiss(Imiss),
         //From Execute
+         .CHJmpAddr(w_CHJumpAddr),
          .JmpAddr(JMPAddr),
          .JmpInstrAddr(JMPIC),
         //To Pipeline Registers
@@ -221,6 +223,7 @@ module processor(
         .o_need_Rs2(w_need_Rs2),
         
         /*EXMA register output data*/
+        .o_CH_Jump_Addr(w_CHJumpAddr),
         .o_EXMA_WB(WB_EX_MA),
         .o_EXMA_MEM(MA_EX_MA),
         .o_EXMA_ALU_rslt(ALUrslt_EX_MA),
