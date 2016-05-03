@@ -35,6 +35,7 @@ module IF(
     input IF_ID_Flush,
     output Imiss,
     //From Execute 
+    input [31:0] CHJmpAddr,
     input [31:0] JmpAddr,
     input [31:0] JmpInstrAddr,
     //To Pipeline Registers
@@ -59,7 +60,8 @@ module IF(
         .IF_ID_Stall(IF_ID_Stall),      
         .WriteEnable(WriteEnable),   
         .CB_o(CB_o),          
-        .Imiss(Imiss),         
+        .Imiss(Imiss),
+        .CHJmpAddr(CHJmpAddr),         
         .JmpAddr(JmpAddr),       
         .JmpInstrAddr(JmpInstrAddr),        
         .IR(IR_w),            

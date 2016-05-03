@@ -76,6 +76,7 @@ module EX_Stage(
         output o_need_Rs2,
         
         /*EXMA register output data*/
+        output [`WIDTH-1:0] o_CH_Jump_Addr,
         output [`WB_WIDTH-1:0] o_EXMA_WB,
         output [`MA_WIDTH-1:0] o_EXMA_MEM,
         output [`WIDTH-1:0] o_EXMA_ALU_rslt,
@@ -128,6 +129,7 @@ assign i_EXMA_indata[`EXMA_RS2ADDR] = i_Rs2_addr;
 assign i_EXMA_indata[`EXMA_PC] = i_PC;
 assign i_EXMA_indata[`EXMA_RDS] = i_Rds_addr;
 
+assign o_CH_Jump_Addr = o_ALU_rslt;
 assign o_EXMA_WB = o_EXMA_outdata[`EXMA_WB];
 assign o_EXMA_MEM = o_EXMA_outdata[`EXMA_MA];
 assign o_EXMA_ALU_rslt = o_EXMA_outdata[`EXMA_ALURSLT];
