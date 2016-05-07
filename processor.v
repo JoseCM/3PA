@@ -264,9 +264,9 @@ module processor(
         .i_ma_PC(PC_EX_MA), //program counter
         .i_ma_Rdst(Rdsaddr_EX_MA), //registo de destino
         .i_ma_mux_wb(DataFromWB),//resultado do write back (forwarding)
-        .i_OP1_MemS(0), //forwrding unit signal, not necessary anymore
+        .i_OP1_MemS(OP_MemS), //forwrding unit signal, not necessary anymore
         .i_ma_flush(MAWB_Flush),
-        .i_ma_stall(0), // Este Stall fica sempre descligado
+        .i_ma_stall(MAWB_Stall), //This will make a stall in WBstage when a Dcache miss has occurred
 
         .o_ma_PC(PCSrc_MA_WB), //program counter para ser colocado no pipeline register MA/WB
         .o_ma_Rdst(RDS_MA_WB), //endere�o do registo de sa�da
@@ -286,6 +286,7 @@ module processor(
         wire [31:0] WB_RdsAddr;*/
         //wire [2:0] WB_RWE;
         //wire [31:0] DataFromWB;
+        wire [1:0] WB_RDst_s;
         
     stage_wb WBack (
 
@@ -299,7 +300,7 @@ module processor(
         .o_wb_rdst(WB_RdsAddr),// output of Rdst to forward
         .o_wb_reg_write_rf(WB_RWE),//output of the third input control bit
         .o_wb_mux(DataFromWB),// Data for the input of the register file
-        .o_wb_reg_dst_s(),// select mux out <-------------------------------------- <------------------------------------
+        .o_wb_reg_dst_s(WB_RDst_s),// select mux out <-------------------------------------- <------------------------------------
         .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
         .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
         .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
@@ -312,6 +313,8 @@ module processor(
          .rst(rst),
          //FORWARD UNIT
          
+         .IDex__RW_MEM(EX_MA[`MA_RW]),
+         .IDex__MemEnable(EX_MA[`MA_EN]),
          .IDex__Need_Rs2(w_need_Rs2),
          .IDex__Need_Rs1(w_need_Rs1),
          .IFid__Need_Rs2(IFid__Need_Rs2),
@@ -324,6 +327,7 @@ module processor(
          .EXmem__R_WE(WB_EX_MA[`WB_R_WE]),
          .EXmem__Rdst(Rdsaddr_EX_MA),
          .EXmem__RDst_S(WB_EX_MA[`WB_RDST_MUX]),
+         .MEMwb__RDst_S(WB_RDst_s), //--------
          .MEMwb__Rdst(WB_RdsAddr),
          .MEMwb__R_WE(WB_RWE),
          .VWB__Rdst(o_vwb_rdst),
@@ -331,6 +335,7 @@ module processor(
          .OP1_ExS(EX_Op1_ExS),
          .OP2_ExS(EX_Op2_ExS),
          .OP2_IdS(fwdRS2_Sel),
+         .OP_MemS(OP_MemS),
 
          //BRANCH UNIT
          .PcMatchValid(BR_Valid),
@@ -348,14 +353,15 @@ module processor(
          .cond_bits(condBits),
 
           //STALL UNIT
-         .i_DCache_Miss(Dmiss), // From Data Cache in MEM stage
-         .i_ICache_Miss(Imiss), // From Instruction Cache in IF stage
-         .o_PC_Stall(PCStall),   // To IF stage
-         .o_IFID_Stall(IF_ID_Stall), // To IFID pipeline register
-         .o_IDEX_Stall(IDEX_Stall), // To IDEX pipeline register
-         .o_EXMA_Stall(EX_EXMA_Stall), // To EXMA pipeline register
-         .o_EXMA_Flush(EX_EXMA_Flush), // To flush EXMA pipleine Register
-         .o_MAWB_Flush(MAWB_Flush), // To flush MAWB pipeline register
+         .i_DCache_Miss(Dmiss),         // From Data Cache in MEM stage
+         .i_ICache_Miss(Imiss),         // From Instruction Cache in IF stage
+         .o_PC_Stall(PCStall),          // To IF stage
+         .o_IFID_Stall(IF_ID_Stall),    // To IFID pipeline register
+         .o_IDEX_Stall(IDEX_Stall),     // To IDEX pipeline register
+         .o_EXMA_Stall(EX_EXMA_Stall),  // To EXMA pipeline register
+         .o_MAWB_Stall(MAWB_Stall),  // To MAWB pipeline register
+         .o_EXMA_Flush(EX_EXMA_Flush),  // To flush EXMA pipleine Register
+         .o_MAWB_Flush(MAWB_Flush),     // To flush MAWB pipeline register
 
           //Pipeline Registers
          .Flush_IF_ID(IF_ID_Flush),

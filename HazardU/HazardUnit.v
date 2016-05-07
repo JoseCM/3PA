@@ -24,6 +24,8 @@ module HazardUnit(
     input clk,
     input rst,
     //FORWARD UNIT
+    input IDex__RW_MEM,         //MA control signals from Execute
+    input IDex__MemEnable,      //used to detect stores 
     input IDex__Need_Rs2,
     input IDex__Need_Rs1,
     input IFid__Need_Rs2,
@@ -35,6 +37,7 @@ module HazardUnit(
     input EXmem__R_WE,
     input [4:0] EXmem__Rdst,
     input [1:0] EXmem__RDst_S,
+    input [1:0] MEMwb__RDst_S,
     input [4:0] MEMwb__Rdst,
     input MEMwb__R_WE,
     input [4:0] VWB__Rdst,  //virtual
@@ -42,6 +45,7 @@ module HazardUnit(
     output [1:0] OP1_ExS,
     output [1:0] OP2_ExS,
     output OP2_IdS,
+    output OP_MemS,
     
     
     //BRANCH UNIT
@@ -68,6 +72,7 @@ module HazardUnit(
     output o_EXMA_Stall, // To EXMA pipeline register
     output o_EXMA_Flush, // To flush EXMA pipleine Register 
     output o_MAWB_Flush, // To flush MAWB pipeline register
+    output o_MAWB_Stall, // To MAWB pipeline register
     
     //Pipeline Registers 
     output Flush_IF_ID,
@@ -78,6 +83,8 @@ module HazardUnit(
         .clk(clk),
         .rst(rst),
         ///////////////////////////IF_ID
+        .IDex__RW_MEM(IDex__RW_MEM),         //MA control signals from Execute
+        .IDex__MemEnable(IDex__MemEnable),
         .IFid__Need_Rs2(IFid__Need_Rs2),
         .IFid__Rs2(IFid__Rs2),
         //////////////////////ID_EX REG
@@ -93,6 +100,7 @@ module HazardUnit(
         .EXmem__Rdst(EXmem__Rdst),
         .EXmem__RDst_S(EXmem__RDst_S),
         //////////////////////MEM_WB REG
+        .MEMwb__RDst_S(MEMwb__RDst_S),
         .MEMwb__Rdst(MEMwb__Rdst),
         .MEMwb__R_WE(MEMwb__R_WE),
         ///////////////////////////virtualWB
@@ -102,7 +110,8 @@ module HazardUnit(
         .OP1_ExS(OP1_ExS),
         .OP2_ExS(OP2_ExS),
         .OP2_IdS(OP2_IdS),
-        .Need_Stall(Need_Stall)
+        .Need_Stall(Need_Stall),
+        .OP_MemS(OP_MemS)
         );
     
 
@@ -138,6 +147,7 @@ module HazardUnit(
          .o_IFID_Stall(o_IFID_Stall), // To IFID pipeline register
          .o_IDEX_Stall(o_IDEX_Stall), // To IDEX pipeline register
          .o_EXMA_Stall(o_EXMA_Stall), // To EXMA pipeline register
+         .o_MAWB_Stall(o_MAWB_Stall), // To MAWB pipeline register
          
           //Flush Signals
          .o_IFID_Flush(o_IFID_Flush), // To flush IFID pipeline register
