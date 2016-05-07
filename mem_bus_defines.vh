@@ -3,6 +3,8 @@
 
 `include "pipelinedefs.v"
 
+// ESTES NOMES (IN / OUT) SAO DA PERSPECTIVA DA CACHE
+
 /******* DcacheInBus *************/
 
 `define DBUSI_WIDTH        ( `MA_WIDTH + `RS2VAL_WIDTH + `ALURSLT_WIDTH)
@@ -30,5 +32,24 @@
 `define DBUSO_DATA           `DBUSO_DATA_MSB : `DBUSO_DATA_LSB
 
 `define DBUSO_MISS      `DBUSO_DATA_MSB + 1
+
+
+/******* IcacheInBus *************/
+
+`define ADDR_WIDTH       (32)
+
+`define IBUSI_ADDR_LSB       (0)
+`define IBUSI_ADDR_MSB       (`ADDR_WIDTH - 1 + `IBUSI_ADDR_LSB)
+`define IBUSI_ADDR           `IBUSI_ADDR_MSB : `IBUSI_ADDR_LSB
+
+/******* IcacheOutBus *************/
+
+`define IBUSO_WIDTH          (`MEMOUT_WIDTH + `MISS_WIDTH)
+
+`define IBUSO_DATA_LSB       (0)
+`define IBUSO_DATA_MSB       (`MEMOUT_WIDTH - 1 + `IBUSO_DATA_LSB)
+`define IBUSO_DATA           `IBUSO_DATA_MSB : `IBUSO_DATA_LSB
+
+`define IBUSO_MISS           `IBUSO_DATA_MSB + 1
 
 `endif

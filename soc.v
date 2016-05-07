@@ -26,9 +26,13 @@ module soc(
     input Rst
     );
     
-    wire [`DBUSI_WIDTH - 1 : 0] dcache_bus_i; 
-    wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_o; 
-    wire [`MA_WIDTH - 1: 0] dcache_bus_i_ma = dcache_bus_i[`DBUSI_MA];
+    wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_i; 
+    wire [`DBUSI_WIDTH - 1 : 0] dcache_bus_o; 
+    wire [`MA_WIDTH - 1: 0] dcache_bus_o_ma = dcache_bus_o[`DBUSI_MA];
+    
+    wire [`IBUSO_WIDTH - 1 : 0] icache_bus_i;
+    //changes 
+    wire [`ADDR_WIDTH - 1 : 0] icache_bus_o; 
     
     processor  cpu(
            .Clk(Clk),
@@ -36,18 +40,31 @@ module soc(
            
            /***************************/
            .Dcache_bus_out(dcache_bus_o),
-           .Dcache_bus_in(dcache_bus_i)         
+           .Dcache_bus_in(dcache_bus_i),
+           //changes
+           .Icache_bus_out(icache_bus_o),
+           .Icache_bus_in(icache_bus_i)         
     );
     
     RAM ram(
             .Clk(Clk),//clock
             .Rst(Rst),//reset
-            .address(dcache_bus_i[`DBUSI_ADDR]),//endere?o da mem?ria a aceder
-            .data_in(dcache_bus_i[`DBUSI_DATA]),//dados a escrever
-            .rw(dcache_bus_i_ma[`MA_RW]),//read
-            .en(dcache_bus_i_ma[`MA_EN]),//write
-            .data_out(dcache_bus_o[`DBUSO_DATA] ),//dados de sa?da lidos
-            .miss(dcache_bus_o[`DBUSO_MISS])//falha no acesso ? mem?ria
+            .address(dcache_bus_o[`DBUSI_ADDR]),//endere?o da mem?ria a aceder
+            .data_in(dcache_bus_o[`DBUSI_DATA]),//dados a escrever
+            .rw(dcache_bus_o_ma[`MA_RW]),//read
+            .en(dcache_bus_o_ma[`MA_EN]),//write
+            .data_out(dcache_bus_i[`DBUSO_DATA] ),//dados de sa?da lidos
+            .miss(dcache_bus_i[`DBUSO_MISS])//falha no acesso ? mem?ria
+    );
+    
+    ROM inst_mem(
+     .Clk(Clk),                                                   
+     .Rst(Rst),                                                   
+     .En(1), 
+     //changes                                                 
+     .Addr(icache_bus_o[`IBUSI_ADDR]),                                                    
+     .Data(icache_bus_i[`IBUSO_DATA]),
+     .Imiss(icache_bus_i[`IBUSO_MISS])                                                         
     );
     
     
