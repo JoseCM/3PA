@@ -44,7 +44,11 @@ module stageMA(
     output [4:0] o_ma_EX_MEM_Rs2,//colocar o endere�o do source register 2 na forward unit,
     output [1:0] o_ma_EX_MEM_MA,
     output o_miss, // falha no acesso de mem�ria
-    output [`WIDTH-1:0] o_ma_mem_out
+    output [`WIDTH-1:0] o_ma_mem_out,
+    
+    /******/
+    output [65:0] Dcache_bus_out,
+    input [32:0] Dcache_bus_in
     
     );
     
@@ -76,7 +80,11 @@ module stageMA(
         .EX_MEM_Rs2(o_ma_EX_MEM_Rs2),
         .EX_MEM_MA(o_ma_EX_MEM_MA),
         .miss(o_miss),
-        .mem_out(mem_data)
+        .mem_out(mem_data),
+        
+        /*********************/
+        .Dcache_bus_out(Dcache_bus_out),
+        .Dcache_bus_in(Dcache_bus_in)
     );
 
     pipereg #(`MAWB_WIDTH) MA_WB(

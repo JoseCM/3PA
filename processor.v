@@ -23,7 +23,12 @@
 
 module processor(
        input Clk,
-       input Rst
+       input Rst,
+       
+       /***************************/
+       output [65:0] Dcache_bus_out,
+       input [32:0] Dcache_bus_in
+       
     );
     
         //need this desclaration
@@ -275,7 +280,10 @@ module processor(
         .o_ma_EX_MEM_Rs2(),//colocar o endere�o do source register 2 na forward unit,
         .o_ma_EX_MEM_MA(HU_MEM_RW),
         .o_miss(Dmiss), // falha no acesso de mem�ria
-        .o_ma_mem_out(Data_Mem_MA_WB)
+        .o_ma_mem_out(Data_Mem_MA_WB),
+        
+        .Dcache_bus_out(Dcache_bus_out),
+        .Dcache_bus_in(Dcache_bus_in)
     );
     
         /*wire [31:0] PCSrc_MA_WB;
