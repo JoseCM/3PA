@@ -40,6 +40,8 @@ module FU(
     input EXmem__R_WE,
     input [4:0] EXmem__Rdst,
     input [1:0] EXmem__RDst_S,
+    input EXMA__Need_Rs2,
+    input [4:0] EXMA__Rs2,
     ////////////////////////////MEM_WB REG
     input [1:0] MEMwb__RDst_S,
     input [4:0] MEMwb__Rdst,
@@ -67,8 +69,8 @@ module FU(
                      ( (VWB__R_WE)   && (IDex__Need_Rs2)  && (VWB__Rdst==IDex__Rs2))                                     ?   2'b11:                  
                                                                                                                              2'b00;
     
-    assign OP_MemS = ( (MEMwb__RDst_S == `MemtoReg) && (EXmem__RW_MEM && EXmem__MemEnable))  ? 1'b1 : //forward from write back to MA
-                                                                                               1'b0;
+    assign OP_MemS = ( (MEMwb__RDst_S == `MemtoReg) && (EXmem__RW_MEM && EXmem__MemEnable) && EXMA__Need_Rs2 && (MEMwb__Rdst==EXMA__Rs2))  ? 1'b1 : //forward from write back to MA
+                                                                                                                                             1'b0;
                                                                                                                              
     assign OP2_IdS = (MEMwb__R_WE && IFid__Need_Rs2 && (MEMwb__Rdst==IFid__Rs2))  ? 1'b1 : //forward RS2 from write back to decde
                                                                                     1'b0;

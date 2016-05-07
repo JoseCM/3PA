@@ -251,7 +251,8 @@ module processor(
         wire [4:0] RDS_MA_WB;
         //wire [31:0] ALU_Rslt_MA_WB;
         wire [2:0] o_ma_WB;
-        wire [31:0] Data_Mem_MA_WB;              
+        wire [31:0] Data_Mem_MA_WB;   
+        wire [4:0] EX_MEM_Rs2;           
         
     stageMA MAccesss(
         .clk(Clk),//clock
@@ -272,7 +273,7 @@ module processor(
         .o_ma_Rdst(RDS_MA_WB), //endere�o do registo de sa�da
         .o_ma_ALU_rslt(ALU_Rslt_MA_WB), //resultado do ALU a ser colocado no pipeline register MA/WB
         .o_ma_WB(o_ma_WB), //sinais de controlo da write back a serem colocados no pipeline register MA/WB
-        .o_ma_EX_MEM_Rs2(),//colocar o endere�o do source register 2 na forward unit,
+        .o_ma_EX_MEM_Rs2(EX_MEM_Rs2),//colocar o endere�o do source register 2 na forward unit,
         .o_ma_EX_MEM_MA(HU_MEM_RW),
         .o_miss(Dmiss), // falha no acesso de mem�ria
         .o_ma_mem_out(Data_Mem_MA_WB)
@@ -327,7 +328,9 @@ module processor(
          .EXmem__R_WE(WB_EX_MA[`WB_R_WE]),
          .EXmem__Rdst(Rdsaddr_EX_MA),
          .EXmem__RDst_S(WB_EX_MA[`WB_RDST_MUX]),
-         .MEMwb__RDst_S(WB_RDst_s), //--------
+         .EXMA__Need_Rs2(1),         //At first sight it isn't needed to verify the forward of WB to MA
+         .EXMA__Rs2(EX_MEM_Rs2),     //signals needed for the WB to MA forward
+         .MEMwb__RDst_S(WB_RDst_s), 
          .MEMwb__Rdst(WB_RdsAddr),
          .MEMwb__R_WE(WB_RWE),
          .VWB__Rdst(o_vwb_rdst),

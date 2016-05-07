@@ -37,6 +37,8 @@ module HazardUnit(
     input EXmem__R_WE,
     input [4:0] EXmem__Rdst,
     input [1:0] EXmem__RDst_S,
+    input EXMA__Need_Rs2,
+    input [4:0] EXMA__Rs2, //--modifying
     input [1:0] MEMwb__RDst_S,
     input [4:0] MEMwb__Rdst,
     input MEMwb__R_WE,
@@ -99,6 +101,8 @@ module HazardUnit(
         .EXmem__R_WE(EXmem__R_WE),
         .EXmem__Rdst(EXmem__Rdst),
         .EXmem__RDst_S(EXmem__RDst_S),
+        .EXMA__Need_Rs2(EXMA__Need_Rs2),
+        .EXMA__Rs2(EXMA__Rs2),
         //////////////////////MEM_WB REG
         .MEMwb__RDst_S(MEMwb__RDst_S),
         .MEMwb__Rdst(MEMwb__Rdst),
