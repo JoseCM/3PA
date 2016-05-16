@@ -43,7 +43,12 @@ module fetchLogic(
     output PCSource,
     output [31:0] Predict,
     output [1:0] CB,
-    output PC_Match
+    output PC_Match,
+    //=========================
+    output [31:0] Icache_bus_out,
+    input [32:0] Icache_bus_in,
+    output [65:0] Dcache_bus_out,
+    input [32:0] Dcache_bus_in
     );
     
    PCUpdate pcupdate(
@@ -60,7 +65,10 @@ module fetchLogic(
        .IF_ID_Flush(IF_ID_Flush),
        .IF_ID_Stall(IF_ID_Stall),
        .IR(IR),
-       .Imiss(Imiss)
+       .Imiss(Imiss),
+       
+       .Icache_bus_out(Icache_bus_out),
+       .Icache_bus_in(Icache_bus_in)
     );
     
     wire [33:0] PPC_CB;

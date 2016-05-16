@@ -27,7 +27,10 @@ module processor(
        
        /***************************/
        output [65:0] Dcache_bus_out,
-       input [32:0] Dcache_bus_in
+       input [32:0] Dcache_bus_in,
+       //changes
+       output [65:0] Icache_bus_out,
+       input [32:0] Icache_bus_in
        
     );
     
@@ -114,7 +117,10 @@ module processor(
          .PC(ID_PC),
          .InstrAddr(ID_IAddr),
          .PCSource(ID_PCSrc),
-         .PPCCB(ID_PPCCB)
+         .PPCCB(ID_PPCCB),
+                
+         .Icache_bus_out(Icache_bus_out),
+         .Icache_bus_in(Icache_bus_in)
     );
 
     //wire WB_RWE;

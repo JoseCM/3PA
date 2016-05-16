@@ -33,7 +33,12 @@ module PCUpdate(
     input IF_ID_Flush,
     input IF_ID_Stall,
     output reg [31:0]IR,
-    output Imiss
+    output Imiss,
+    
+    /**************************/
+    output [31:0] Icache_bus_out,
+    input [32:0] Icache_bus_in
+    
     );
     
     //reg  [31:0]    InstrAddr;     //changed here
@@ -45,17 +50,20 @@ module PCUpdate(
                            (FlushPipeandPC)                ?  JmpAddr:
                            (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
                            (PCSource)                      ?  Predict:
- 
                                                            PC;
-         
-    ROM inst_mem(
-     .Clk(Clk),                                                   
-     .Rst(Rst),                                                   
-     .En(1),                                                  
-     .Addr(new_InstrAddr),                                                    
-     .Data(newIR),
-     .Imiss(Imiss)                                                         
-    );
+
+//    ROM inst_mem(
+//     .Clk(Clk),                                                   
+//     .Rst(Rst),                                                   
+//     .En(1),                                                  
+//     .Addr(new_InstrAddr),                                                    
+//     .Data(newIR),
+//     .Imiss(Imiss)                                                         
+//    );
+
+    assign Icache_bus_out =  new_InstrAddr;
+    assign Imiss = Icache_bus_in[32];
+    assign newIR = Icache_bus_in[31:0];
     
     always@ (posedge Clk)
     begin

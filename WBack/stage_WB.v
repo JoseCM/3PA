@@ -40,7 +40,7 @@ module stage_wb(
     output [`WIDTH-1:0] o_vwb_mux        // Output of the WB one clock late
 );
 
-    wire [1:0]mux_sel = i_wb_cntrl[`WB_RDST_MUX];
+    wire [1:0] mux_sel = i_wb_cntrl[`WB_RDST_MUX];
     
     VirtualWB vWB(
             .clk(clk),
@@ -59,7 +59,7 @@ module stage_wb(
     
   //ASSIGN OF INPUT TO OUTPUTS PROPAGATION 
   assign o_wb_reg_write_rf = i_wb_cntrl[`WB_R_WE];
-  assign o_wb_reg_dst_s = i_wb_cntrl[1:0];
+  assign o_wb_reg_dst_s = i_wb_cntrl[`WB_RDST_MUX];
   assign o_wb_rdst = i_wb_rdst;
   
 endmodule

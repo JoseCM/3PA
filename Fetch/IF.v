@@ -43,8 +43,13 @@ module IF(
     output [31:0] PC,
     output [31:0] InstrAddr,
     output PCSource,
-    output [33:0] PPCCB
+    output [33:0] PPCCB,
     
+    output [65:0] Dcache_bus_out,
+    input [32:0] Dcache_bus_in,
+    //Changes
+    output [31:0] Icache_bus_out,
+    input [32:0] Icache_bus_in
 );
 
     wire [31:0] IR_w, PC_w, InstrAddr_w, Predict_w;
@@ -70,7 +75,10 @@ module IF(
         .PCSource(PCSource_w),      
         .Predict(Predict_w),       
         .CB(CB_w),
-        .PC_Match(PCMatch_w)            
+        .PC_Match(PCMatch_w),
+                   
+        .Icache_bus_out(Icache_bus_out),
+        .Icache_bus_in(Icache_bus_in)            
     );
 
     wire [`IFID_WIDTH-1:0]in;
