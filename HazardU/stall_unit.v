@@ -33,21 +33,18 @@ module Stall_Unit(
     output o_IFID_Stall, // To IFID pipeline register
     output o_IDEX_Stall, // To IDEX pipeline register
     output o_EXMA_Stall, // To EXMA pipeline register
-    output o_MAWB_Stall, // To MAWB pipeline register
     
      //Flush Signals
     output o_IFID_Flush, // To flush IFID pipeline register
     output o_IDEX_Flush,
     output o_EXMA_Flush, // To flush EXMA pipleine Register 
     output o_MAWB_Flush // To flush MAWB pipeline register
-
     );
     
     assign o_PC_Stall = i_Need_Stall | i_DCache_Miss | i_ICache_Miss;
     assign o_IFID_Stall = i_Need_Stall | i_DCache_Miss; 
     assign o_IDEX_Stall = i_Need_Stall | i_DCache_Miss;
     assign o_EXMA_Stall = i_DCache_Miss;
-    assign o_MAWB_Stall = i_DCache_Miss;
     
     assign o_IFID_Flush = i_ICache_Miss & ~i_Need_Stall & ~i_DCache_Miss;
     assign o_EXMA_Flush = i_Need_Stall & ~i_DCache_Miss;

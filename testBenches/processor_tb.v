@@ -39,7 +39,7 @@ module processor_tb(
         #10
         Rst = 0;
         
-        #4000
+        #1000
         $finish;
     end
     
