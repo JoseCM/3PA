@@ -45,9 +45,9 @@ int	lc = 0;		/* location counter--# bytes for this instr	*/
 %token	DOT_ALLOC		/* yylval = NONE			*/
 %token	DOT_ORG			/* yylval = NONE			*/
 %token	DOT_EQU			/* yylval = NONE			*/
-
-
-
+%token	MUL			/* yylval = NONE			*/   	 /*new instruction*/
+%token	DIV			/* yylval = NONE			*/   	 /*new instruction*/
+	
 
 /* start of rules section						*/
 %%
@@ -196,6 +196,22 @@ stmt	:	ADD	reg ',' reg ',' reg
 	|	XOR	reg ',' reg ',' '#' expr
 			{
 			add_stmt(XOR_OP,XOR_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	MUL	reg ',' reg ',' reg
+			{
+			add_stmt(MUL_OP,MUL_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	MUL	reg ',' reg ',' '#' expr
+			{
+			add_stmt(MUL_OP,MUL_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	DIV	reg ',' reg ',' reg
+			{
+			add_stmt(DIV_OP,DIV_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	DIV	reg ',' reg ',' '#' expr
+			{
+			add_stmt(DIV_OP,DIV_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
 			}
 	;
 
