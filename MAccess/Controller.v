@@ -38,8 +38,8 @@ module PeriphController(
    reg [1:0] state; 
    reg Done;
    
-   assign StartAXIRead  =  (RW && En && !Done) ? 1 : 0;
-   assign StartAXIWrite = (!RW && En && !Done) ? 1 : 0;
+   assign StartAXIRead  =  (!RW && En && !Done) ? 1 : 0;
+   assign StartAXIWrite = (RW && En && !Done) ? 1 : 0;
    
    assign Stall = (PeripheralAccess && !ReadCompleted && !WriteCompleted ) ? 1 : 0;
    
@@ -51,11 +51,11 @@ module PeriphController(
     else
         case (state) 
         IDLE:
-            if(RW && PeripheralAccess) begin
+            if(!RW && PeripheralAccess) begin
                 state <= R_BUSY;
                 Done  <= 1;
             end
-            else if (!RW && PeripheralAccess) begin
+            else if (RW && PeripheralAccess) begin
                 state <= W_BUSY;
                 Done  <= 1;
             end

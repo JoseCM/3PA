@@ -19,6 +19,10 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+`define AccType_None   2'd0
+`define AccType_Periph 2'd1
+`define AccType_Mem    2'd2
+`define AccType_NTypes 2'd3
 
 module MemController(
         input Clk,
@@ -51,25 +55,32 @@ module MemController(
         input  C_Stall
     );
     
-    wire P_Stall;
-    
-    wire [2:0] AccessType; 
-    assign AccessType = (Address >= 32'h44A00000 && Address <= 32'h44A10000 && En) ? 3'b001 : 
-                        (Address >= 32'h0 && Address <= 32'hFFFF && En)            ? 3'b010 :
-                                                                                     3'b000;
-    assign Stall = AccessType == 3'b001 ? P_Stall : 
-                   AccessType == 3'b010 ? C_Stall : 0 ; 
-                   
-    assign OData = AccessType  == 3'b001 ? P_ReadData :
-                   AccessType  == 3'b010 ? C_ReadData : 0;
-                                                                                                   
-    assign P_AXIAddr = Address; //Always use processor address
-    assign P_WriteData = IData; //Always use processor input data for periph AXI
-
+        wire [`AccType_NTypes-1:0] AccessType; 
+        wire Periph_AccessCondition =  En && Address >= 32'h10000 && Address <= 32'h20000;
+        wire Mem_AccessCondition =    En && ~Periph_AccessCondition;
+        
+        assign AccessType = Periph_AccessCondition ? `AccType_Periph : 
+                            Mem_AccessCondition ? `AccType_Mem :
+                                                     `AccType_None;
+                                                       
+        assign Stall = AccessType == `AccType_Periph ? P_Stall : 
+                       AccessType == `AccType_Mem ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
+                       
+        assign OData = AccessType  == `AccType_Periph ? P_ReadData :
+                       AccessType  == `AccType_Mem ? C_ReadData : 0;
+                                                                                                       
+        assign P_AXIAddr = Address;
+        assign P_WriteData = IData; //Always use processor input data for periph AXI    
+        
+        //For Cache Signals 
+        assign C_En = (AccessType == `AccType_Mem);
+        assign C_RW = RW;
+        assign C_WriteData = IData;
+        assign C_Address = Address;
     
     PeriphController PController(
     .Clk(Clk),
-    .PeripheralAccess(AccessType[0]),
+    .PeripheralAccess(AccessType == `AccType_Periph),
     .RW(RW),
     .En(En),
     .Stall(P_Stall),
@@ -78,12 +89,6 @@ module MemController(
     .WriteCompleted(P_WriteCompleted),
     .ReadCompleted(P_ReadCompleted)
     );
-    
-    
-    //For Cache Forward Signals 
-    assign C_En = AccessType[1];
-    assign C_RW = RW;
-    assign C_WriteData = IData;
-    assign C_Address = Address;
+
     
 endmodule
