@@ -203,7 +203,7 @@ module soc # (
         .M_AXI_RREADY(m00_axi_rready)
     );
     
-    ROM inst_mem(
+   /* ROM inst_mem(
      .Clk(Clk),                                                   
      .Rst(Rst),                                                   
      .En(1), 
@@ -211,7 +211,7 @@ module soc # (
      .Addr(icache_bus_o[`IBUSI_ADDR]),                                                    
      .Data(icache_bus_i[`IBUSO_DATA]),
      .Imiss(icache_bus_i[`IBUSO_MISS])                                                         
-    );
+    );*/
     
     
 endmodule
