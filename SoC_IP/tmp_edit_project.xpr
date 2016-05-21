@@ -3,10 +3,10 @@
 <!--                                                         -->
 <!-- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="10" Path="c:/users/pedro/documents/3pa_processor/soc_ipcore/tmp_edit_project.xpr">
+<Project Version="7" Minor="10" Path="c:/users/pedro/documents/3pa_processor/soc_ip/tmp_edit_project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="e80d742990c5487aa8ce8af7249f82d4"/>
+    <Option Name="Id" Val="6a8f5157e5d34a2d8258a6fe8f986665"/>
     <Option Name="Part" Val="xc7z010clg400-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirModelSim" Val="$PCACHEDIR/compile_simlib/modelsim"/>

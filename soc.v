@@ -158,7 +158,7 @@ module soc # (
         .ReadData(P_ReadData),
         //.ValidReadData(ValidReadData),
         .M_AXI_ACLK(Clk),
-        .M_AXI_ARESETN(Rst),
+        .M_AXI_ARESETN(NotRst),
         .M_AXI_AWID(m00_axi_awid),
         .M_AXI_AWADDR(m00_axi_awaddr),
         .M_AXI_AWLEN(m00_axi_awlen),
@@ -203,7 +203,7 @@ module soc # (
         .M_AXI_RREADY(m00_axi_rready)
     );
     
-    ROM inst_mem(
+   ROM inst_mem(
      .Clk(Clk),                                                   
      .Rst(Rst),                                                   
      .En(1), 
