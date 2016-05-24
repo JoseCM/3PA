@@ -47,6 +47,12 @@ int	lc = 0;		/* location counter--# bytes for this instr	*/
 %token	DOT_EQU			/* yylval = NONE			*/
 
 
+/* NEW INSTRUCTIONS */
+%token ASR			/*yylval = NONE*/
+%token ASL			/*yylval = NONE*/
+%token LSR			/*yylval = NONE*/
+%token LSL			/*yylval = NONE*/
+%token RETI                     /*yylval = NONE*/
 
 
 /* start of rules section						*/
@@ -189,13 +195,49 @@ stmt	:	ADD	reg ',' reg ',' reg
 			sprintf(err_msg,"Syntax error near line #%d\n",curr_line);
 			err_exit(err_msg,PARSE_ABORT);
 			}
-   |	XOR	reg ',' reg ',' reg
+   	|	XOR	reg ',' reg ',' reg
 			{
 			add_stmt(XOR_OP,XOR_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
 			}
 	|	XOR	reg ',' reg ',' '#' expr
 			{
 			add_stmt(XOR_OP,XOR_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	ASR	reg ',' reg ',' reg
+			{
+			add_stmt(ASR_OP,ASR_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	ASR	reg ',' reg ',' '#' expr
+			{
+			add_stmt(ASR_OP,ASR_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	ASL	reg ',' reg ',' reg
+			{
+			add_stmt(ASL_OP,ASL_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	ASL	reg ',' reg ',' '#' expr
+			{
+			add_stmt(ASL_OP,ASL_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	LSR	reg ',' reg ',' reg
+			{
+			add_stmt(LSR_OP,LSR_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	LSR	reg ',' reg ',' '#' expr
+			{
+			add_stmt(LSR_OP,LSR_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	LSL	reg ',' reg ',' reg
+			{
+			add_stmt(LSL_OP,LSL_CODE,$2,$4,$6,REG_TYPE,WORD_SIZE);
+			}
+	|	LSL	reg ',' reg ',' '#' expr
+			{
+			add_stmt(LSL_OP,LSL_CODE,$2,$4,$7,IMMEDIATE,WORD_SIZE);
+			}
+	|	RETI	
+			{
+			add_stmt(RETI_OP,RETI_CODE,zero_ptr,zero_ptr,zero_ptr,REG_TYPE,WORD_SIZE);
 			}
 	;
 

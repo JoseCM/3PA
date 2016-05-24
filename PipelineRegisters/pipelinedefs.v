@@ -65,7 +65,7 @@
 
 `define WB_WIDTH                  3 // RE_Enable + RDST(2)
 `define MA_WIDTH                  2 // enable + R/W
-`define EX_WIDTH                 15 // needs(2) + alu_src1(2) + alu_src2(1) + cc_we(1) + alu_ctrl(3) + jump/branchinst(2) + condbits(4)
+`define EX_WIDTH                 16 // needs(2) + alu_src1(2) + alu_src2(1) + cc_we(1) + alu_ctrl(4) + jump/branchinst(2) + condbits(4)
 `define OP1_WIDTH                32
 `define OP2_WIDTH                32
 `define IM_WIDTH                 32
@@ -95,8 +95,8 @@
 `define IDEX_EX            `IDEX_EX_MSB : `IDEX_EX_LSB
 
 /* Control Values for execute stage*/
-`define EX_CondBits     14:11
-`define EX_ALUCTRL      10:8
+`define EX_CondBits     15:12
+`define EX_ALUCTRL      11:8
 `define EX_ALU_SRC1     7:6
 `define EX_ALU_SRC2     5
 `define EX_CC_WE        4

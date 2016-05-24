@@ -136,9 +136,10 @@ module processor(
     wire [31:0] EX_Op1;
     wire [31:0] EX_Op2;
     wire [31:0] EX_Im;
-    wire [14:0] EX_ExCtrl;
+    wire [`EX_WIDTH-1:0] EX_ExCtrl;
     wire [1:0] EX_MA;
     wire [2:0] EX_WB;
+ 
     
     IDControlUnit decode(
          .Clk(Clk),
@@ -375,6 +376,7 @@ module processor(
          .Flush_IF_ID(IF_ID_Flush),
          .Flush_ID_EX(IDEX_Flush)
         );
+
 
 
 

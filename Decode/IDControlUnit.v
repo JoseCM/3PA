@@ -59,6 +59,7 @@ module IDControlUnit(
     output [`EX_WIDTH-1:0] oEX,   
     output [`MA_WIDTH-1:0] oMA,
     output [`WB_WIDTH-1:0] oWB,
+
     
     /*forward unit signal*/
     output IFid__Need_Rs2,

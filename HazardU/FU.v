@@ -63,8 +63,8 @@ module FU(
                      ( (VWB__R_WE)   && (IDex__Need_Rs2)  && (VWB__Rdst==IDex__Rs2))                                     ?   2'b11:                  
                                                                                                                              2'b00;
                                                                                                                              
-    assign OP2_IdS = (MEMwb__R_WE && IFid__Need_Rs2 && (MEMwb__Rdst==IFid__Rs2))  ? 1'b1 : //forward RS2 from write back to decde
-                                                                                    1'b0;
+    assign OP2_IdS = 0;/*(MEMwb__R_WE && IFid__Need_Rs2 && (MEMwb__Rdst==IFid__Rs2))  ? 1'b1 : //forward RS2 from write back to decde
+                                                                                    1'b0;*/
                                                                                                                             
     assign Need_Stall = ( (!EXmem__RW_MEM && EXmem__MemEnable) && ( ((IDex__Need_Rs1) && (EXmem__Rdst==IDex__Rs1)) || ((IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2)) ))     ?   1'b1:
                                                                                                                                                              1'b0;

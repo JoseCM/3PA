@@ -23,18 +23,20 @@
 `define WIDTH 32
 
 module PC_Eval(
-
-	/*Input data from ID/EX registers*/
+	   /*Input data from ID/EX registers*/
     	input [`WIDTH-1:0] i_PC,
     	input [`WIDTH-1:0] i_ALU_rslt,
     	input [`WIDTH-1:0] i_PPC,
 
-	/*Input Control Signal from Branch Unit*/
+	   /*Input Control Signal from Branch Unit*/
     	input i_NPC_Ctrl,
 
-	/*Output data*/
+	   /*Output data*/
     	output [`WIDTH-1:0] o_New_PC,    
-    	output o_PPC_Eq
+    	output o_PPC_Eq,
+    	
+    	//SOLUTION OUTPUT
+    	output [`WIDTH-1:0] o_PC_VIC
     	);
     
     /*New Program Counter Selection*/
@@ -42,5 +44,8 @@ module PC_Eval(
 
     /*Check if the result of the predicted PC is equal to the ALU result (1 is equal / 0 not equal)*/
     assign o_PPC_Eq = (i_PPC == i_ALU_rslt);  
+    
+    //MAYBE A SOLUTION TO VIC
+    assign o_PC_VIC = o_PPC_Eq ? i_PC : i_ALU_rslt;    
     
 endmodule

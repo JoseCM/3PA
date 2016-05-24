@@ -50,6 +50,7 @@ module PCUpdate(
                            (FlushPipeandPC)                ?  JmpAddr:
                            (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
                            (PCSource)                      ?  Predict:
+ 
                                                            PC;
 
 //    ROM inst_mem(

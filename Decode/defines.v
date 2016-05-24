@@ -54,6 +54,13 @@
 `define	LDX	5'd12
 `define	ST	5'd13
 `define	STX	5'd14
+`define	MUL	5'd15
+`define	DIV	5'd16
+`define	ASR	5'd17
+`define	ASL	5'd18
+`define	LSR	5'd19
+`define	LSL	5'd20
+`define RETI 5'd21
 `define	HLT	5'd31
 
 `endif

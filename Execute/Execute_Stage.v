@@ -90,7 +90,7 @@ module EX_Stage(
             
 wire [1:0] i_ALU_src1_Ctrl ;
 wire i_ALU_src2_Ctrl;
-wire [2:0] i_ALU_Ctrl;
+wire [3:0] i_ALU_Ctrl;
 wire i_CC_WE;
 wire[`WIDTH-1:0] i_PPC = i_PPCCB[`PPCCB_WIDTH-1:2];
                             

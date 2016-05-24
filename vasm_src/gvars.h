@@ -26,6 +26,11 @@ defined for the convenience of the assembler.				*/
 #define  DOT_ALLOC_OP	19
 #define  DOT_ORG_OP	20
 #define  XOR_OP         21
+#define  ASR_OP		24
+#define  ASL_OP		25
+#define  LSR_OP		26
+#define  LSL_OP		27
+#define  RETI_OP        28
 
 /* Define all of the op-code values.  Note that there are fewer
 op-codes than there are operations visible to the assembler.  These
@@ -45,6 +50,11 @@ are the values that will actually appear in the object code file.	*/
 #define	LDX_CODE	12
 #define	ST_CODE		13
 #define	STX_CODE	14
+#define ASR_CODE	17
+#define ASL_CODE	18
+#define LSR_CODE	19
+#define LSL_CODE	20
+#define RETI_CODE   	21
 #define	HLT_CODE	31
 
 /* Define all of the possible branch conditions.  Stored in stmt[].misc	*/
