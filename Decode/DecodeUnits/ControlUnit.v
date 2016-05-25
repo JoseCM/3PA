@@ -455,7 +455,58 @@ begin
             WBStage[`WB_R_WE] <= 0;
             WBStage[`WB_RDST_MUX] <= 2'b0; 
         end
+        `MUL:
+        begin
+            SignExt <= bit16 ? 0 : 2'b0;
+            RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
+    
+            /* Ex */
+            EXStage[`EX_CondBits] <= 4'b0;
+            EXStage[`EX_ALUCTRL] <= 4'b0111;
+            EXStage[`EX_ALU_SRC1] <= 2'b00;
+            EXStage[`EX_ALU_SRC2] <= bit16;
+            EXStage[`EX_CC_WE] <= 1;
+            EXStage[`EX_JMP] <= 0;
+            EXStage[`EX_BXX ] <= 0;
+            EXStage[`EX_NEED_RS1] <= 1;
+            EXStage[`EX_NEED_RS2] <= !bit16;
+            
+            /* MA */
+            MAStage[`MA_RW] <= 0;
+            MAStage[`MA_EN] <= 0;               
+               
+            /* WB */ 
+            WBStage[`WB_R_WE] <= 1;
+            WBStage[`WB_RDST_MUX] <= 2'b01; 
+        end
+        `DIV:
+        begin
+            SignExt <= bit16 ? 0 : 2'b0;
+            RS2_Sel <= 1'b0;
+            IFid__Need_Rs2 <= !bit16;
+            
+            /* Ex */
+            EXStage[`EX_CondBits] <= 4'b0;
+            EXStage[`EX_ALUCTRL] <= 4'b1000;
+            EXStage[`EX_ALU_SRC1] <= 2'b00;
+            EXStage[`EX_ALU_SRC2] <= bit16;
+            EXStage[`EX_CC_WE] <= 1;
+            EXStage[`EX_JMP] <= 0;
+            EXStage[`EX_BXX ] <= 0;
+            EXStage[`EX_NEED_RS1] <= 1;
+            EXStage[`EX_NEED_RS2] <= !bit16;
+            
+            /* MA */
+            MAStage[`MA_RW] <= 0;
+            MAStage[`MA_EN] <= 0;               
+            
+            /* WB */ 
+            WBStage[`WB_R_WE] <= 1;
+            WBStage[`WB_RDST_MUX] <= 2'b01;
+        end
         //---------------NEW SHIfTS----------------//
+        
         `ASR :
         begin
             SignExt <= bit16 ? 0 : 2'b0;

@@ -67,6 +67,8 @@ module ALU(
     //reg c; //Auxiliar to carry out determination
     reg [`WIDTH-1:0] AUX_SL ; //Substitute of the previous c register. 
     wire subt = (i_ALU_Ctrl == `ALU_SUB); //In case it's a subb operation
+    wire mul = (i_ALU_Ctrl == `ALU_MUL);
+    wire div = (i_ALU_Ctrl == `ALU_DIV);
  
 
    
@@ -89,8 +91,10 @@ module ALU(
             else begin
                 ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
                 ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
-                ro_CCodes[`CARRY] <= ((|AUX_SL[`WIDTH-1:0]) & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB) | (i_ALU_Ctrl == `ALU_ASL) | (i_ALU_Ctrl == `ALU_MUL) | (i_ALU_Ctrl == `ALU_DIV)));
-                ro_CCodes[`OVERFLOW] <=  ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
+                ro_CCodes[`CARRY] <= ((|AUX_SL[`WIDTH-1:0]) & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB) | (i_ALU_Ctrl == `ALU_ASL) | (i_ALU_Ctrl == `ALU_MUL)));
+                ro_CCodes[`OVERFLOW] <=  ((~div & (ro_ALU_rslt[`WIDTH-1] & ((~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1]))^(i_Op1[`WIDTH-1]&i_Op2[`WIDTH-1]&mul))) 
+                                         | (~ro_ALU_rslt[`WIDTH-1] & ((i_Op1[`WIDTH-1] & ((subt^mul)^i_Op2[`WIDTH-1]))^(~i_Op1[`WIDTH-1]& i_Op2[`WIDTH-1]&mul))))
+                                         | (div & (i_Op2[`WIDTH-1]==0)));        
                 //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
             end
         end
@@ -106,7 +110,7 @@ module ALU(
             `ALU_NOT: ro_ALU_rslt           <= ~i_Op1;
             `ALU_XOR: ro_ALU_rslt           <= i_Op1 ^ i_Op2;
             `ALU_MUL: {AUX_SL,ro_ALU_rslt}  <= i_Op1 * i_Op2;
-            `ALU_DIV: {AUX_SL,ro_ALU_rslt}  <= i_Op1 / i_Op2;
+            `ALU_DIV: ro_ALU_rslt           <= i_Op1 / i_Op2;
             `ALU_ASR: ro_ALU_rslt           <= $signed(i_Op1) >>> i_Op2[4:0]; //$signed task is synthetizable. Check Coding Guidelines for Datapath Synthesis (Synopsys)
             `ALU_ASL: {AUX_SL,ro_ALU_rslt}  <= $signed(i_Op1) <<< i_Op2[4:0];
             `ALU_LSR: ro_ALU_rslt           <= i_Op1 >> i_Op2;
