@@ -27,7 +27,7 @@ TODO: fill and store buffer outputs/inputs
 module CacheIControl(
     input Clk,
     input Rst,
-    input En,
+    input En, //só fica a1 no acesso
     input RW,
     output Stall,
     input [31:0] WordAddress,
@@ -83,33 +83,21 @@ module CacheIControl(
     
     assign R_Enable = (En && ((ReadState == IDLE) || (ReadState == WAIT_COMPLETION_DIRTY) || (ReadState == WAIT_COMPLETION_NON_DIRTY)) && !RW && !Stall) && RC_OEn;
     
-    /*assign Stall = (En && (WriteState == IDLE) && (C_Miss && RBusy) && RW)? 1'b1:
-                    (En && (WriteState == WWORD_ON_CACHE) && RW)? 1'b1:
-                    (En && (WriteState == START_AXI_RW) && RW)? 1'b1:
-                    (En && (WriteState == START_AXI_R) && RW)? 1'b1:
-                    (En && (WriteState == MERGE_RESULTS) && RW)? 1'b1:
-                    (En && (WriteState == WRITE_LB_ON_CACHE) && RW)? 1'b1:
-                    //(En && (WriteState == WWORD_ON_CACHE) && RW)? 1'b1:
-                    //Stall in case of a write to cache when LBuffer tries to write on cache too
-                    (En && (ReadState == IDLE) && (C_Miss && WBusy) && !RW)? 1'b1:
-                    (En && (ReadState == READ_MISS_DIRTY) && !RW)? 1'b1:
-                    (En && (ReadState == READ_MISS_NOT_DIRTY) && !RW)? 1'b1:
-                    (En && (ReadState == WAIT_COMPLETION_DIRTY) && !RW)? 1'b1:
-                    (En && (ReadState == WAIT_COMPLETION_NON_DIRTY) && !RW)? 1'b1:
-                    (En && (ReadState == WRITE_CACHE) && !RW)? 1'b1:
-                                                                1'b0;*/
-
+    
+    assign CrtWord = (En && ((ReadState == READ_MISS_DIRTY) || (ReadState == READ_MISS_NOT_DIRTY)) && LB_FirstWord);
+    
+    
     assign Stall = WStall || RStall;
     
-    assign RStall = ((ReadState == IDLE) && (C_Miss && !RW)) || //read state, idle transitions, wether it's write is busy or not
-                    (((ReadState == READ_MISS_DIRTY) || (ReadState == READ_MISS_NOT_DIRTY)) && (!LB_FirstWord)) || //Stall until the critical word arrives
-                    (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && (C_Miss & !RW)) || //Stall if another read miss is issued
-                    (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && ((LB_Completed || !LB_Occupied) && (LW_Completed || !LW_Occupied)) && !RW) ||
-                    ((ReadState == WRITE_CACHE) && (/*C_Miss &*/ !RW)); //Stall if we're writting the cache line
+    assign RStall = En && ((ReadState == IDLE) && (C_Miss && !RW)) || //read state, idle transitions, wether it's write is busy or not
+                    En && (((ReadState == READ_MISS_DIRTY) || (ReadState == READ_MISS_NOT_DIRTY)) && (!LB_FirstWord)) || //Stall until the critical word arrives
+                    En && (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && (C_Miss & !RW)) || //Stall if another read miss is issued
+                    En && (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && ((LB_Completed || !LB_Occupied) && (LW_Completed || !LW_Occupied)) && !RW) ||
+                    En && ((ReadState == WRITE_CACHE) && (/*C_Miss &*/ !RW)); //Stall if we're writting the cache line
                     
-    assign WStall = (!C_Miss && RW && SameLine) || //Stalls if the write tries to write on the same cache line of the LineBuffer
-                    (C_Miss && RW && RBusy) || //Stalls if there's a write miss and the LineBuffer is occupied by previous misses
-                    (En && RW && WBusy);    //Stalls if there's a write and the previous one hasn't finished
+    assign WStall = En && (!C_Miss && RW && SameLine) || //Stalls if the write tries to write on the same cache line of the LineBuffer
+                    En && (C_Miss && RW && RBusy) || //Stalls if there's a write miss and the LineBuffer is occupied by previous misses
+                    En && (RW && WBusy);    //Stalls if there's a write and the previous one hasn't finished
 
 //----------------------------WRITE STATE MACHINE-------------------------
 
@@ -124,6 +112,7 @@ module CacheIControl(
         LB_Enable <= 0;
         StoreBuff_Enable <= 1;
         FromStoreBuffer <= 0;
+        WBusy <= 0;
      end
      else 
         case(WriteState)
@@ -142,7 +131,6 @@ module CacheIControl(
                     else begin
                         //Combinational Write
                     end    
-
                 end
                 else if(C_Miss && C_Dirty && !RBusy) begin
                     WriteState <= START_AXI_RW;

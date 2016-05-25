@@ -44,21 +44,14 @@ module DCache(
         output RWordSelect
     );
     
-    wire [31:0] OAddress;
-    wire Miss;
-    wire [31:0] OData;
-    wire [31:0] IData;
     wire W_Enable;
     wire R_Enable;
-   // wire C_RW;
+    // wire C_RW;
     wire Merge;
     wire dirty;
     wire writeType;
-    wire [31:0] AddrMux;
-    wire [31:0] IDataMux;
     wire StoreBuff_Enable;
-    wire RWLine;
-   // assign Stall = CtrlStall || C_Ctrl;
+    // assign Stall = CtrlStall || C_Ctrl;
     reg [31:0] StoreBuff;
     reg [31:0] StoreBuffAddr;
     
@@ -84,7 +77,7 @@ module DCache(
         .RW(RW),
         /*Cache*/        
         .Stall(Stall),
-        .WordAddress(WordAddress),
+        .WordAddress(Address),
         .LineAddress(LB_LineAddr),
         .C_Dirty(dirty),
         .WriteType(writeType),
@@ -130,8 +123,8 @@ module DCache(
         .W_Enable(W_Enable), 
         .R_Enable(R_Enable),
         /*Word related cache signals*/
-        .word(WordWrite),
-        .addr(WordWriteAddress),
+        .word(WData),
+        .addr(Address),
         .inst(RData),
         .hit(hit),
         .dirty(dirty),
