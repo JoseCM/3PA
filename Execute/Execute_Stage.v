@@ -59,10 +59,6 @@ module EX_Stage(
         input [`PC_WIDTH-1:0] i_PC, 
         input [`PPCCB_WIDTH-1:0] i_PPCCB,
         input [`IC_WIDTH-1:0] i_IC,
-              
-        /****************VIC*****************/
-        input i_VIC_CCodes_ctrl,
-        input [3:0] i_VIC_CCodes,
         
         /*External Outputs data and signals(No Connection to the Pipeline Register)*/
         output [1:0] o_CB,
@@ -79,7 +75,6 @@ module EX_Stage(
         output [`RDSADDR_WIDTH-1:0] o_Rds_addr,
         output o_need_Rs1,
         output o_need_Rs2,
-
         
         /*EXMA register output data*/
         output [`WIDTH-1:0] o_CH_Jump_Addr,
@@ -125,7 +120,6 @@ assign i_ALU_src2_Ctrl =  i_EX_Ctrl[`EX_ALU_SRC2];
 assign i_ALU_Ctrl = i_EX_Ctrl[`EX_ALUCTRL];
 assign i_CC_WE = i_EX_Ctrl[`EX_CC_WE];
 
-
 /*Concatenate data to EXMA register bus and desconcatenate*/
 
 assign i_EXMA_indata[`EXMA_WB] = i_WB_Ctrl;
@@ -170,8 +164,6 @@ ALU alu(
                  .i_CC_WE(i_CC_WE),
                  .i_ALU_Ctrl(i_ALU_Ctrl),
                  .reset(reset),
-                 .i_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),
-                 .i_VIC_CCodes(i_VIC_CCodes),
                  .ro_ALU_rslt(o_ALU_rslt),
                  .ro_CCodes(o_CCodes)
         );

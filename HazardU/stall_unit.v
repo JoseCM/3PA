@@ -39,7 +39,6 @@ module Stall_Unit(
     output o_IDEX_Flush,
     output o_EXMA_Flush, // To flush EXMA pipleine Register 
     output o_MAWB_Flush // To flush MAWB pipeline register
-
     );
     
     assign o_PC_Stall = i_Need_Stall | i_DCache_Miss | i_ICache_Miss;

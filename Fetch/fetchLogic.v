@@ -48,11 +48,7 @@ module fetchLogic(
     output [31:0] Icache_bus_out,
     input [32:0] Icache_bus_in,
     output [65:0] Dcache_bus_out,
-    input [32:0] Dcache_bus_in,
-    
-    /**********VIC*************/
-    input i_VIC_ctrl,
-    input [31:0] i_VIC_iaddr
+    input [32:0] Dcache_bus_in
     );
     
    PCUpdate pcupdate(
@@ -72,11 +68,7 @@ module fetchLogic(
        .Imiss(Imiss),
        
        .Icache_bus_out(Icache_bus_out),
-       .Icache_bus_in(Icache_bus_in),
-       
-       /**********VIC*************/
-       .i_VIC_ctrl(i_VIC_ctrl),
-       .i_VIC_iaddr(i_VIC_iaddr)
+       .Icache_bus_in(Icache_bus_in)
     );
     
     wire [33:0] PPC_CB;

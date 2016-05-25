@@ -49,12 +49,7 @@ module IF(
     input [32:0] Dcache_bus_in,
     //Changes
     output [31:0] Icache_bus_out,
-    output o_IFID_NOT_FLUSH,
-    input [32:0] Icache_bus_in,
-    
-    /**********VIC*************/
-    input i_VIC_ctrl,
-    input [31:0] i_VIC_iaddr
+    input [32:0] Icache_bus_in
 );
 
     wire [31:0] IR_w, PC_w, InstrAddr_w, Predict_w;
@@ -83,16 +78,12 @@ module IF(
         .PC_Match(PCMatch_w),
                    
         .Icache_bus_out(Icache_bus_out),
-        .Icache_bus_in(Icache_bus_in), 
-        
-         /**********VIC*************/
-        .i_VIC_ctrl(i_VIC_ctrl),
-        .i_VIC_iaddr(i_VIC_iaddr)      
+        .Icache_bus_in(Icache_bus_in)            
     );
 
     wire [`IFID_WIDTH-1:0]in;
     assign in = (Rst)          ?      0:
-                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w,1'b1};
+                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w};
 
     wire [`IFID_WIDTH-1:0]out;
     assign IR = (Rst)          ?      0:
@@ -109,9 +100,6 @@ module IF(
                                       
     assign PCSource = (Rst)    ?      0:   
                                       out[`IFID_VALID];
-                                      
-    assign o_IFID_NOT_FLUSH = (Rst)  ?  0: 
-                                      out[`IFID_NOT_FLUSH];
     
    
     pipereg #(`IFID_WIDTH) IFIDreg(

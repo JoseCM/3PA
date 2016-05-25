@@ -54,10 +54,6 @@ module ALU(
     
     /*reset signal*/
     input reset,
-    
-    /****************VIC*****************/
-    input i_VIC_CCodes_ctrl,
-    input [3:0] i_VIC_CCodes,
 
     /* Outputs */
     output reg [`WIDTH-1:0] ro_ALU_rslt, 
@@ -80,19 +76,13 @@ module ALU(
             ro_CCodes[`OVERFLOW]    <= 0;        
         end
         /*CARRY -> UNSIGNEDS........OVERFLOWS -> SIGNEDS*/
-        else if(i_CC_WE || i_VIC_CCodes_ctrl)
+        else if(i_CC_WE)
         begin
-            if(i_VIC_CCodes_ctrl)
-            begin
-                ro_CCodes <= i_VIC_CCodes;
-            end
-            else begin
-                ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
-                ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
-                ro_CCodes[`CARRY] <= ((|AUX_SL[`WIDTH-1:0]) & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB) | (i_ALU_Ctrl == `ALU_ASL) | (i_ALU_Ctrl == `ALU_MUL) | (i_ALU_Ctrl == `ALU_DIV)));
-                ro_CCodes[`OVERFLOW] <=  ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
-                //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
-            end
+            ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
+            ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
+            ro_CCodes[`CARRY] <= ((|AUX_SL[`WIDTH-1:0]) & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB) | (i_ALU_Ctrl == `ALU_ASL) | (i_ALU_Ctrl == `ALU_MUL) | (i_ALU_Ctrl == `ALU_DIV)));
+            ro_CCodes[`OVERFLOW] <=  ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
+            //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
         end
     end
     

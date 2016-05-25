@@ -34,9 +34,8 @@
 `define PC_WIDTH        32
 `define PPCCB_WIDTH     34
 `define IC_WIDTH        32
-`define NOT_FLUSH_WIDTH 1
 
-`define IFID_WIDTH           (`INST_WIDTH + `VALID_WIDTH + `PC_WIDTH + `PPCCB_WIDTH + `IC_WIDTH + `NOT_FLUSH_WIDTH)
+`define IFID_WIDTH           (`INST_WIDTH + `VALID_WIDTH + `PC_WIDTH + `PPCCB_WIDTH + `IC_WIDTH)
 
 `define IFID_INST_LSB        (0)
 `define IFID_INST_MSB        (`INST_WIDTH - 1 + `IFID_INST_LSB)
@@ -58,10 +57,6 @@
 `define IFID_IC_MSB          (`IC_WIDTH - 1 + `IFID_IC_LSB)
 `define IFID_IC              `IFID_IC_MSB : `IFID_IC_LSB
 
-`define IFID_NOT_FLUSH_LSB          (`IFID_IC_MSB + 1)
-`define IFID_NOT_FLUSH_MSB          (`NOT_FLUSH_WIDTH - 1 + `IFID_NOT_FLUSH_LSB )
-`define IFID_NOT_FLUSH              `IFID_NOT_FLUSH_MSB : `IFID_NOT_FLUSH_LSB  
-
 /**************************************************
 *
 *   ID/EX Pipeline Registers
@@ -77,10 +72,8 @@
 `define RDSADDR_WIDTH             5 //Modified
 `define RS1ADDR_WIDTH             5
 `define RS2ADDR_WIDTH             5
-`define RETI_WIDTH                1//Control bit to indicate Reti
 
-
-`define IDEX_WIDTH     (`WB_WIDTH + `MA_WIDTH + `EX_WIDTH + `VALID_WIDTH + `OP1_WIDTH + `OP2_WIDTH + `IM_WIDTH + `RDSADDR_WIDTH + `RS1ADDR_WIDTH + `RS2ADDR_WIDTH + `PC_WIDTH + `PPCCB_WIDTH + `IC_WIDTH + `RETI_WIDTH + `NOT_FLUSH_WIDTH)
+`define IDEX_WIDTH     (`WB_WIDTH + `MA_WIDTH + `EX_WIDTH + `VALID_WIDTH + `OP1_WIDTH + `OP2_WIDTH + `IM_WIDTH + `RDSADDR_WIDTH + `RS1ADDR_WIDTH + `RS2ADDR_WIDTH + `PC_WIDTH + `PPCCB_WIDTH + `IC_WIDTH)
 
 `define IDEX_WB_LSB        (0)
 `define IDEX_WB_MSB        (`WB_WIDTH - 1 + `IDEX_WB_LSB)
@@ -152,14 +145,6 @@
 `define IDEX_IC_LSB          (`IDEX_PPCCB_MSB + 1)
 `define IDEX_IC_MSB          (`IC_WIDTH - 1 + `IDEX_IC_LSB)
 `define IDEX_IC              `IDEX_IC_MSB : `IDEX_IC_LSB
-
-`define IDEX_RETI_LSB     (`IDEX_IC_MSB + 1)
-`define IDEX_RETI_MSB     (`RETI_WIDTH - 1 + `IDEX_RETI_LSB)
-`define IDEX_RETI         `IDEX_RETI_MSB : `IDEX_RETI_LSB
-
-`define IDEX_NOT_FLUSH_LSB          (`IDEX_RETI_MSB + 1)
-`define IDEX_NOT_FLUSH_MSB          (`NOT_FLUSH_WIDTH - 1 + `IDEX_NOT_FLUSH_LSB  )
-`define IDEX_NOT_FLUSH              `IDEX_NOT_FLUSH_MSB : `IDEX_NOT_FLUSH_LSB  
 
 /**************************************************
 *

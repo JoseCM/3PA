@@ -37,11 +37,7 @@ module PCUpdate(
     
     /**************************/
     output [31:0] Icache_bus_out,
-    input [32:0] Icache_bus_in,
-    
-    /**********VIC*************/
-    input i_VIC_ctrl,
-    input [31:0] i_VIC_iaddr
+    input [32:0] Icache_bus_in
     
     );
     
@@ -80,13 +76,7 @@ module PCUpdate(
     end
     else if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
     begin
-         if(i_VIC_ctrl) begin
-            InstrAddr = i_VIC_iaddr;
-         end
-         else begin
             InstrAddr = new_InstrAddr; 
-         end
-            
             PC =  InstrAddr +4'b0100;
             IR = newIR;
     end

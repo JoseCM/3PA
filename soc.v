@@ -45,7 +45,7 @@ module soc(
            .Icache_bus_out(icache_bus_o),
            .Icache_bus_in(icache_bus_i)         
     );
-
+    
     RAM ram(
             .Clk(Clk),//clock
             .Rst(Rst),//reset
