@@ -29,7 +29,9 @@ module PeriphController(
     output StartAXIRead,
     output StartAXIWrite,
     input WriteCompleted,
-    input ReadCompleted
+    input ReadCompleted,
+    input [31:0] oAddress,
+    input [31:0] LB_LineAddres
     );
     
    parameter [1:0] IDLE = 0,
