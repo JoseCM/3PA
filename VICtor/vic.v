@@ -20,20 +20,35 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Vic(
+module VIC(
     input clk,
     input rst,
-    input [31:0] i_PC,    
-    input [3:0] i_VIC_data,   
-    input [4:0] i_VIC_regaddr,
-    input i_VIC_we,
-    input [30:0] i_ext,
-    input i_reti,
-    input [3:0] i_CCodes,
     
+    /*Execute Signals*/
+    input [31:0] i_PC, 
+    input [3:0] i_CCodes, 
+    input i_reti, 
+    
+    input i_NOT_FLUSH,
+    
+    /*Memory Stage*/
+    input [3:0] i_VIC_data,   
+    input [4:0] i_VIC_regaddr,   
+    input i_VIC_we,
+    
+    /*Peripherals*/
+    input [30:0] i_ext,
+    
+
+    /*Execute Signals*/
     output [3:0] o_CCodes,
+    output o_VIC_CCodes_ctrl,
+    
+    /*Memory Stage*/
     output [3:0] o_VIC_data,
     output [31:0] o_VIC_iaddr,
+    
+    /*Fetch Stage and Branch Unit*/
     output o_VIC_ctrl
     );
     
@@ -52,10 +67,12 @@ module Vic(
         .i_ISR_addr(o_irq_addr),
         .i_IRQ(o_IRQ),
         .i_CCodes(i_CCodes),
+        .i_NOT_FLUSH(i_NOT_FLUSH),
         .o_IRQ_PC(o_VIC_ctrl),
         .o_VIC_iaddr(o_VIC_iaddr),
         .o_VIC_CCodes(o_CCodes),
-        .o_IRQ_VIC(i_IRQ)
+        .o_IRQ_VIC(i_IRQ),
+        .o_VIC_CCodes_ctrl(o_VIC_CCodes_ctrl)
     );
 
     vic_registers vr (

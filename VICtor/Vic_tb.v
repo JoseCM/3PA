@@ -39,7 +39,7 @@ module Vic_tb(
    wire [31:0] o_VIC_iaddr;
    wire o_VIC_ctrl;
     
-   Vic vic(
+   VIC vic(
         .clk(clk),
         .rst(rst),
         .i_PC(i_PC),    

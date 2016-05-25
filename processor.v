@@ -24,6 +24,7 @@
 module processor(
        input Clk,
        input Rst,
+       input [30:0] i_ext, // input vic peripheral
        
        /***************************/
        output [65:0] Dcache_bus_out,
@@ -94,6 +95,12 @@ module processor(
     wire [31:0] ID_IAddr;
     wire [33:0] ID_PPCCB;
     wire [31:0] w_CHJumpAddr;
+    
+    /**********VIC*************/
+    wire i_VIC_ctrl;
+    wire [31:0] i_VIC_iaddr;
+    wire i_VIC_CCodes_ctrl;
+    wire [3:0] i_VIC_CCodes;
 
     IF fetch(
         //General
@@ -120,7 +127,13 @@ module processor(
          .PPCCB(ID_PPCCB),
                 
          .Icache_bus_out(Icache_bus_out),
-         .Icache_bus_in(Icache_bus_in)
+         .Icache_bus_in(Icache_bus_in),
+         
+         /**********VIC*************/
+         .i_VIC_ctrl(i_VIC_ctrl),
+         .i_VIC_iaddr(i_VIC_iaddr),
+         
+         .o_IFID_NOT_FLUSH(NOT_FLUSH)
     );
 
     //wire WB_RWE;
@@ -139,7 +152,11 @@ module processor(
     wire [`EX_WIDTH-1:0] EX_ExCtrl;
     wire [1:0] EX_MA;
     wire [2:0] EX_WB;
- 
+    
+    wire RETI_Inst;
+    
+    wire NOT_FLUSH;
+    wire VIC_NOT_FLUSH;
     
     IDControlUnit decode(
          .Clk(Clk),
@@ -155,6 +172,8 @@ module processor(
          .iPC(ID_PC), 
          .iValid(ID_PCSrc),
          .iIR(ID_IR),
+         /**/
+         .i_NOT_FLUSH(NOT_FLUSH),
          /*Input to stall or flush*/
          .stall(IDEX_Stall),
          .flush(IDEX_Flush),
@@ -181,7 +200,10 @@ module processor(
 
          .oEX(EX_ExCtrl),
          .oMA(EX_MA),
-         .oWB(EX_WB)
+         .oWB(EX_WB),
+         .o_RETI(RETI_Inst), //RETI Signal
+         
+         .o_NOT_FLUSH(VIC_NOT_FLUSH)//later for vic
     );
 
 
@@ -223,6 +245,10 @@ module processor(
         .i_PC(EX_PC), 
         .i_PPCCB(EX_PPCCB),
         .i_IC(EX_IC),
+       
+        /****************VIC*****************/
+        .i_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),
+        .i_VIC_CCodes(i_VIC_CCodes),
         
         /*External Outputs data and signals(No Connection to the Pipeline Register)*/
         .o_CB(BR_CBI),
@@ -353,10 +379,12 @@ module processor(
          .JumpInstr(BR_JmpCtrl),
          .PredicEqRes(PPC_Eq),
          .CtrlIn(BR_CBI),
+         .i_VIC_ctrl(i_VIC_ctrl),
          .CtrlOut(ID_CB_o),
          .FlushPipePC(ID_FlushPipeandPC),
          .WriteEnable(ID_WriteEnable),
          .NPC(EX_NPC),
+         
 
           //CHECK CC
          .cc4(condCodes),            // The condition code bits
@@ -378,6 +406,38 @@ module processor(
         );
 
 
-
-
+    VIC vic(
+            
+            .clk(clk),
+            .rst(rst), 
+                      
+            /*Execute Signals*/
+            .i_PC(),
+            .i_CCodes(condCodes), //saving cc from execute stage
+            .i_reti(RETI_Inst),   //Reti value from Decode    
+            
+            .i_NOT_FLUSH(VIC_NOT_FLUSH),
+                
+             /*Memory Stage*/
+            .i_VIC_data(),   
+            .i_VIC_regaddr(),   
+            .i_VIC_we(),
+            
+             /*Peripherals*/
+            .i_ext(i_ext), // input peripheral
+        
+            /*Execute Signals*/
+            .o_CCodes(i_VIC_CCodes),
+            .o_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),
+            
+            /*Memory Stage*/
+            .o_VIC_data(),
+ 
+            
+            /*Fetch Stage*/
+            .o_VIC_iaddr(i_VIC_iaddr),
+            .o_VIC_ctrl(i_VIC_ctrl)
+            
+            );
+            
 endmodule

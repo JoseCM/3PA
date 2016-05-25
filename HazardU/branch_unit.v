@@ -27,6 +27,9 @@ module branch_unit(
     input   PredicEqRes,
     input   [1:0] CtrlIn,
     
+    /*********VIC**************/
+    input i_VIC_ctrl,
+    
     output  reg [1:0] CtrlOut,
     output  reg FlushPipePC,
     output  reg WriteEnable,
@@ -35,7 +38,7 @@ module branch_unit(
     );
     
     //changed here
-    wire [6:0] inputcat = {PcMatchValid,JumpTaken,BranchInstr,JumpInstr,PredicEqRes,CtrlIn};  
+    wire [7:0] inputcat = {PcMatchValid,JumpTaken,BranchInstr,JumpInstr,PredicEqRes,CtrlIn,i_VIC_ctrl};  
     
     always @(inputcat)
     begin  

@@ -50,6 +50,10 @@ module HazardUnit(
     input   JumpInstr,
     input   PredicEqRes,
     input   [1:0] CtrlIn,
+    
+    /*************VIC****************/
+    input i_VIC_ctrl,
+    
     output  [1:0] CtrlOut,
     output  FlushPipePC,
     output  WriteEnable,
@@ -113,6 +117,7 @@ module HazardUnit(
         .JumpInstr(JumpInstr),
         .PredicEqRes(PredicEqRes),
         .CtrlIn(CtrlIn),
+        .i_VIC_ctrl(i_VIC_ctrl),
         .CtrlOut(CtrlOut),
         .FlushPipePC(FlushPipePC),
         .WriteEnable(WriteEnable),
@@ -144,6 +149,8 @@ module HazardUnit(
          .o_IDEX_Flush(o_IDEX_Flush),
          .o_EXMA_Flush(o_EXMA_Flush), // To flush EXMA pipleine Register 
          .o_MAWB_Flush(o_MAWB_Flush) // To flush MAWB pipeline register
+         
+         
          );
          
      assign Flush_IF_ID =  FlushPipePC | o_IFID_Flush;
