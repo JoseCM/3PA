@@ -166,6 +166,9 @@ module soc # (
     wire P_ReadCompleted;
     wire start_write_wire;
     wire start_read_wire;
+    wire [31:0] C_WriteData;
+    wire [31:0] C_ReadData;
+    wire [31:0] C_Address;
     wire [31:0] LW_Output_Addr;
     wire [255:0] LW_AXIData;
     wire WriteCompleted;
@@ -197,7 +200,14 @@ module soc # (
     .P_WriteData(P_WriteData),
     .P_ReadData(P_ReadData),
     .P_WriteCompleted(P_WriteCompleted),
-    .P_ReadCompleted(P_ReadCompleted)
+    .P_ReadCompleted(P_ReadCompleted),
+    //For cache control
+    .C_En(C_En),
+    .C_RW(C_RW),
+    .C_WriteData(C_WriteData),
+    .C_Address(C_Address),
+    .C_ReadData(C_ReadData),
+    .C_Stall(C_Stall)
     );
     
    //Cache & Cache Controller
@@ -213,14 +223,14 @@ module soc # (
    .Stall(C_Stall),
    /*LineWriteBuffer*/
    .LW_Enable(LW_En),
-   .LW_Completed(ST_Completed),
+   .LW_Completed(LW_Completed),
    .oLineData(LW_CacheLineToWrite),
    /*LineFillBuffer*/
-   .LB_Completed(LB_Completed),
-   .LB_FirstWord(FirstDataAcquired),
+   .LB_Completed(LB_LineReadCompleted),
+   .LB_FirstWord(LB_FirstDataAcquired),
    .LB_Enable(LB_En),
    .LB_LineData(LB_ReadLine),
-   .LB_LineAddr(LB_LineAddr),
+   .LB_LineAddr(LB_Output_Addr),
    .RWordSelect(RWordSelect)
    );
    
@@ -231,7 +241,7 @@ module soc # (
    LinefillBuffer lfb (
    .Clk(Clk),
    .Enable(LB_Enable),
-   .Address(axi_araddr_input), //start adress
+   .Address(C_Address), //start adress
    .BaseAddress(LB_Output_Addr), //saved start adress
    .LineReadCompleted(LB_LineReadCompleted), // read a whole line
    .Line(LB_ReadLine), //read line
@@ -247,7 +257,7 @@ module soc # (
    .Clk(Clk),
    .Enable(LW_Enable),
    .Data(LW_CacheLineToWrite),
-   .Address(axi_awaddr_input), 
+   .Address(C_Address ), 
    .AXICompleted(WriteCompleted),
    .AXIData(LW_AXIData),
    .AXIAddr(LW_Output_Addr),

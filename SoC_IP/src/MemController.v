@@ -77,7 +77,7 @@ module MemController(
         assign C_RW = RW;
         assign C_WriteData = IData;
         assign C_Address = Address;
-    
+        
     PeriphController PController(
     .Clk(Clk),
     .PeripheralAccess(AccessType == `AccType_Periph),

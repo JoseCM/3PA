@@ -51,10 +51,6 @@ module DCache(
     wire W_Enable;
     wire R_Enable;
    // wire C_RW;
-    //Not connected
-    wire LB_Completed;
-    wire ST_Completed;
-    wire [31:0] LB_FirstWord;
     wire Merge;
     wire dirty;
     wire writeType;
@@ -88,6 +84,8 @@ module DCache(
         .RW(RW),
         /*Cache*/        
         .Stall(Stall),
+        .WordAddress(WordAddress),
+        .LineAddress(LB_LineAddr),
         .C_Dirty(dirty),
         .WriteType(writeType),
         .C_Miss(~hit),
@@ -122,7 +120,7 @@ module DCache(
     in case of a read miss*/
     assign WCacheLine = (Merge == 1)? MergedLine : LB_LineData; 
     /*Mux to use address from store buffer or directly from CPU*/
-    assign WordWriteAddress = (FromStoreBuffer == 1) ? StoreBuffAddr : Address;
+    assign WordAddress = (FromStoreBuffer == 1) ? StoreBuffAddr : Address;
     assign WordWrite = (FromStoreBuffer == 1) ? StoreBuff : WData;
     
     DCacheMem DCMem(
