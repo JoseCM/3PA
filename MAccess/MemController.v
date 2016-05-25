@@ -63,11 +63,11 @@ module MemController(
                             Mem_AccessCondition ? `AccType_Mem :
                                                      `AccType_None;
                                                        
-        assign Stall = AccessType == `AccType_Periph ? P_Stall : 
-                       AccessType == `AccType_Mem ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
+        assign Stall = (AccessType == `AccType_Periph) ? P_Stall : 
+                       (AccessType == `AccType_Mem) ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
                        
-        assign OData = AccessType  == `AccType_Periph ? P_ReadData :
-                       AccessType  == `AccType_Mem ? C_ReadData : 0;
+        assign OData = (AccessType  == `AccType_Periph) ? P_ReadData :
+                       (AccessType  == `AccType_Mem) ? C_ReadData : 0;
                                                                                                        
         assign P_AXIAddr = Address;
         assign P_WriteData = IData; //Always use processor input data for periph AXI    
