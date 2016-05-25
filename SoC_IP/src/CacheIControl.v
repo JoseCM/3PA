@@ -115,10 +115,11 @@ module CacheIControl(
 
     //Write
     always @(posedge Clk) begin
-     if(Rst || !En) begin
+     if(Rst) begin
         WriteState <= IDLE;
 	    WC_OEn <= 1;
         Merge <= 0;
+        WBusy <= 0;
         WriteType <= 0;
         LW_Enable <= 0;
         LB_Enable <= 0;
@@ -129,7 +130,7 @@ module CacheIControl(
         case(WriteState)
             IDLE: 
             begin
-               if(!C_Miss && RW) begin //TODO verify if the atual state is writecache
+               if(!C_Miss && RW && En) begin //TODO verify if the atual state is writecache
                     if(SameLine) begin
                         //Wait one cycle
                         WriteState <= WWORD_ON_CACHE;
@@ -144,7 +145,7 @@ module CacheIControl(
                     end    
 
                 end
-                else if(C_Miss && C_Dirty && !RBusy) begin
+                else if(C_Miss && C_Dirty && !RBusy && En) begin
                     WriteState <= START_AXI_RW;
                     LB_Occupied <= 1;
                     LW_Occupied <= 1;
@@ -156,7 +157,7 @@ module CacheIControl(
                     StoreBuff_Enable <= 0;
                     FromStoreBuffer <= 0;
                 end
-                else if(C_Miss && !C_Dirty && !RBusy) begin
+                else if(C_Miss && !C_Dirty && !RBusy && En) begin
                     WriteState <= START_AXI_R;
                     LB_Occupied <= 1;
                     WBusy <= 1;
@@ -166,7 +167,7 @@ module CacheIControl(
                     StoreBuff_Enable <= 0;
                     FromStoreBuffer <= 0;
                 end
-                else if(!RW) begin
+                else if(!RW && En) begin
                     WriteState <= IDLE;
                     WBusy <= 0; 
                     WC_OEn <= 1;
@@ -242,7 +243,7 @@ module CacheIControl(
  //----------------------------READ STATE MACHINE-------------------------   
     //Read
     always @(posedge Clk) begin
-        if(Rst || !En) begin
+        if(Rst) begin
             ReadState  <= IDLE;
             LB_Occupied <= 0;
             LW_Occupied <= 0;
@@ -255,7 +256,7 @@ module CacheIControl(
             case(ReadState)
             IDLE:
             begin
-                if(C_Miss && !RW && C_Dirty && !WBusy) begin
+                if(C_Miss && !RW && C_Dirty && !WBusy && En) begin
                     ReadState <= READ_MISS_DIRTY;
                     LB_Enable <= 1;
                     LB_Occupied <= 1;
@@ -264,14 +265,14 @@ module CacheIControl(
                     RC_OEn <= 0;
                     RBusy <= 1;
                 end
-                else if(C_Miss && !RW && !C_Dirty && !WBusy) begin
+                else if(C_Miss && !RW && !C_Dirty && !WBusy && En) begin
                     ReadState <= READ_MISS_NOT_DIRTY;
                     LB_Occupied <= 1;
                     LB_Enable <= 1;
                     RC_OEn <= 0;
                     RBusy <= 1;
                 end
-                else if(RW) begin
+                else if(RW && En) begin
                     ReadState <= IDLE;
                     RBusy <= 0;
                     RC_OEn <= 1;

@@ -180,6 +180,9 @@ module soc # (
     wire [255:0] LB_ReadLine; 
     wire [255:0] LW_CacheLineToWrite;
     wire RWordSelect;
+    wire C_Stall;
+    wire LB_Enable;
+    wire LW_Enable;
     
     wire NotRst;
     assign NotRst = !Rst;
@@ -222,15 +225,15 @@ module soc # (
    .RData(C_ReadData),
    .Stall(C_Stall),
    /*LineWriteBuffer*/
-   .LW_Enable(LW_En),
+   .LW_Enable(LW_Enable),
    .LW_Completed(LW_Completed),
    .oLineData(LW_CacheLineToWrite),
    /*LineFillBuffer*/
    .LB_Completed(LB_LineReadCompleted),
    .LB_FirstWord(LB_FirstDataAcquired),
-   .LB_Enable(LB_En),
+   .LB_Enable(LB_Enable),
    .LB_LineData(LB_ReadLine),
-   .LB_LineAddr(LB_LineAddr),
+   .LB_LineAddr(LB_Output_Addr),
    .RWordSelect(RWordSelect)
    );
    
@@ -257,7 +260,7 @@ module soc # (
    .Clk(Clk),
    .Enable(LW_Enable),
    .Data(LW_CacheLineToWrite),
-   .Address(C_Address ), 
+   .Address(C_Address), 
    .AXICompleted(WriteCompleted),
    .AXIData(LW_AXIData),
    .AXIAddr(LW_Output_Addr),

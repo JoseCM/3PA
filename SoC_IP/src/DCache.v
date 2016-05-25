@@ -61,6 +61,8 @@ module DCache(
    // assign Stall = CtrlStall || C_Ctrl;
     reg [31:0] StoreBuff;
     reg [31:0] StoreBuffAddr;
+    wire[31:0] WordAddress;
+    wire [31:0] WordWrite;
     
     
     /*Store buffer for writes*/
@@ -109,6 +111,8 @@ module DCache(
     /*Merge Unit, gets word from StoreBuffer and merges with
     cache line read from memory*/
     wire[255:0] MergedLine;
+    wire[255:0] WCacheLine;
+    
     MergeUnit MU (
        .Address_LSBs(StoreBuffAddr[2:0]),
        .WriteData(StoreBuff),
@@ -131,7 +135,7 @@ module DCache(
         .R_Enable(R_Enable),
         /*Word related cache signals*/
         .word(WordWrite),
-        .addr(WordWriteAddress),
+        .addr(WordAddress),
         .inst(RData),
         .hit(hit),
         .dirty(dirty),
