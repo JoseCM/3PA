@@ -45,9 +45,6 @@ module LinefillBuffer(
     reg [31:0] Buff[7:0];
     reg state;
     reg FirstEnable;
-    /*TEMP*/
-    reg [2:0]idx;
-    reg [2:0]wrdAddr;
     
     assign Line = {Buff[7],Buff[6],Buff[5],Buff[4],Buff[3],Buff[2],Buff[1],Buff[0]};
     wire [2:0]WordAddress = BaseAddress[2:0];
@@ -57,8 +54,6 @@ module LinefillBuffer(
     
     /*Write in the correct buffer*/
     always @(posedge Clk) begin
-        wrdAddr <= WordAddress;
-
         if(!Enable) begin
             Counter <= 0; 
         end
@@ -67,9 +62,7 @@ module LinefillBuffer(
                 LineReadCompleted <= 1;
             end
             if(!LineReadCompleted) begin
-                idx <= wordIndex; 
                 Buff[wordIndex] <= Data;
-                wrdAddr <= WordAddress;
                 Counter <= Counter + 1;
             end
         end
