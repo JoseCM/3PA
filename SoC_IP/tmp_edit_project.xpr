@@ -6,7 +6,7 @@
 <Project Version="7" Minor="10" Path="c:/users/pedro/documents/3pa_processor/soc_ip/tmp_edit_project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="6a496844ad274b9591df9ba29741b051"/>
+    <Option Name="Id" Val="854db0cbb5c543e59133d4be196ad008"/>
     <Option Name="Part" Val="xc7z010clg400-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirModelSim" Val="$PCACHEDIR/compile_simlib/modelsim"/>
@@ -239,13 +239,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/src/AXIMaster.v">
+      <File Path="$PPRDIR/src/processor.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/src/processor.v">
+      <File Path="$PPRDIR/src/AXIMaster.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

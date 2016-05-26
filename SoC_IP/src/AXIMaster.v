@@ -272,7 +272,7 @@
     //Size should be C_M_AXI_DATA_WIDTH, in 2^SIZE bytes, otherwise narrow bursts are used
     assign M_AXI_AWSIZE    = clogb2((C_M_AXI_DATA_WIDTH/8)-1);
     //INCR burst type is usually used, except for keyhole bursts
-    assign M_AXI_AWBURST    = 2'b01;
+    assign M_AXI_AWBURST    = 2'b10;
     assign M_AXI_AWLOCK    = 1'b0;
     //Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port. Not Allocated, Modifiable, not Bufferable. Not Bufferable since this example is meant to test memory, not intermediate cache. 
     assign M_AXI_AWCACHE    = 4'b0010;
@@ -297,7 +297,7 @@
     //Size should be C_M_AXI_DATA_WIDTH, in 2^n bytes, otherwise narrow bursts are used
     assign M_AXI_ARSIZE    = clogb2((C_M_AXI_DATA_WIDTH/8)-1);
     //INCR burst type is usually used, except for keyhole bursts
-    assign M_AXI_ARBURST    = 2'b01;
+    assign M_AXI_ARBURST    = 2'b10;
     assign M_AXI_ARLOCK    = 1'b0;
     //Update value to 4'b0011 if coherent accesses to be used via the Zynq ACP port. Not Allocated, Modifiable, not Bufferable. Not Bufferable since this example is meant to test memory, not intermediate cache. 
     assign M_AXI_ARCACHE    = 4'b0010;
