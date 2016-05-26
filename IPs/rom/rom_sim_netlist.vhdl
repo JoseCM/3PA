@@ -1,7 +1,7 @@
 -- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2015.4 (lin64) Build 1412921 Wed Nov 18 09:44:32 MST 2015
--- Date        : Wed May 25 15:39:21 2016
+-- Date        : Thu May 26 11:31:49 2016
 -- Host        : cake running 64-bit Ubuntu 15.04
 -- Command     : write_vhdl -force -mode funcsim
 --               /mnt/Data/Universidade/MESTRADO_EEIC/EMBEBIDOS/EmbSys-2/Carlos-git/3PA_ZE/IPs/rom/rom_sim_netlist.vhdl
@@ -104,7 +104,7 @@ end rom_dist_mem_gen_v8_0_9;
 
 architecture STRUCTURE of rom_dist_mem_gen_v8_0_9 is
   signal \<const0>\ : STD_LOGIC;
-  signal \^spo\ : STD_LOGIC_VECTOR ( 30 downto 1 );
+  signal \^spo\ : STD_LOGIC_VECTOR ( 28 to 28 );
 begin
   dpo(31) <= \<const0>\;
   dpo(30) <= \<const0>\;
@@ -203,77 +203,53 @@ begin
   qspo(1) <= \<const0>\;
   qspo(0) <= \<const0>\;
   spo(31) <= \<const0>\;
-  spo(30 downto 29) <= \^spo\(30 downto 29);
-  spo(28) <= \^spo\(1);
-  spo(27) <= \^spo\(30);
+  spo(30) <= \^spo\(28);
+  spo(29) <= \<const0>\;
+  spo(28) <= \^spo\(28);
+  spo(27) <= \<const0>\;
   spo(26) <= \<const0>\;
   spo(25) <= \<const0>\;
   spo(24) <= \<const0>\;
   spo(23) <= \<const0>\;
   spo(22) <= \<const0>\;
-  spo(21) <= \^spo\(1);
-  spo(20) <= \^spo\(1);
-  spo(19) <= \^spo\(1);
-  spo(18) <= \^spo\(1);
-  spo(17) <= \^spo\(1);
-  spo(16) <= \^spo\(1);
-  spo(15) <= \^spo\(1);
-  spo(14) <= \^spo\(1);
-  spo(13) <= \^spo\(1);
-  spo(12) <= \^spo\(1);
-  spo(11) <= \^spo\(1);
-  spo(10) <= \^spo\(1);
-  spo(9) <= \^spo\(1);
-  spo(8) <= \^spo\(1);
-  spo(7) <= \^spo\(1);
-  spo(6) <= \^spo\(1);
-  spo(5) <= \^spo\(1);
-  spo(4) <= \^spo\(1);
-  spo(3) <= \^spo\(1);
-  spo(2) <= \^spo\(1);
-  spo(1) <= \^spo\(1);
-  spo(0) <= \^spo\(1);
+  spo(21) <= \<const0>\;
+  spo(20) <= \<const0>\;
+  spo(19) <= \<const0>\;
+  spo(18) <= \<const0>\;
+  spo(17) <= \<const0>\;
+  spo(16) <= \<const0>\;
+  spo(15) <= \<const0>\;
+  spo(14) <= \<const0>\;
+  spo(13) <= \<const0>\;
+  spo(12) <= \<const0>\;
+  spo(11) <= \<const0>\;
+  spo(10) <= \<const0>\;
+  spo(9) <= \<const0>\;
+  spo(8) <= \<const0>\;
+  spo(7) <= \<const0>\;
+  spo(6) <= \<const0>\;
+  spo(5) <= \<const0>\;
+  spo(4) <= \<const0>\;
+  spo(3) <= \<const0>\;
+  spo(2) <= \<const0>\;
+  spo(1) <= \<const0>\;
+  spo(0) <= \^spo\(28);
 GND: unisim.vcomponents.GND
      port map (
       G => \<const0>\
     );
 \spo[0]_INST_0\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0000000000000001"
-    )
-        port map (
-      I0 => a(0),
-      I1 => a(3),
-      I2 => a(1),
-      I3 => a(2),
-      I4 => a(4),
-      I5 => a(5),
-      O => \^spo\(1)
-    );
-\spo[27]_INST_0\: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"00000001"
+      INIT => X"0000000000000010"
     )
         port map (
       I0 => a(4),
       I1 => a(2),
-      I2 => a(1),
-      I3 => a(3),
-      I4 => a(5),
-      O => \^spo\(30)
-    );
-\spo[29]_INST_0\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"0000000000000002"
-    )
-        port map (
-      I0 => a(0),
-      I1 => a(3),
-      I2 => a(1),
-      I3 => a(2),
-      I4 => a(4),
+      I2 => a(0),
+      I3 => a(1),
+      I4 => a(3),
       I5 => a(5),
-      O => \^spo\(29)
+      O => \^spo\(28)
     );
 end STRUCTURE;
 library IEEE;
