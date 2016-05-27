@@ -44,7 +44,7 @@ module VirtualWB(
             end
         else if(stall) begin
             o_vwb_rdst <= o_vwb_rdst;
-            o_vwb_reg_write_rfend <= o_vwb_reg_write_rfend;
+            o_vwb_reg_write_rf <= o_vwb_reg_write_rf;
             o_vwb_mux <= o_vwb_mux;
         end
         else begin
