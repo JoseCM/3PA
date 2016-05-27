@@ -58,6 +58,7 @@ module MemController(
         wire [`AccType_NTypes-1:0] AccessType; 
         wire Periph_AccessCondition =  En && Address >= 32'h10000 && Address <= 32'h20000;
         wire Mem_AccessCondition =    En && ~Periph_AccessCondition;
+        wire P_En;
         
         assign AccessType = Periph_AccessCondition ? `AccType_Periph : 
                             Mem_AccessCondition ? `AccType_Mem :
@@ -74,6 +75,7 @@ module MemController(
         
         //For Cache Signals 
         assign C_En = (AccessType == `AccType_Mem);
+        assign P_En = (AccessType == `AccType_Periph);
         assign C_RW = RW;
         assign C_WriteData = IData;
         assign C_Address = Address;
@@ -82,7 +84,7 @@ module MemController(
     .Clk(Clk),
     .PeripheralAccess(AccessType == `AccType_Periph),
     .RW(RW),
-    .En(En),
+    .En(P_En),
     .Stall(P_Stall),
     .StartAXIRead(P_StartAXIRead),
     .StartAXIWrite(P_StartAXIWrite),
