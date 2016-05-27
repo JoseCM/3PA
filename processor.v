@@ -310,7 +310,8 @@ module processor(
         .o_wb_reg_dst_s(WB_RDst_s),// select mux out <-------------------------------------- <------------------------------------
         .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
         .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
-        .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
+        .o_vwb_mux(o_vwb_mux),        // Output of the WB one clock late
+        .stall(MAWB_Stall) // virtual write back stalls when memmory access stalls
     );
 
 
