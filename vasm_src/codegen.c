@@ -302,6 +302,23 @@ for (i = 0; i < curr_stmt; i++)
             lc = sym_table[stmt[i].op1].value;
             break;
 
+        case MUL_OP: case DIV_OP:   // *new instructions
+            code = 0;
+            code |= (0x1f & stmt[i].op_code) << 27;
+            code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+            code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+            if (stmt[i].misc == IMMEDIATE)
+               {
+               check_immed(sym_table[stmt[i].op3].value,16,i);
+               code |= 1 << 16;
+               code |= (0xffff & sym_table[stmt[i].op3].value);
+               }
+            else {
+               code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+               }
+            print_code_toBuff(code,4,&lc);
+            break;
+
         default:
             err_exit("Unknown instruction.",BAD_OPTYPE);
             break;
@@ -580,6 +597,24 @@ lc = 0;
         case DOT_ORG_OP:
             lc = sym_table[stmt[i].op1].value;
             break;
+
+        case MUL_OP: case DIV_OP:    // *new instructions
+            code = 0;
+            code |= (0x1f & stmt[i].op_code) << 27;
+            code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+            code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+            if (stmt[i].misc == IMMEDIATE)
+               {
+               check_immed(sym_table[stmt[i].op3].value,16,i);
+               code |= 1 << 16;
+               code |= (0xffff & sym_table[stmt[i].op3].value);
+               }
+            else {
+               code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+               }
+            lc = lc + 4;
+            break;
+
 
         default:
             err_exit("Unknown instruction.",BAD_OPTYPE);

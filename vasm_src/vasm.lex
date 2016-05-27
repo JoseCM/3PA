@@ -47,6 +47,8 @@ xor|XOR         {yylval = NONE;         return(XOR);    }
 st|ST		{yylval = NONE;		return(ST);	}
 stx|STX		{yylval = NONE;		return(STX);	}
 sub|SUB		{yylval = NONE;		return(SUB);	}
+mul|MUL		{yylval = NONE;     return(MUL);    }    /*new instruction*/
+div|DIV		{yylval = NONE;     return(DIV);    }    /*new instruction*/
 
 
 r{digit}+	{	/* register, e.g. r24				*/
