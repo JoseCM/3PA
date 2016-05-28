@@ -47,7 +47,7 @@ module LinefillBuffer(
     reg FirstEnable;
     
     assign Line = {Buff[7],Buff[6],Buff[5],Buff[4],Buff[3],Buff[2],Buff[1],Buff[0]};
-    wire [2:0]WordAddress = BaseAddress[2:0];
+    wire [2:0]WordAddress = BaseAddress[4:2];
     assign CriticalWord = Data & {32{FirstDataAcquired}};//word is determined by LSB of address
     
     wire [2:0] wordIndex = (Counter + WordAddress) & 32'b111; //store only the 3 LSB of the sum, so it wraps

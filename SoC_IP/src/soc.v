@@ -210,8 +210,13 @@ module soc # (
     .C_WriteData(C_WriteData),
     .C_Address(C_Address),
     .C_ReadData(C_ReadData),
-    .C_Stall(C_Stall)
+    .C_Stall(C_Stall),
+    /**/
+    .RWordSelect(RWordSelect),
+    .LB_CriticalWord(LB_CriticalWord)
     );
+    
+
     
    //Cache & Cache Controller
    DCache datacache(
@@ -237,14 +242,14 @@ module soc # (
    .RWordSelect(RWordSelect)
    );
    
-   assign RData = (RWordSelect) ? LB_CriticalWord : C_ReadData;
+   //assign RData = (RWordSelect) ? LB_CriticalWord : C_ReadData;
 
    
    //Read
    LinefillBuffer lfb (
    .Clk(Clk),
    .Enable(LB_Enable),
-   .Address(C_Address), //start adress
+   .Address({C_Address[31:2],{2'b00}}), //start adress // Always ignore address' which are not aligned
    .BaseAddress(LB_Output_Addr), //saved start adress
    .LineReadCompleted(LB_LineReadCompleted), // read a whole line
    .Line(LB_ReadLine), //read line

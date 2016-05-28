@@ -90,7 +90,7 @@ module stageMA(
     pipereg #(`MAWB_WIDTH) MA_WB(
         .clk(clk),
         .rst(rst),
-        .flush(i_ma_flush),
+        .flush(0), //.flush(i_ma_flush) Rafa was here, neste estágio não há razão para haver flush 
         .stall(i_ma_stall),
         .in({ma_Rdst,ma_PC, mem_data, ma_ALU_rslt, ma_WB}),
         .out(o_ma)

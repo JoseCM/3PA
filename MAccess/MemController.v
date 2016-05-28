@@ -52,7 +52,11 @@ module MemController(
         output [31:0] C_WriteData,
         output [31:0] C_Address,
         input  [31:0] C_ReadData,
-        input  C_Stall
+        input  C_Stall,
+        
+        /**/
+        input [31:0] LB_CriticalWord,
+        input RWordSelect
     );
     
         wire [`AccType_NTypes-1:0] AccessType; 
@@ -68,8 +72,9 @@ module MemController(
                        (AccessType == `AccType_Mem) ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
                        
         assign OData = (AccessType  == `AccType_Periph) ? P_ReadData :
-                       (AccessType  == `AccType_Mem) ? C_ReadData : 0;
-                                                                                                       
+                       (AccessType  == `AccType_Mem && RWordSelect)  ? LB_CriticalWord : 
+                       (AccessType  == `AccType_Mem && !RWordSelect) ? C_ReadData : 0;
+                                                                                              
         assign P_AXIAddr = Address;
         assign P_WriteData = IData; //Always use processor input data for periph AXI    
         

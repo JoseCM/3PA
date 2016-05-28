@@ -2530,7 +2530,7 @@
       <spirit:file>
         <spirit:name>src/soc.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_4bcf73aa</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_6b652d5f</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -2923,7 +2923,7 @@
       </xilinx:taxonomies>
       <xilinx:displayName>soc_v1_0</xilinx:displayName>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2016-05-26T20:51:49Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2016-05-28T17:29:29Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2015.4</xilinx:xilinxVersion>

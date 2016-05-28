@@ -133,7 +133,7 @@ module CacheIControl(
                         //Combinational Write
                     end    
                 end
-                else if(C_Miss && C_Dirty && !RBusy && En) begin
+                else if(C_Miss && C_Dirty && !RBusy && En && RW) begin
                     WriteState <= START_AXI_RW;
                     LB_Occupied <= 1;
                     LW_Occupied <= 1;
@@ -145,7 +145,7 @@ module CacheIControl(
                     StoreBuff_Enable <= 0;
                     FromStoreBuffer <= 0;
                 end
-                else if(C_Miss && !C_Dirty && !RBusy && En) begin
+                else if(C_Miss && !C_Dirty && !RBusy && En && RW) begin
                     WriteState <= START_AXI_R;
                     LB_Occupied <= 1;
                     WBusy <= 1;

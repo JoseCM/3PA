@@ -37,7 +37,8 @@ module stage_wb(
     output [1:0]o_wb_reg_dst_s,// select mux out
     output [4:0]o_vwb_rdst,               // Register to save data in RegFile one clock late
     output o_vwb_reg_write_rf,            // Control signal that allows the writing in the RegFile one clock late
-    output [`WIDTH-1:0] o_vwb_mux        // Output of the WB one clock late
+    output [`WIDTH-1:0] o_vwb_mux,        // Output of the WB one clock late
+    input stall
 );
 
     wire [1:0] mux_sel = i_wb_cntrl[`WB_RDST_MUX];
@@ -50,7 +51,8 @@ module stage_wb(
             .i_vwb_mux(o_wb_mux),        // Output of the WB
             .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
             .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
-            .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
+            .o_vwb_mux(o_vwb_mux),        // Output of the WB one clock late
+            .stall(stall)
         );
     
   //MUX  

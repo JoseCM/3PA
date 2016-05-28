@@ -52,12 +52,17 @@ module MemController(
         output [31:0] C_WriteData,
         output [31:0] C_Address,
         input  [31:0] C_ReadData,
-        input  C_Stall
+        input  C_Stall,
+        
+        /**/
+        input [31:0] LB_CriticalWord,
+        input RWordSelect
     );
     
         wire [`AccType_NTypes-1:0] AccessType; 
         wire Periph_AccessCondition =  En && Address >= 32'h10000 && Address <= 32'h20000;
         wire Mem_AccessCondition =    En && ~Periph_AccessCondition;
+        wire P_En;
         
         assign AccessType = Periph_AccessCondition ? `AccType_Periph : 
                             Mem_AccessCondition ? `AccType_Mem :
@@ -67,13 +72,15 @@ module MemController(
                        (AccessType == `AccType_Mem) ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
                        
         assign OData = (AccessType  == `AccType_Periph) ? P_ReadData :
-                       (AccessType  == `AccType_Mem) ? C_ReadData : 0;
-                                                                                                       
+                       (AccessType  == `AccType_Mem && RWordSelect)  ? LB_CriticalWord : 
+                       (AccessType  == `AccType_Mem && !RWordSelect) ? C_ReadData : 0;
+                                                                                              
         assign P_AXIAddr = Address;
         assign P_WriteData = IData; //Always use processor input data for periph AXI    
         
         //For Cache Signals 
         assign C_En = (AccessType == `AccType_Mem);
+        assign P_En = (AccessType == `AccType_Periph);
         assign C_RW = RW;
         assign C_WriteData = IData;
         assign C_Address = Address;
@@ -82,7 +89,7 @@ module MemController(
     .Clk(Clk),
     .PeripheralAccess(AccessType == `AccType_Periph),
     .RW(RW),
-    .En(En),
+    .En(P_En),
     .Stall(P_Stall),
     .StartAXIRead(P_StartAXIRead),
     .StartAXIWrite(P_StartAXIWrite),
