@@ -26,6 +26,8 @@ module branch_unit(
     input   JumpInstr,
     input   PredicEqRes,
     input   [1:0] CtrlIn,
+    
+    /***************VIC*******************/
     input   IRQ, //NEW INPUT FROM VIC, telling if there is an interruption to be attended
     
     output  reg [1:0] CtrlOut,
@@ -39,7 +41,7 @@ module branch_unit(
     wire [6:0] inputcat = {PcMatchValid,JumpTaken,BranchInstr,JumpInstr,PredicEqRes,CtrlIn,IRQ};  
     
     //Could be reg?
-    wire [1:0] Flush;   //auxiliar wire to determine if FlushPipePC should be asserted. Flush[1] is modified by the IRQ and Flush[0] is modified by the switch case
+    reg [1:0] Flush;   //auxiliar wire to determine if FlushPipePC should be asserted. Flush[1] is modified by the IRQ and Flush[0] is modified by the switch case
                         //if one of both is asserted then the Flush of Fetch and Decode should be done (FlushPipePC = 1)
     
     always @(inputcat)

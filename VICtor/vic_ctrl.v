@@ -33,86 +33,77 @@ module vic_ctrl(
    output reg [3:0] o_VIC_CCodes,
    output reg o_IRQ_VIC,
    output reg o_VIC_CCodes_ctrl
-   //output reg o_Flush_signal-------------> REMEMBER BIIIITCH
    );
 
     reg [31:0]saved_PC; // stores the PC value   
     reg [3:0] saved_CC;
-    reg EX_not_ready_for_interrupt;
-    always @(posedge i_IRQ) 
-    begin    
-           /* APAGAR QUANDO SE VALIDAR O COMENTADO */
-           /* o_IRQ_VIC = 1'b1;    //rises the flag to externalVIC
-            o_IRQ_PC = 1'b1;       //signal to fetch?
-            
-            if(~i_reti) //In case of sequencial interrupts we don't need to resave the program counter
-            begin
-                saved_PC = i_PC;
-                saved_CC = i_CCodes;
-            end   
-            else        //safety implementation, keeps the saved_PC
-            begin
-                saved_PC = saved_PC;  
-                saved_CC = saved_CC;  
-            end
-                
-            o_VIC_iaddr = ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
-            o_IRQ_VIC = 1'b1;
-            if(i_reti)
-            begin  
-                o_IRQ_PC = 1'b1;
-                saved_PC = saved_PC;  
-                saved_CC = saved_CC;
-                o_VIC_iaddr = ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
-            end
-            else
-            begin
-                if(i_NOT_FLUSH)
-                begin
-                   o_IRQ_PC = 1'b1;
-                   saved_PC = i_PC;
-                   saved_CC = i_CCodes;
-                   o_VIC_iaddr = ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
-                end
-                else
-                begin
-                    EX_not_ready_for_interrupt=1;
-                end
-            end
-
-    end
+    reg CC_PC_NotSaved;
+    reg delay;
     
-    always @(posedge (i_NOT_FLUSH && EX_not_ready_for_interrupt))
+    always @(posedge i_IRQ) //Assim que se sinalize uma interrup��o pelo vic_irq
+    begin  
+        o_IRQ_VIC <= 1'b1;
+        CC_PC_NotSaved <= 1'b1;
+        
+        if(i_reti) // Consecutive Interruptions
+        begin  
+            CommonITHandle(saved_CC, saved_PC);
+        end
+    end       
+   
+    always @(posedge clk)
     begin
-       o_IRQ_PC = 1'b1;
-       saved_PC = i_PC;
-       saved_CC = i_CCodes;
-       o_VIC_iaddr = ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
-       EX_not_ready_for_interrupt=0;
-    end
-    
-    always @(posedge clk) 
-    begin
+        if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
+        begin
+            CommonITHandle(i_CCodes, i_PC);
+        end
+  
         if(rst)
         begin
-            o_IRQ_VIC = 1'b0;
+            o_IRQ_VIC <= 1'b0;
+            o_IRQ_PC <= 1'b0;
+            saved_PC <= 0;
+            o_VIC_CCodes_ctrl <= 0;
+            CC_PC_NotSaved <= 0;
+            o_VIC_CCodes <= 0;
+            saved_CC <= 0;
+            saved_PC <= 0;
+            o_VIC_iaddr <= 0;
         end
-        
-        o_IRQ_PC = 1'b0;     //sujeita a erros ---> problemas de timing
-        
-        if(!i_reti) 
+        else
         begin
-            o_VIC_CCodes_ctrl = 1'b0;    
+            if(~CC_PC_NotSaved)
+            begin
+                if(~i_reti)
+                begin
+                    o_VIC_CCodes_ctrl = 1'b0;    
+                end
+            end
+        end     
+        
+        if(o_IRQ_PC)
+        begin
+            o_IRQ_PC <= 0;
         end
     end
-    
     //When a ISR is finished
     always @(posedge i_reti) begin
-        o_VIC_iaddr = saved_PC;
-        o_VIC_CCodes = saved_CC;
-        o_IRQ_VIC   = 1'b0;
-        o_VIC_CCodes_ctrl = 1'b1;
-
+        o_VIC_iaddr <= saved_PC;
+        o_IRQ_PC <= 1'b1;
+        o_VIC_CCodes <= saved_CC;
+        o_VIC_CCodes_ctrl <= 1'b1;
+        o_IRQ_VIC <= 1'b0;
     end
-
+    
+task CommonITHandle;
+input [3:0]CCode_attribution; 
+input [31:0]PC_attribution;
+begin
+    saved_PC <= PC_attribution;  
+    saved_CC <= CCode_attribution;
+    o_VIC_iaddr <= ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
+    o_IRQ_PC <= 1'b1;
+    CC_PC_NotSaved <= 1'b0;
+end
+endtask
 endmodule

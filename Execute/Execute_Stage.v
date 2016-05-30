@@ -63,6 +63,7 @@ module EX_Stage(
         /****************VIC*****************/
         input i_VIC_CCodes_ctrl,
         input [3:0] i_VIC_CCodes,
+        output [`WIDTH-1:0] o_PC_VIC,
         
         /*External Outputs data and signals(No Connection to the Pipeline Register)*/
         output [1:0] o_CB,
@@ -182,7 +183,8 @@ PC_Eval new_pc(
                  .i_PPC(i_PPC),
                  .i_NPC_Ctrl(i_NPC_Ctrl),
                  .o_New_PC(o_New_PC),
-                 .o_PPC_Eq(o_PPC_Eq)
+                 .o_PPC_Eq(o_PPC_Eq),
+                 .o_PC_VIC(o_PC_VIC)
         );
         
         

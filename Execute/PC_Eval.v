@@ -35,6 +35,7 @@ module PC_Eval(
     	output [`WIDTH-1:0] o_New_PC,    
     	output o_PPC_Eq,
     	
+    	/*************VIC*************/
     	//SOLUTION OUTPUT
     	output [`WIDTH-1:0] o_PC_VIC
     	);

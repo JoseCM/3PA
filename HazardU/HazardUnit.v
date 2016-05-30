@@ -117,7 +117,7 @@ module HazardUnit(
         .JumpInstr(JumpInstr),
         .PredicEqRes(PredicEqRes),
         .CtrlIn(CtrlIn),
-        .i_VIC_ctrl(i_VIC_ctrl),
+        .IRQ(i_VIC_ctrl),
         .CtrlOut(CtrlOut),
         .FlushPipePC(FlushPipePC),
         .WriteEnable(WriteEnable),

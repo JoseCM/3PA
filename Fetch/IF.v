@@ -49,12 +49,13 @@ module IF(
     input [32:0] Dcache_bus_in,
     //Changes
     output [31:0] Icache_bus_out,
-    output o_IFID_NOT_FLUSH,
+    
     input [32:0] Icache_bus_in,
     
     /**********VIC*************/
     input i_VIC_ctrl,
-    input [31:0] i_VIC_iaddr
+    input [31:0] i_VIC_iaddr,
+    output o_IFID_NOT_FLUSH
 );
 
     wire [31:0] IR_w, PC_w, InstrAddr_w, Predict_w;
@@ -92,7 +93,7 @@ module IF(
 
     wire [`IFID_WIDTH-1:0]in;
     assign in = (Rst)          ?      0:
-                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w,1'b1};
+                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w,1'b1};    //less significant bit for flush (VIC stuff)
 
     wire [`IFID_WIDTH-1:0]out;
     assign IR = (Rst)          ?      0:
