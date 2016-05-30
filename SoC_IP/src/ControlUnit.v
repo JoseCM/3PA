@@ -387,7 +387,7 @@ begin
             
             /* WB */ 
             WBStage[`WB_R_WE] <= 0;
-            WBStage[`WB_RDST_MUX] <= 2'b0; 
+            WBStage[`WB_RDST_MUX] <= 2'b01; 
         end
         `STX :
         begin
@@ -412,7 +412,7 @@ begin
             
             /* WB */ 
             WBStage[`WB_R_WE] <= 0;
-            WBStage[`WB_RDST_MUX] <= 2'b0;           
+            WBStage[`WB_RDST_MUX] <= 2'b01;           
         end
         `HLT :
         begin

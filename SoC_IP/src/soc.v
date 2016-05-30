@@ -244,12 +244,17 @@ module soc # (
    
    //assign RData = (RWordSelect) ? LB_CriticalWord : C_ReadData;
 
+    reg [31:0] AddressDelay;
+    always@ (posedge Clk) begin
+        if(!LB_Enable) AddressDelay <= {C_Address[31:2],{2'b00}};
+        else AddressDelay <= AddressDelay;
+    end
    
    //Read
    LinefillBuffer lfb (
    .Clk(Clk),
    .Enable(LB_Enable),
-   .Address({C_Address[31:2],{2'b00}}), //start adress // Always ignore address' which are not aligned
+   .Address(AddressDelay), //start adress // Always ignore address' which are not aligned
    .BaseAddress(LB_Output_Addr), //saved start adress
    .LineReadCompleted(LB_LineReadCompleted), // read a whole line
    .Line(LB_ReadLine), //read line

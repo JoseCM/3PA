@@ -318,7 +318,7 @@ module processor(
         
     HazardUnit HazardU(
          .clk(Clk),
-         .rst(rst),
+         .rst(Rst),
          //FORWARD UNIT
          
          .IDex__RW_MEM(EX_MA[`MA_RW]),
