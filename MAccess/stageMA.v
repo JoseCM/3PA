@@ -19,6 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 `define WIDTH   32
+`define CONFREG_WIDTH 4
+`define CONFREGADDR_WIDTH 5
 `include "pipelinedefs.v"
 
 module stageMA(
@@ -38,18 +40,24 @@ module stageMA(
     input i_ma_stall,
     
     output [`WIDTH-1:0] o_ma_PC, //program counter para ser colocado no pipeline register MA/WB
-    output [4:0] o_ma_Rdst, //endere�o do registo de sa�da
+    output [4:0] o_ma_Rdst, //endereï¿½o do registo de saï¿½da
     output [`WIDTH-1:0] o_ma_ALU_rslt, //resultado do ALU a ser colocado no pipeline register MA/WB
     output [2:0] o_ma_WB, //sinais de controlo da write back a serem colocados no pipeline register MA/WB
-    output [4:0] o_ma_EX_MEM_Rs2,//colocar o endere�o do source register 2 na forward unit,
+    output [4:0] o_ma_EX_MEM_Rs2,//colocar o endereï¿½o do source register 2 na forward unit,
     output [1:0] o_ma_EX_MEM_MA,
-    output o_miss, // falha no acesso de mem�ria
+    output o_miss, // falha no acesso de memï¿½ria
     output [`WIDTH-1:0] o_ma_mem_out,
     
     /******/
     output [65:0] Dcache_bus_out,
-    input [32:0] Dcache_bus_in
+    input [32:0] Dcache_bus_in,
+    output RAM_EN,
     
+    /*To and from VIC Registers*/
+    output [`CONFREGADDR_WIDTH-1:0] o_vic_index,
+    output [`CONFREG_WIDTH-1:0] o_vic_data,
+    output o_vic_WRe,
+    input [`CONFREG_WIDTH-1:0] i_vic_data
     );
     
     wire[`WIDTH-1:0] ma_PC; //program counter para ser colocado no pipeline register MA/WB
@@ -84,7 +92,14 @@ module stageMA(
         
         /*********************/
         .Dcache_bus_out(Dcache_bus_out),
-        .Dcache_bus_in(Dcache_bus_in)
+        .Dcache_bus_in(Dcache_bus_in),
+        .RAM_EN(RAM_EN),
+        
+        /*To and from VIC Registers*/
+        .o_vic_index(o_vic_index),
+        .o_vic_data(o_vic_data),
+        .o_vic_WRe(o_vic_WRe),
+        .i_vic_data(i_vic_data)
     );
 
     pipereg #(`MAWB_WIDTH) MA_WB(
@@ -102,5 +117,16 @@ module stageMA(
     assign o_ma_ALU_rslt = o_ma[`MAWB_ALURSLT];
     assign o_ma_WB = o_ma[`MAWB_WB];
     
+    vic_registers vic_r(
+        .clk(clk),
+        .rst(rst), 
+        .i_VIC_regaddr(o_vic_index), //register address
+        .i_VIC_data(o_vic_data), //Input data
+        .o_VIC_data(i_vic_data), //Output Data
+        .o_enable(), //Global Enable
+        .i_VIC_we(o_vic_WRe), //Write Operation signal
+        .o_buffer()// Configuration Registers
+    );
+   
     
 endmodule
