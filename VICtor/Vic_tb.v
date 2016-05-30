@@ -38,7 +38,8 @@ module Vic_tb(
    wire [3:0] o_VIC_data;
    wire [31:0] o_VIC_iaddr;
    wire o_VIC_ctrl;
-    
+   reg r_NOT_FLUSH;
+
    Vic vic(
         .clk(clk),
         .rst(rst),
@@ -49,14 +50,12 @@ module Vic_tb(
         .i_ext(i_ext),
         .i_reti(i_reti),
         .i_CCodes(i_CCodes),
-        
+        .i_NOT_FLUSH(r_NOT_FLUSH),
         .o_CCodes(o_CCodes),
         .o_VIC_data(o_VIC_data),
         .o_VIC_iaddr(o_VIC_iaddr),
         .o_VIC_ctrl(o_VIC_ctrl)
         );
-        
-    integer i, nums; 
         
     initial begin
        
@@ -67,7 +66,7 @@ module Vic_tb(
         i_reti = 0;
         i_ext = 0;
         i_VIC_we = 1;
-       
+        r_NOT_FLUSH = 1;
         
         #5
         rst=1;
@@ -86,7 +85,7 @@ module Vic_tb(
         i_VIC_regaddr = 3;
         i_VIC_data = 4'b1000;   //low
         #10
-        i_VIC_regaddr = 31;
+        i_VIC_regaddr = 31; //ENABLE
         i_VIC_data = 4'b1111;   //low
         
         #5
@@ -106,11 +105,11 @@ module Vic_tb(
         
         #2000
         $finish;
-    end
-        
+    end    
+    
     always #5 clk=~clk; 
     
-    always #200 begin
+    always #205 begin
         i_reti = 1;
         #10
         i_reti = 0;

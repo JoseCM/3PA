@@ -32,7 +32,8 @@ module ControlUnit(
         output reg [`EX_WIDTH-1:0] EXStage,
         output reg [1:0] MAStage,
         output reg [2:0] WBStage,
-        output reg IFid__Need_Rs2
+        output reg IFid__Need_Rs2,
+        output reg RETI_Inst
     );
     
 always @(opcode or bit16 or CondBits) 
@@ -43,6 +44,7 @@ begin
             SignExt <= 2'bx;
             RS2_Sel <= 1'bx;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
             
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -68,6 +70,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
 
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -94,6 +97,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -119,6 +123,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
 
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -144,6 +149,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -169,6 +175,7 @@ begin
             SignExt <= 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
            
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -194,6 +201,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /* EX */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -219,6 +227,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -244,6 +253,7 @@ begin
             SignExt <= 2'b11;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
         
             /* Ex */
             EXStage[`EX_CondBits] <= CondBits;
@@ -269,6 +279,7 @@ begin
             SignExt <= 2'b00;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
         
             /* EX */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -294,6 +305,7 @@ begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
         
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -319,6 +331,7 @@ begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -344,6 +357,7 @@ begin
             SignExt <= 2'b01;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= 1;//?
+            RETI_Inst <= 1'b0;//RETI
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -369,6 +383,7 @@ begin
             SignExt <= 2'b10;
             RS2_Sel <= 1'b1;
             IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b0;//RETI
         
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -394,6 +409,7 @@ begin
             SignExt <= 2'b01;
             RS2_Sel <= 1'b1;
             IFid__Need_Rs2 <= 1;
+            RETI_Inst <= 1'b0;//RETI
         
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -418,6 +434,7 @@ begin
         begin
             SignExt <= 2'b0;
             RS2_Sel <= 1'b0;
+            RETI_Inst <= 1'b0;//RETI
             
             /* EX */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -444,6 +461,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -469,6 +487,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
             
             /* Ex */
             EXStage[`EX_CondBits] <= 4'b0;
@@ -494,6 +513,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
 
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -519,6 +539,7 @@ begin
             SignExt <= bit16 ? 0 : 2'b0;
             RS2_Sel <= 1'b0;
             IFid__Need_Rs2 <= !bit16;
+            RETI_Inst <= 1'b0;//RETI
 
             /*Ex*/
             EXStage[`EX_CondBits] <= 4'b0;
@@ -538,7 +559,33 @@ begin
             /* WB */
             WBStage[`WB_R_WE] <= 1;
             WBStage[`WB_RDST_MUX] <= 2'b01;           
-        end  
+        end            
+            `RETI :
+            begin
+            SignExt <= 2'bx;
+            RS2_Sel <= 1'bx;
+            IFid__Need_Rs2 <= 0;
+            RETI_Inst <= 1'b1;
+            
+            /* Ex */
+            EXStage[`EX_CondBits] <= 4'b0;
+            EXStage[`EX_ALUCTRL] <= 4'b0000;
+            EXStage[`EX_ALU_SRC1] <= 2'b0;
+            EXStage[`EX_ALU_SRC2] <= 1'b0;
+            EXStage[`EX_CC_WE] <= 0;
+            EXStage[`EX_JMP] <= 0;
+            EXStage[`EX_BXX ] <= 0;
+            EXStage[`EX_NEED_RS1] <= 1'b0;
+            EXStage[`EX_NEED_RS2] <=  1'b0;
+            
+            /* MA */
+            MAStage[`MA_RW] <= 0;
+            MAStage[`MA_EN] <= 0;                  
+            
+            /* WB */ 
+            WBStage[`WB_R_WE] <= 0;
+            WBStage[`WB_RDST_MUX] <= 2'b0;           
+        end
     endcase
 
 end    

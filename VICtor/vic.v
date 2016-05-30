@@ -30,11 +30,13 @@ module Vic(
     input [30:0] i_ext,
     input i_reti,
     input [3:0] i_CCodes,
+    input i_NOT_FLUSH,
     
     output [3:0] o_CCodes,
     output [3:0] o_VIC_data,
     output [31:0] o_VIC_iaddr,
-    output o_VIC_ctrl
+    output o_VIC_ctrl,
+    output o_VIC_CCodes_ctrl
     );
     
     wire [4:0]o_irq_addr;
@@ -45,17 +47,19 @@ module Vic(
     wire [123:0] buffer;
     
     vic_ctrl vcu (
-        .clk(clk),
-        .rst(rst),
-        .i_PC(i_PC),
-        .i_reti(i_reti),
-        .i_ISR_addr(o_irq_addr),
-        .i_IRQ(o_IRQ),
-        .i_CCodes(i_CCodes),
-        .o_IRQ_PC(o_VIC_ctrl),
-        .o_VIC_iaddr(o_VIC_iaddr),
-        .o_VIC_CCodes(o_CCodes),
-        .o_IRQ_VIC(i_IRQ)
+        .clk(clk),                              //Clock
+        .rst(rst),                              //Reset
+        .i_PC(i_PC),                            //Program Counter from execute stage
+        .i_reti(i_reti),                        //reti signal from Control unit
+        .i_ISR_addr(o_irq_addr),                //interrupt routine address
+        .i_IRQ(o_IRQ),                          //IRQ signal from vic_irq (interrupt occured)
+        .i_CCodes(i_CCodes),                    //condition codes from execute stage
+        .i_NOT_FLUSH(i_NOT_FLUSH),              //signal from execute stage that tells if its present an instruction or a bubble in that stage
+        .o_IRQ_PC(o_VIC_ctrl),                  //signal to select the mux in the fetch stage and to flush the pipeline (flush IF/ID and ID/EX)
+        .o_VIC_iaddr(o_VIC_iaddr),              //address that goes in to the new mux in the fetch stage
+        .o_VIC_CCodes(o_CCodes),                //output condition codes (when reti occurs and when the context before interrupt must be re-established)
+        .o_IRQ_VIC(i_IRQ),                      //output signal to notify irq_vic that a reti occured (end of interruption)
+        .o_VIC_CCodes_ctrl(o_VIC_CCodes_ctrl)   //signal for the execute stage (ALU)---> to restore the ccodes stored before an interrupt or to store ccodes normally
     );
 
     vic_registers vr (
