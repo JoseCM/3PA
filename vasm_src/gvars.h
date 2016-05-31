@@ -26,6 +26,8 @@ defined for the convenience of the assembler.				*/
 #define  DOT_ALLOC_OP	19
 #define  DOT_ORG_OP	20
 #define  XOR_OP         21
+#define  MUL_OP		22     //* new operation MUL
+#define  DIV_OP     23     //* new operation DIV
 #define  ASR_OP		24
 #define  ASL_OP		25
 #define  LSR_OP		26
@@ -50,6 +52,8 @@ are the values that will actually appear in the object code file.	*/
 #define	LDX_CODE	12
 #define	ST_CODE		13
 #define	STX_CODE	14
+#define MUL_CODE	15  //* new instruction MUL
+#define DIV_CODE	16  //* new instruction DIV
 #define ASR_CODE	17
 #define ASL_CODE	18
 #define LSR_CODE	19
