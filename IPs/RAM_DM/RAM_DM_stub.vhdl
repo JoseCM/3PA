@@ -1,10 +1,9 @@
 -- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2015.4 (win64) Build 1412921 Wed Nov 18 09:43:45 MST 2015
--- Date        : Tue Apr 19 11:05:17 2016
--- Host        : Regd running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               c:/Users/rafael/Documents/VivadoProjects/soc_3pa/soc_3pa.srcs/sources_1/ip/RAM_DM/RAM_DM_stub.vhdl
+-- Date        : Tue May 31 10:54:31 2016
+-- Host        : DESKTOP-SGS8TFD running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode synth_stub C:/Users/migue/Documents/GitHub/3PA/IPs/RAM_DM/RAM_DM_stub.vhdl
 -- Design      : RAM_DM
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7z010clg400-1
