@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 `define CONFREG_WIDTH 4
 `define CONFREGADDR_WIDTH 5
