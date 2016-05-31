@@ -318,6 +318,77 @@ for (i = 0; i < curr_stmt; i++)
                }
             print_code_toBuff(code,4,&lc);
             break;
+	
+		case ASR_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        print_code_toBuff(code,4,&lc);
+		        break;
+		case ASL_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        print_code_toBuff(code,4,&lc);
+		        break;
+		case LSL_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        print_code_toBuff(code,4,&lc);
+		        break;
+		case LSR_OP:
+		        code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        print_code_toBuff(code,4,&lc);
+		        break;
+		case RETI_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        print_code_toBuff(code,4,&lc);
+
+		        break;
 
         default:
             err_exit("Unknown instruction.",BAD_OPTYPE);
@@ -614,6 +685,76 @@ lc = 0;
                }
             lc = lc + 4;
             break;
+
+		case ASR_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        lc = lc + 4;
+		        break;
+		case ASL_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        lc = lc + 4;
+		        break;
+		case LSL_OP:
+			code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        lc = lc + 4;
+		        break;
+		case LSR_OP:
+		        code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        code |= (0x1f & sym_table[stmt[i].op1].value) << 22;
+		        code |= (0x1f & sym_table[stmt[i].op2].value) << 17;
+		        if (stmt[i].misc == IMMEDIATE)
+		           {
+		           check_immed(sym_table[stmt[i].op3].value,16,i);
+		           code |= 1 << 16;
+		           code |= (0xffff & sym_table[stmt[i].op3].value);
+		           }
+		        else {
+		           code |= (0x1f & sym_table[stmt[i].op3].value) << 11;
+		           }
+		        lc = lc + 4;
+		        break;
+		case RETI_OP:
+		        code = 0;
+		        code |= (0x1f & stmt[i].op_code) << 27;
+		        lc = lc + 4;
+		        break;
 
 
         default:

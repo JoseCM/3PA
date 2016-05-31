@@ -49,6 +49,11 @@ stx|STX		{yylval = NONE;		return(STX);	}
 sub|SUB		{yylval = NONE;		return(SUB);	}
 mul|MUL		{yylval = NONE;     return(MUL);    }    /*new instruction*/
 div|DIV		{yylval = NONE;     return(DIV);    }    /*new instruction*/
+asr|ASR		{yylval = NONE;		return(ASR);	}
+asl|ASL		{yylval = NONE;		return(ASL);	}
+lsr|LSR		{yylval = NONE;		return(LSR);	}
+lsl|LSL		{yylval = NONE;		return(LSL);	}
+reti|RETI	{yylval = NONE;		return(RETI);	}
 
 
 r{digit}+	{	/* register, e.g. r24				*/
