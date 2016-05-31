@@ -183,6 +183,7 @@ module soc # (
     wire C_Stall;
     wire LB_Enable;
     wire LW_Enable;
+    wire [31:0] LineWriteBufAddr;
     
     wire NotRst;
     assign NotRst = !Rst;
@@ -232,6 +233,7 @@ module soc # (
    /*LineWriteBuffer*/
    .LW_Enable(LW_Enable),
    .LW_Completed(LW_Completed),
+   .LineWriteBufAddr(LineWriteBufAddr),
    .oLineData(LW_CacheLineToWrite),
    /*LineFillBuffer*/
    .LB_Completed(LB_LineReadCompleted),
@@ -270,7 +272,7 @@ module soc # (
    .Clk(Clk),
    .Enable(LW_Enable),
    .Data(LW_CacheLineToWrite),
-   .Address(C_Address), 
+   .Address(LineWriteBufAddr), 
    .AXICompleted(WriteCompleted),
    .AXIData(LW_AXIData),
    .AXIAddr(LW_Output_Addr),

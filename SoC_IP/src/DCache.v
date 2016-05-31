@@ -34,7 +34,7 @@ module DCache(
         output LW_Enable,
         input  LW_Completed,
         output [255:0] oLineData,
-        input [31:0] LineWriteBufAddr,
+        output[31:0] LineWriteBufAddr,
     //Line Fill Buffer Signals
         output LB_Enable,
         input LB_Completed,

@@ -74,6 +74,7 @@ module CacheIControl(
     reg RC_OEn; //Enable para permitir o acesso à cache com o processador num read
     wire RStall;
     wire WStall;
+    reg WriteCacheDummy;
 
     wire SameLine = (LineAddress[`LINE_T:`LINE_B] == WordAddress[`LINE_T:`LINE_B]) && RBusy;
     
@@ -81,7 +82,9 @@ module CacheIControl(
     //Else use Write or Read State Machine Values.
     assign W_Enable = (En && WriteState == IDLE && RW && !Stall) && WC_OEn;
     
-    assign R_Enable = (En && ((ReadState == IDLE) || (ReadState == WAIT_COMPLETION_DIRTY) || (ReadState == WAIT_COMPLETION_NON_DIRTY)) && !RW && !Stall) && RC_OEn;
+    assign R_Enable = (En && !RW  && RC_OEn && (
+                            ((ReadState == IDLE) || (ReadState == WAIT_COMPLETION_DIRTY) || (ReadState == WAIT_COMPLETION_NON_DIRTY)) && (!Stall || WriteCacheDummy)
+                            ));
     
     
     assign CrtWord = (En && ((ReadState == READ_MISS_DIRTY) || (ReadState == READ_MISS_NOT_DIRTY)) && LB_FirstWord);
@@ -93,7 +96,8 @@ module CacheIControl(
                     En && (((ReadState == READ_MISS_DIRTY) || (ReadState == READ_MISS_NOT_DIRTY)) && (!LB_FirstWord)) || //Stall until the critical word arrives
                     En && (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && (C_Miss & !RW)) || //Stall if another read miss is issued
                     En && (((ReadState == WAIT_COMPLETION_NON_DIRTY) || (ReadState == WAIT_COMPLETION_DIRTY)) && ((LB_Completed || !LB_Occupied) && (LW_Completed || !LW_Occupied)) && !RW) ||
-                    En && ((ReadState == WRITE_CACHE) && (/*C_Miss &*/ !RW)); //Stall if we're writting the cache line
+                    En && ((ReadState == WRITE_CACHE) && (/*C_Miss &*/ !RW)) || //Stall if we're writting the cache line
+                    En && !RW && SameLine && (WBusy || (RBusy && !LB_FirstWord)) ;
                     
     assign WStall = En && (!C_Miss && RW && SameLine) || //Stalls if the write tries to write on the same cache line of the LineBuffer
                     En && (C_Miss && RW && RBusy) || //Stalls if there's a write miss and the LineBuffer is occupied by previous misses
@@ -114,6 +118,7 @@ module CacheIControl(
         StoreBuff_Enable <= 1;
         FromStoreBuffer <= 0;
         WBusy <= 0;
+        WriteCacheDummy <= 0;
      end
      else 
         case(WriteState)
@@ -239,11 +244,13 @@ module CacheIControl(
             WriteType <= 0;
             RBusy <= 0;
             LB_Enable <= 0;
+            WriteCacheDummy <= 0;
         end
         else
             case(ReadState)
             IDLE:
             begin
+                WriteCacheDummy <= 0;
                 if(C_Miss && !RW && C_Dirty && !WBusy && En) begin
                     ReadState <= READ_MISS_DIRTY;
                     LB_Enable <= 1;
@@ -348,6 +355,7 @@ module CacheIControl(
             WRITE_CACHE:
             begin
                 ReadState <= IDLE;
+                WriteCacheDummy <= 1;
                 //Activate Write ST Signals
                 RBusy <= 0;
                 WriteType <= 0;            
