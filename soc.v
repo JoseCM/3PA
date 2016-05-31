@@ -23,7 +23,8 @@
 
 module soc(
     input Clk,
-    input Rst
+    input Rst,
+    input [30:0] i_ext
     );
     
     wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_i; 

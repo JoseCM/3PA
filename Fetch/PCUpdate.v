@@ -80,12 +80,12 @@ module PCUpdate(
     end
     else if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
     begin
-         if(i_VIC_ctrl) begin
+         /*if(i_VIC_ctrl) begin
             InstrAddr = i_VIC_iaddr;
          end
-         else begin
+         else begin*/
             InstrAddr = new_InstrAddr; 
-         end
+         //end
             
             PC =  InstrAddr +4'b0100;
             IR = newIR;
