@@ -105,6 +105,11 @@ module processor(
     wire NOT_FLUSH;             
     wire VIC_NOT_FLUSH;
     wire [31:0] PC_EX_VIC;
+    /*********VIC2**************/
+    wire [4:0] o_vic_index;
+    wire [3:0] o_vic_data;
+    wire o_vic_WRe;
+    wire [3:0] i_vic_data;
 
     IF fetch(
         //General
@@ -317,7 +322,13 @@ module processor(
         .o_ma_mem_out(Data_Mem_MA_WB),
         
         .Dcache_bus_out(Dcache_bus_out),
-        .Dcache_bus_in(Dcache_bus_in)
+        .Dcache_bus_in(Dcache_bus_in),
+        
+         /*****************VIC2******************/ 
+       .o_vic_index(o_vic_index),
+       .o_vic_data(o_vic_data),
+       .o_vic_WRe(o_vic_WRe),
+       .i_vic_data(i_vic_data)    
     );
     
         /*wire [31:0] PCSrc_MA_WB;
@@ -417,9 +428,9 @@ module processor(
             .i_NOT_FLUSH(VIC_NOT_FLUSH),      
                       
              /*Memory Stage*/
-            .i_VIC_data(),      //GROUP 2
-            .i_VIC_regaddr(),   //GROUP 2  
-            .i_VIC_we(),        //GROUP 2
+            .i_VIC_data(o_vic_data), 
+            .i_VIC_regaddr(o_vic_index),
+            .i_VIC_we(o_vic_WRe),  
                 
              /*Peripherals*/
             .i_ext(i_ext), // input peripheral    
@@ -429,7 +440,7 @@ module processor(
             .o_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),     
                   
             /*Memory Stage*/
-            .o_VIC_data(),     //GROUP 2            
+            .o_VIC_data(i_vic_data),           
             
             /*Fetch Stage*/
             .o_VIC_iaddr(i_VIC_iaddr),

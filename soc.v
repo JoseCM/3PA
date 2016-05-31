@@ -37,7 +37,7 @@ module soc(
     processor  cpu(
            .Clk(Clk),
            .Rst(Rst),
-           
+           .i_ext(i_ext), // input vic peripheral
            /***************************/
            .Dcache_bus_out(dcache_bus_o),
            .Dcache_bus_in(dcache_bus_i),
