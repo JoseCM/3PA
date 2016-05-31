@@ -24,9 +24,6 @@
 module soc(
     input Clk,
     input Rst,
-    output miss,
-    output [31 : 0] data,
-    input [31 : 0] slave_addr,
     output [0 : 0] m00_axi_awid,
     output [31 : 0] m00_axi_awaddr,
     output [7 : 0] m00_axi_awlen,
@@ -102,9 +99,9 @@ module soc(
     );
     
     ledmaster_0 icache (
-        .miss(miss),
-        .data(data),
-        .slave_addr(slave_addr),
+        .miss(icache_bus_i[`IBUSO_MISS]),
+        .data(icache_bus_i[`IBUSO_DATA]),
+        .slave_addr(icache_bus_o[`IBUSI_ADDR]),
         .m00_axi_awid(m00_axi_awid),
         .m00_axi_awaddr(m00_axi_awaddr),
         .m00_axi_awlen(m00_axi_awlen),
@@ -143,7 +140,7 @@ module soc(
         .m00_axi_rvalid(m00_axi_rvalid),
         .m00_axi_rready(m00_axi_rready),
         .m00_axi_aclk(m00_axi_aclk),
-        .m00_axi_aresetn(m00_axi_aresetn)
+        .m00_axi_aresetn(~m00_axi_aresetn) //Negate if Rst and m00_axi_aresetn are connected
     );
     
 //    ROM inst_mem(
