@@ -26,7 +26,7 @@ module soc_tb(
     
     reg Clk;
     reg Rst;
-    reg i_ext;
+    reg [30:0] i_ext;
     
     soc uut
     (
@@ -37,12 +37,17 @@ module soc_tb(
     
     initial
     begin
-        i_ext = 31'h0;
+        i_ext = 31'h00000000;
         Clk=0;
         Rst=1;
         #10
         Rst = 0;
+       
         
+        #300 i_ext[1] = 1;
+        #4  i_ext[1] = 0;
+
+       
         #1000
         $finish;
     end
