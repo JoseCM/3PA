@@ -26,15 +26,18 @@ module soc_tb(
     
     reg Clk;
     reg Rst;
+    reg i_ext;
     
     soc uut
     (
        .Clk(Clk),
-       .Rst(Rst)
+       .Rst(Rst),
+       .i_ext(i_ext)
     );
     
     initial
     begin
+        i_ext = 31'h0;
         Clk=0;
         Rst=1;
         #10
