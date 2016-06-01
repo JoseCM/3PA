@@ -24,6 +24,8 @@
 module soc(
     input Clk,
     input Rst,
+    
+    // Instruction Cache AXI Master Signals
     output [0 : 0] m00_axi_awid,
     output [31 : 0] m00_axi_awaddr,
     output [7 : 0] m00_axi_awlen,
@@ -60,9 +62,7 @@ module soc(
     input [1 : 0] m00_axi_rresp,
     input m00_axi_rlast,
     input m00_axi_rvalid,
-    output m00_axi_rready,
-    input m00_axi_aclk,
-    input m00_axi_aresetn
+    output m00_axi_rready
     );
     
     wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_i; 
@@ -139,8 +139,8 @@ module soc(
         .m00_axi_rlast(m00_axi_rlast),
         .m00_axi_rvalid(m00_axi_rvalid),
         .m00_axi_rready(m00_axi_rready),
-        .m00_axi_aclk(m00_axi_aclk),
-        .m00_axi_aresetn(~m00_axi_aresetn) //Negate if Rst and m00_axi_aresetn are connected
+        .m00_axi_aclk(Clk),
+        .m00_axi_aresetn(~Rst) //Negate if Rst and m00_axi_aresetn are connected
     );
     
 //    ROM inst_mem(
