@@ -44,7 +44,7 @@ module soc_tb(
         Rst = 0;
        
         
-        #300 i_ext[1] = 1;
+        #150 i_ext[1] = 1;
         #4  i_ext[1] = 0;
 
        

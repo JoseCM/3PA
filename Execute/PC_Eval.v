@@ -37,7 +37,11 @@ module PC_Eval(
     	
     	/*************VIC*************/
     	//SOLUTION OUTPUT
-    	output [`WIDTH-1:0] o_PC_VIC
+    	output [`WIDTH-1:0] o_PC_VIC,
+    	
+    	/*******FROM BRANCH**********/
+        input BranchInstr,
+        input JumpInstr
     	);
     
     /*New Program Counter Selection*/

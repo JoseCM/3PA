@@ -279,7 +279,12 @@ module processor(
         .o_EXMA_Rs2_val(Rs2val_EX_MA),
         .o_EXMA_Rs2_addr(Rs2addr_EX_MA), //Not necessary anymore
         .o_EXMA_PC(PC_EX_MA),
-        .o_EXMA_Rds_addr(Rdsaddr_EX_MA)
+        .o_EXMA_Rds_addr(Rdsaddr_EX_MA),
+        
+        
+        /*******FROM BRANCH**********/
+        .BranchInstr(BR_BranchCtrl),
+        .JumpInstr(BR_JmpCtrl)
           
         );
 
