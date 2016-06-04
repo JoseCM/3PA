@@ -42,7 +42,20 @@ module soc # (
     parameter integer C_M01_AXI_ARUSER_WIDTH    = 0,
     parameter integer C_M01_AXI_WUSER_WIDTH    = 0,
     parameter integer C_M01_AXI_RUSER_WIDTH    = 0,
-    parameter integer C_M01_AXI_BUSER_WIDTH    = 0
+    parameter integer C_M01_AXI_BUSER_WIDTH    = 0,
+    
+    // Parameters for Instricton Cache AXI Master
+    parameter CACHE_LINE_NO = 8,
+    parameter CACHE_LINE_SIZE = 64,
+    parameter BURST_TYPE = 2,
+    parameter integer C_M02_AXI_ID_WIDTH    = 1,
+    parameter integer C_M02_AXI_ADDR_WIDTH    = 32,
+    parameter integer C_M02_AXI_DATA_WIDTH    = 32,
+    parameter integer C_M02_AXI_AWUSER_WIDTH    = 0,
+    parameter integer C_M02_AXI_ARUSER_WIDTH    = 1,
+    parameter integer C_M02_AXI_WUSER_WIDTH    = 0,
+    parameter integer C_M02_AXI_RUSER_WIDTH    = 1,
+    parameter integer C_M02_AXI_BUSER_WIDTH    = 0
 )
 (
     input Clk,
@@ -134,7 +147,46 @@ module soc # (
     input wire  m01_axi_rlast,
     input wire [C_M01_AXI_RUSER_WIDTH-1 : 0] m01_axi_ruser,
     input wire  m01_axi_rvalid,
-    output wire  m01_axi_rready
+    output wire  m01_axi_rready,
+    
+    //Instruction Cache AXI Master Interface
+      output [0 : 0] m02_axi_awid,
+      output [31 : 0] m02_axi_awaddr,
+      output [7 : 0] m02_axi_awlen,
+      output [2 : 0] m02_axi_awsize,
+      output [1 : 0] m02_axi_awburst,
+      output m02_axi_awlock,
+      output [3 : 0] m02_axi_awcache,
+      output [2 : 0] m02_axi_awprot,
+      output [3 : 0] m02_axi_awqos,
+      output m02_axi_awvalid,
+      input m02_axi_awready,
+      output [31 : 0] m02_axi_wdata,
+      output [3 : 0] m02_axi_wstrb,
+      output m02_axi_wlast,
+      output m02_axi_wvalid,
+      input m02_axi_wready,
+      input [0 : 0] m02_axi_bid,
+      input [1 : 0] m02_axi_bresp,
+      input m02_axi_bvalid,
+      output m02_axi_bready,
+      output [0 : 0] m02_axi_arid,
+      output [31 : 0] m02_axi_araddr,
+      output [7 : 0] m02_axi_arlen,
+      output [2 : 0] m02_axi_arsize,
+      output [1 : 0] m02_axi_arburst,
+      output m02_axi_arlock,
+      output [3 : 0] m02_axi_arcache,
+      output [2 : 0] m02_axi_arprot,
+      output [3 : 0] m02_axi_arqos,
+      output m02_axi_arvalid,
+      input m02_axi_arready,
+      input [0 : 0] m02_axi_rid,
+      input [31 : 0] m02_axi_rdata,
+      input [1 : 0] m02_axi_rresp,
+      input m02_axi_rlast,
+      input m02_axi_rvalid,
+      output m02_axi_rready
     );
     
     wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_i; 
@@ -422,15 +474,66 @@ module soc # (
         .M_AXI_RREADY(m01_axi_rready)
     );
     
-   ROM inst_mem(
-     .Clk(Clk),                                                   
-     .Rst(Rst),                                                   
-     .En(1), 
-     //changes                                                 
-     .Addr(icache_bus_o[`IBUSI_ADDR]),                                                    
-     .Data(icache_bus_i[`IBUSO_DATA]),
-     .Imiss(icache_bus_i[`IBUSO_MISS])                                                         
-    );
-    
+      Icache_AXIMaster #(
+        .C_M02_AXI_ID_WIDTH(C_M02_AXI_ID_WIDTH),  // Thread ID Width
+        .C_M02_AXI_ADDR_WIDTH(C_M02_AXI_ADDR_WIDTH),  // Width of Address Bus
+        .C_M02_AXI_DATA_WIDTH(C_M02_AXI_DATA_WIDTH),  // Width of Data Bus
+        .C_M02_AXI_AWUSER_WIDTH(C_M02_AXI_AWUSER_WIDTH),  // Width of User Write Address Bus
+        .C_M02_AXI_ARUSER_WIDTH(C_M02_AXI_ARUSER_WIDTH),  // Width of User Read Address Bus
+        .C_M02_AXI_WUSER_WIDTH(C_M02_AXI_WUSER_WIDTH),  // Width of User Write Data Bus
+        .C_M02_AXI_RUSER_WIDTH(C_M02_AXI_RUSER_WIDTH),  // Width of User Read Data Bus
+        .C_M02_AXI_BUSER_WIDTH(C_M02_AXI_BUSER_WIDTH),  // Width of User Response Bus
+        .CACHE_LINE_NO(CACHE_LINE_NO),
+        .CACHE_LINE_SIZE(CACHE_LINE_SIZE),
+        .BURST_TYPE(BURST_TYPE)
+      ) inst (
+        .miss(icache_bus_i[`IBUSO_MISS]),
+        .data(icache_bus_i[`IBUSO_DATA]),
+        .slave_addr(icache_bus_o[`IBUSI_ADDR]),
+        .m02_axi_awid(m02_axi_awid),
+        .m02_axi_awaddr(m02_axi_awaddr),
+        .m02_axi_awlen(m02_axi_awlen),
+        .m02_axi_awsize(m02_axi_awsize),
+        .m02_axi_awburst(m02_axi_awburst),
+        .m02_axi_awlock(m02_axi_awlock),
+        .m02_axi_awcache(m02_axi_awcache),
+        .m02_axi_awprot(m02_axi_awprot),
+        .m02_axi_awqos(m02_axi_awqos),
+        .m02_axi_awuser(),
+        .m02_axi_awvalid(m02_axi_awvalid),
+        .m02_axi_awready(m02_axi_awready),
+        .m02_axi_wdata(m02_axi_wdata),
+        .m02_axi_wstrb(m02_axi_wstrb),
+        .m02_axi_wlast(m02_axi_wlast),
+        .m02_axi_wuser(),
+        .m02_axi_wvalid(m02_axi_wvalid),
+        .m02_axi_wready(m02_axi_wready),
+        .m02_axi_bid(m02_axi_bid),
+        .m02_axi_bresp(m02_axi_bresp),
+        .m02_axi_buser(1'B0),
+        .m02_axi_bvalid(m02_axi_bvalid),
+        .m02_axi_bready(m02_axi_bready),
+        .m02_axi_arid(m02_axi_arid),
+        .m02_axi_araddr(m02_axi_araddr),
+        .m02_axi_arlen(m02_axi_arlen),
+        .m02_axi_arsize(m02_axi_arsize),
+        .m02_axi_arburst(m02_axi_arburst),
+        .m02_axi_arlock(m02_axi_arlock),
+        .m02_axi_arcache(m02_axi_arcache),
+        .m02_axi_arprot(m02_axi_arprot),
+        .m02_axi_arqos(m02_axi_arqos),
+        .m02_axi_aruser(),
+        .m02_axi_arvalid(m02_axi_arvalid),
+        .m02_axi_arready(m02_axi_arready),
+        .m02_axi_rid(m02_axi_rid),
+        .m02_axi_rdata(m02_axi_rdata),
+        .m02_axi_rresp(m02_axi_rresp),
+        .m02_axi_rlast(m02_axi_rlast),
+        .m02_axi_ruser(1'B0),
+        .m02_axi_rvalid(m02_axi_rvalid),
+        .m02_axi_rready(m02_axi_rready),
+        .m02_axi_aclk(m02_axi_aclk),
+        .m02_axi_aresetn(m02_axi_aresetn)
+      );
     
 endmodule
