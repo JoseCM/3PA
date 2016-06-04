@@ -546,11 +546,11 @@
 	
 	always @(posedge M_AXI_ACLK)
 	begin
-	   dup_miss <= M_AXI_RLAST && miss;
+	   dup_miss <= (M_AXI_RLAST & M_AXI_RVALID & M_AXI_RREADY) && miss;
 	end
 	
 	wire is_reading = init_txn_pulse | start_single_burst_read | burst_read_active;
-    assign  start_read = ((miss & ~prev_miss) & ~(is_reading)) || dup_miss;
+    assign  start_read = ((miss & ~prev_miss)  || dup_miss) & ~is_reading;
 
     always @(posedge start_read)
     begin
@@ -568,7 +568,7 @@
 	           valid[i] <= 0;
 	       end
 	   end
-	   else if(M_AXI_RLAST) 
+	   else if(M_AXI_RLAST & M_AXI_RVALID & M_AXI_RREADY) 
 	   begin
 	      tag[slave_addr[index_msb:index_lsb]] <= slave_addr[31:tag_lsb];
 	      valid[slave_addr[index_msb:index_lsb]] <= 1'b1;
