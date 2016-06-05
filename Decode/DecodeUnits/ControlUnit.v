@@ -624,8 +624,8 @@ begin
             EXStage[`EX_ALU_SRC1] <= 2'b0;
             EXStage[`EX_ALU_SRC2] <= 1'b0;
             EXStage[`EX_CC_WE] <= 0;
-            EXStage[`EX_JMP] <= 0;
-            EXStage[`EX_BXX ] <= 0;
+            EXStage[`EX_JMP] <= 1;
+            EXStage[`EX_BXX ] <= 1;
             EXStage[`EX_NEED_RS1] <= 1'b0;
             EXStage[`EX_NEED_RS2] <=  1'b0;
             

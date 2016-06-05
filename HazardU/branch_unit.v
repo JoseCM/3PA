@@ -31,7 +31,7 @@ module branch_unit(
     input   IRQ, //NEW INPUT FROM VIC, telling if there is an interruption to be attended
     
     output  reg [1:0] CtrlOut,
-    output  reg FlushPipePC,
+    output  FlushPipePC,
     output  reg WriteEnable,
     output  reg [1:0] NPC
     
@@ -43,7 +43,11 @@ module branch_unit(
     //Could be reg?
     reg [1:0] Flush;   //auxiliar wire to determine if FlushPipePC should be asserted. Flush[1] is modified by the IRQ and Flush[0] is modified by the switch case
                         //if one of both is asserted then the Flush of Fetch and Decode should be done (FlushPipePC = 1)
-     
+    
+    
+    //If any of the bits the Flush bus is asserted then the Flush of the Fetch and Decode must happen    
+    assign FlushPipePC = (|Flush);
+    
     always @(inputcat)
     begin  
    
@@ -52,10 +56,8 @@ module branch_unit(
     if (IRQ)
         Flush[1] <= 1;
     else
-        Flush[1] <= 0;
+        Flush[1] <= 0;  
     
-    //If any of the bits the Flush bus is asserted then the Flush of the Fetch and Decode must happen
-    FlushPipePC <= (|Flush);
     
     casex(inputcat)    
         7'bxx00xxx : 
@@ -189,7 +191,7 @@ module branch_unit(
        default:
        begin
        CtrlOut <= 2'b00;
-       FlushPipePC <= 1'b0;
+       Flush[0] <= 1'b0;
        WriteEnable <= 1'b0;
        NPC <= 2'b00;       
        end         
