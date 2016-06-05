@@ -93,7 +93,7 @@ module IF(
 
     wire [`IFID_WIDTH-1:0]in;
     assign in = (Rst)          ?      0:
-                                      {InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w,1'b1};    //less significant bit for flush (VIC stuff)
+                                      {1'b1,InstrAddr_w,Predict_w,CB_w,PC_w,PCMatch_w,IR_w};    //PCMatch = Valid bit
 
     wire [`IFID_WIDTH-1:0]out;
     assign IR = (Rst)          ?      0:

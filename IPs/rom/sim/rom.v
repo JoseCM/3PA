@@ -46,24 +46,71 @@
 // 
 // DO NOT MODIFY THIS FILE.
 
+
 // IP VLNV: xilinx.com:ip:dist_mem_gen:8.0
 // IP Revision: 10
 
-// The following must be inserted into your Verilog file for this
-// core to be instantiated. Change the instance name and port connections
-// (in parentheses) to your own signal names.
+`timescale 1ns/1ps
 
-//----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
-RAM_DM your_instance_name (
-  .a(a),      // input wire [15 : 0] a
-  .d(d),      // input wire [31 : 0] d
-  .clk(clk),  // input wire clk
-  .we(we),    // input wire we
-  .spo(spo)  // output wire [31 : 0] spo
+(* DowngradeIPIdentifiedWarnings = "yes" *)
+module rom (
+  a,
+  spo
 );
-// INST_TAG_END ------ End INSTANTIATION Template ---------
 
-// You must compile the wrapper file RAM_DM.v when simulating
-// the core, RAM_DM. When compiling the wrapper file, be sure to
-// reference the Verilog simulation library.
+input wire [5 : 0] a;
+output wire [31 : 0] spo;
 
+  dist_mem_gen_v8_0_10 #(
+    .C_FAMILY("zynq"),
+    .C_ADDR_WIDTH(6),
+    .C_DEFAULT_DATA("0"),
+    .C_DEPTH(64),
+    .C_HAS_CLK(0),
+    .C_HAS_D(0),
+    .C_HAS_DPO(0),
+    .C_HAS_DPRA(0),
+    .C_HAS_I_CE(0),
+    .C_HAS_QDPO(0),
+    .C_HAS_QDPO_CE(0),
+    .C_HAS_QDPO_CLK(0),
+    .C_HAS_QDPO_RST(0),
+    .C_HAS_QDPO_SRST(0),
+    .C_HAS_QSPO(0),
+    .C_HAS_QSPO_CE(0),
+    .C_HAS_QSPO_RST(0),
+    .C_HAS_QSPO_SRST(0),
+    .C_HAS_SPO(1),
+    .C_HAS_WE(0),
+    .C_MEM_INIT_FILE("rom.mif"),
+    .C_ELABORATION_DIR("./"),
+    .C_MEM_TYPE(0),
+    .C_PIPELINE_STAGES(0),
+    .C_QCE_JOINED(0),
+    .C_QUALIFY_WE(0),
+    .C_READ_MIF(1),
+    .C_REG_A_D_INPUTS(0),
+    .C_REG_DPRA_INPUT(0),
+    .C_SYNC_ENABLE(1),
+    .C_WIDTH(32),
+    .C_PARSER_TYPE(1)
+  ) inst (
+    .a(a),
+    .d(32'B0),
+    .dpra(6'B0),
+    .clk(1'D0),
+    .we(1'D0),
+    .i_ce(1'D1),
+    .qspo_ce(1'D1),
+    .qdpo_ce(1'D1),
+    .qdpo_clk(1'D0),
+    .qspo_rst(1'D0),
+    .qdpo_rst(1'D0),
+    .qspo_srst(1'D0),
+    .qdpo_srst(1'D0),
+    .spo(spo),
+    .dpo(),
+    .qspo(),
+    .qdpo()
+  );
+endmodule

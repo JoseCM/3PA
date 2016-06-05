@@ -90,7 +90,11 @@ module EX_Stage(
         output [`WIDTH-1:0] o_EXMA_Rs2_val,
         output [`RS2ADDR_WIDTH-1:0] o_EXMA_Rs2_addr,
         output [`WIDTH-1:0] o_EXMA_PC,
-        output [`RDSADDR_WIDTH-1:0] o_EXMA_Rds_addr
+        output [`RDSADDR_WIDTH-1:0] o_EXMA_Rds_addr,
+        
+        /*******FROM BRANCH**********/
+        input BranchInstr,
+        input JumpInstr
     );
 
             
@@ -184,7 +188,9 @@ PC_Eval new_pc(
                  .i_NPC_Ctrl(i_NPC_Ctrl),
                  .o_New_PC(o_New_PC),
                  .o_PPC_Eq(o_PPC_Eq),
-                 .o_PC_VIC(o_PC_VIC)
+                 .o_PC_VIC(o_PC_VIC),
+                 .BranchInstr(BranchInstr),
+                 .JumpInstr(JumpInstr)
         );
         
         

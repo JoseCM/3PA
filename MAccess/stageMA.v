@@ -117,16 +117,4 @@ module stageMA(
     assign o_ma_ALU_rslt = o_ma[`MAWB_ALURSLT];
     assign o_ma_WB = o_ma[`MAWB_WB];
     
-    vic_registers vic_r(
-        .clk(clk),
-        .rst(rst), 
-        .i_VIC_regaddr(o_vic_index), //register address
-        .i_VIC_data(o_vic_data), //Input data
-        .o_VIC_data(i_vic_data), //Output Data
-        .o_enable(), //Global Enable
-        .i_VIC_we(o_vic_WRe), //Write Operation signal
-        .o_buffer()// Configuration Registers
-    );
-   
-    
 endmodule

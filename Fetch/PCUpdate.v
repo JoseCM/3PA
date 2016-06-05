@@ -51,6 +51,7 @@ module PCUpdate(
  
     
     assign new_InstrAddr = (Rst)                           ?  32'b0:
+                           (i_VIC_ctrl)                    ?  i_VIC_iaddr:
                            (FlushPipeandPC)                ?  JmpAddr:
                            (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
                            (PCSource)                      ?  Predict:
@@ -78,15 +79,9 @@ module PCUpdate(
             InstrAddr <= 32'b0;
             IR = 0;
     end
-    else if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
+    else if (i_VIC_ctrl || (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush)))
     begin
-         if(i_VIC_ctrl) begin
-            InstrAddr = i_VIC_iaddr;
-         end
-         else begin
             InstrAddr = new_InstrAddr; 
-         end
-            
             PC =  InstrAddr +4'b0100;
             IR = newIR;
     end

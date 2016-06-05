@@ -43,12 +43,19 @@ module vic_ctrl(
     always @(posedge i_IRQ) //Assim que se sinalize uma interrup��o pelo vic_irq
     begin  
         o_IRQ_VIC <= 1'b1;
-        CC_PC_NotSaved <= 1'b1;
-        
+ //       CC_PC_NotSaved <= 1'b1;
+                
         if(i_reti) // Consecutive Interruptions
         begin  
             CommonITHandle(saved_CC, saved_PC);
         end
+        else 
+            if (i_NOT_FLUSH)
+                CommonITHandle(i_CCodes, i_PC);
+            else
+                CC_PC_NotSaved <= 1'b1;
+            
+            
     end       
    
     always @(posedge clk)
@@ -88,8 +95,6 @@ module vic_ctrl(
     end
     //When a ISR is finished
     always @(posedge i_reti) begin
-        o_VIC_iaddr <= saved_PC;
-        o_IRQ_PC <= 1'b1;
         o_VIC_CCodes <= saved_CC;
         o_VIC_CCodes_ctrl <= 1'b1;
         o_IRQ_VIC <= 1'b0;
@@ -101,8 +106,8 @@ input [31:0]PC_attribution;
 begin
     saved_PC <= PC_attribution;  
     saved_CC <= CCode_attribution;
-    o_VIC_iaddr <= ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
     o_IRQ_PC <= 1'b1;
+    o_VIC_iaddr <= ({27'b0000_0000_0000_0000_0000_0000_000,i_ISR_addr}) << 4;   //addr of ISR to fetch*/
     CC_PC_NotSaved <= 1'b0;
 end
 endtask
