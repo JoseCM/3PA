@@ -21,7 +21,7 @@
 `define WIDTH   32
 `define CONFREG_WIDTH 4
 `define CONFREGADDR_WIDTH 5
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 module stageMA(
 

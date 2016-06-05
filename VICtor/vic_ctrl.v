@@ -95,6 +95,8 @@ module vic_ctrl(
     end
     //When a ISR is finished
     always @(posedge i_reti) begin
+        o_VIC_iaddr <= saved_PC;
+        o_IRQ_PC <= 1'b1;
         o_VIC_CCodes <= saved_CC;
         o_VIC_CCodes_ctrl <= 1'b1;
         o_IRQ_VIC <= 1'b0;

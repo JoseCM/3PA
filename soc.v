@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 `include "mem_bus_defines.vh"
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 module soc(
     input Clk,
