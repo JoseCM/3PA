@@ -42,15 +42,16 @@ module PCUpdate(
     );
     
     //reg  [31:0]    InstrAddr;     //changed here
-    wire [31:0] new_InstrAddr;
-    wire [31:0] newIR;
- 
+    reg [31:0] new_InstrAddr;
+    //wire [31:0] new_InstrAddr;
+    wire [31:0] new_IR;
     
-    assign new_InstrAddr = (Rst)                           ?  32'b0:
-                           (FlushPipeandPC)                ?  JmpAddr:
-                           (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
-                           (PCSource)                      ?  Predict:
-                                                           PC;
+//    assign new_InstrAddr = (Rst)                           ?  32'b0:
+//                           (FlushPipeandPC)                ?  JmpAddr:
+//                           (PCStall || IF_ID_Stall)        ?  InstrAddr:                           
+//                           (PCSource)                      ?  Predict:
+//                                                           PC;
+ 
 
 //    ROM inst_mem(
 //     .Clk(Clk),                                                   
@@ -63,7 +64,25 @@ module PCUpdate(
 
     assign Icache_bus_out =  new_InstrAddr;
     assign Imiss = Icache_bus_in[32];
-    assign newIR = Icache_bus_in[31:0];
+    assign new_IR = Rst ? 32'b0 : Icache_bus_in[31:0];
+    
+    //always@ (posedge (Clk | FlushPipeandPC | PCStall | IF_ID_Stall | PCSource))
+    always @(negedge Clk)
+    begin
+    
+        if(Rst)
+        begin
+                new_InstrAddr <= 0;
+        end
+        else
+        begin
+              new_InstrAddr <= (FlushPipeandPC)               ?  JmpAddr:
+                               (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
+                               (PCSource)                     ?  Predict:
+                                                                 PC ;
+        end                         
+        
+    end
     
     always@ (posedge Clk)
     begin
@@ -71,13 +90,18 @@ module PCUpdate(
     begin
             PC <= 32'b0;
             InstrAddr <= 32'b0;
-            IR = 0;
+            new_InstrAddr <= 0;
+            IR <= 0;
     end
-    else if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
+    else
     begin
-            InstrAddr = new_InstrAddr; 
-            PC =  InstrAddr +4'b0100;
-            IR = newIR;
+    
+            if (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))
+            begin
+                InstrAddr = new_InstrAddr;
+                IR = new_IR;
+                PC  =  new_InstrAddr + 4'b0100;
+            end
     end
     end  
     
