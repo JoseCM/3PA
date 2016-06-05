@@ -7,14 +7,8 @@ RETI
 
 .org 0x20
 LDI r0, #12
-LDI r1, #10
-LDI r2, #9
-LDI r3, #8
 LDI r4, #15
 ST IR1, r0
-ST IR8, r1
-ST IR2, r2
-ST IR3, r3
 ST IR_ENABLE, r4
 NOP
 NOP
