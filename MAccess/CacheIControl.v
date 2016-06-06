@@ -80,10 +80,10 @@ module CacheIControl(
     
     //If Read/Write and Read/WriteState is Idle use Idle Values
     //Else use Write or Read State Machine Values.
-    assign W_Enable = (En && WriteState == IDLE && RW && !Stall) && WC_OEn;
+    assign W_Enable = (En && WriteState == IDLE && RW && !SameLine) && WC_OEn;
     
     assign R_Enable = (En && !RW  && RC_OEn && (
-                            ((ReadState == IDLE) || (ReadState == WAIT_COMPLETION_DIRTY) || (ReadState == WAIT_COMPLETION_NON_DIRTY)) && (!Stall || WriteCacheDummy)
+                            ((ReadState == IDLE) || (ReadState == WAIT_COMPLETION_DIRTY) || (ReadState == WAIT_COMPLETION_NON_DIRTY)) && (!SameLine)
                             ));
     
     
