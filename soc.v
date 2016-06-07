@@ -490,6 +490,8 @@ module soc # (
         .miss(icache_bus_i[`IBUSO_MISS]),
         .data(icache_bus_i[`IBUSO_DATA]),
         .slave_addr(icache_bus_o[`IBUSI_ADDR]),
+        .m02_axi_aclk(Clk),
+        .m02_axi_aresetn(NotRst),
         .m02_axi_awid(m02_axi_awid),
         .m02_axi_awaddr(m02_axi_awaddr),
         .m02_axi_awlen(m02_axi_awlen),
@@ -531,9 +533,7 @@ module soc # (
         .m02_axi_rlast(m02_axi_rlast),
         .m02_axi_ruser(1'B0),
         .m02_axi_rvalid(m02_axi_rvalid),
-        .m02_axi_rready(m02_axi_rready),
-        .m02_axi_aclk(m02_axi_aclk),
-        .m02_axi_aresetn(m02_axi_aresetn)
+        .m02_axi_rready(m02_axi_rready)
       );
     
 endmodule
