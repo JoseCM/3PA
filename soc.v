@@ -24,7 +24,7 @@
 module soc # (
     // Parameters of Axi Master Bus Interface PAXI
     parameter  C_M00_AXI_TARGET_SLAVE_BASE_ADDR    = 32'h40000000,
-    parameter integer C_M00_AXI_ID_WIDTH    = 1,
+    parameter integer C_M00_AXI_ID_WIDTH    = 3,
     parameter integer C_M00_AXI_ADDR_WIDTH    = 32,
     parameter integer C_M00_AXI_DATA_WIDTH    = 32,
     parameter integer C_M00_AXI_AWUSER_WIDTH    = 0,
@@ -35,7 +35,7 @@ module soc # (
     
     // Parameters of Axi Master Bus Interface M01_AXI
     parameter  C_M01_AXI_TARGET_SLAVE_BASE_ADDR    = 32'h40000000,
-    parameter integer C_M01_AXI_ID_WIDTH    = 1,
+    parameter integer C_M01_AXI_ID_WIDTH    = 3,
     parameter integer C_M01_AXI_ADDR_WIDTH    = 32,
     parameter integer C_M01_AXI_DATA_WIDTH    = 32,
     parameter integer C_M01_AXI_AWUSER_WIDTH    = 0,
@@ -48,7 +48,7 @@ module soc # (
     parameter CACHE_LINE_NO = 8,
     parameter CACHE_LINE_SIZE = 64,
     parameter BURST_TYPE = 2,
-    parameter integer C_M02_AXI_ID_WIDTH    = 1,
+    parameter integer C_M02_AXI_ID_WIDTH    = 3,
     parameter integer C_M02_AXI_ADDR_WIDTH    = 32,
     parameter integer C_M02_AXI_DATA_WIDTH    = 32,
     parameter integer C_M02_AXI_AWUSER_WIDTH    = 0,
@@ -532,8 +532,8 @@ module soc # (
         .m02_axi_ruser(1'B0),
         .m02_axi_rvalid(m02_axi_rvalid),
         .m02_axi_rready(m02_axi_rready),
-        .m02_axi_aclk(m02_axi_aclk),
-        .m02_axi_aresetn(m02_axi_aresetn)
+        .m02_axi_aclk(Clk),
+        .m02_axi_aresetn(NotRst)
       );
     
 endmodule
