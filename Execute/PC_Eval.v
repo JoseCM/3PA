@@ -52,7 +52,7 @@ module PC_Eval(
     
     //MAYBE A SOLUTION TO VIC
     assign o_PC_VIC = (!(JumpInstr || BranchInstr)) ? i_PC :
-                                         o_PPC_Eq   ? i_PC : 
+                                         o_PPC_Eq   ? i_PPC : 
                                          i_ALU_rslt;    
     
 endmodule

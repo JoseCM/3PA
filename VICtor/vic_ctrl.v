@@ -43,8 +43,7 @@ module vic_ctrl(
     always @(posedge i_IRQ) //Assim que se sinalize uma interrup��o pelo vic_irq
     begin  
         o_IRQ_VIC <= 1'b1;
- //       CC_PC_NotSaved <= 1'b1;
-                
+            
         if(i_reti) // Consecutive Interruptions
         begin  
             CommonITHandle(saved_CC, saved_PC);
@@ -53,18 +52,21 @@ module vic_ctrl(
             if (i_NOT_FLUSH)
                 CommonITHandle(i_CCodes, i_PC);
             else
-                CC_PC_NotSaved <= 1'b1;
-            
-            
+                CC_PC_NotSaved <= 1'b1;          
     end       
    
-    always @(posedge clk)
+    always @(negedge clk)
     begin
+        //delay = i_NOT_FLUSH;
+                 
         if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
         begin
-            CommonITHandle(i_CCodes, i_PC);
+               CommonITHandle(i_CCodes, i_PC);
         end
-  
+    end
+   
+    always @(posedge clk)
+    begin               
         if(rst)
         begin
             o_IRQ_VIC <= 1'b0;
@@ -79,6 +81,19 @@ module vic_ctrl(
         end
         else
         begin
+             
+            if(o_IRQ_PC)
+            begin
+                o_IRQ_PC <= 0;
+            end
+              
+            //delay = i_NOT_FLUSH;
+             
+            /*if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
+            begin
+                   CommonITHandle(i_CCodes, i_PC);
+            end*/
+            
             if(~CC_PC_NotSaved)
             begin
                 if(~i_reti)
@@ -87,11 +102,6 @@ module vic_ctrl(
                 end
             end
         end     
-        
-        if(o_IRQ_PC)
-        begin
-            o_IRQ_PC <= 0;
-        end
     end
     //When a ISR is finished
     always @(posedge i_reti) begin

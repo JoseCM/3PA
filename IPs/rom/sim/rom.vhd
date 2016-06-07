@@ -58,7 +58,7 @@ USE dist_mem_gen_v8_0_9.dist_mem_gen_v8_0_9;
 
 ENTITY rom IS
   PORT (
-    a : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+    a : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
     spo : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
 END rom;
@@ -103,9 +103,9 @@ ARCHITECTURE rom_arch OF rom IS
       C_PARSER_TYPE : INTEGER
     );
     PORT (
-      a : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+      a : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
       d : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-      dpra : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+      dpra : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
       clk : IN STD_LOGIC;
       we : IN STD_LOGIC;
       i_ce : IN STD_LOGIC;
@@ -126,9 +126,9 @@ BEGIN
   U0 : dist_mem_gen_v8_0_9
     GENERIC MAP (
       C_FAMILY => "zynq",
-      C_ADDR_WIDTH => 6,
+      C_ADDR_WIDTH => 12,
       C_DEFAULT_DATA => "0",
-      C_DEPTH => 64,
+      C_DEPTH => 4096,
       C_HAS_CLK => 0,
       C_HAS_D => 0,
       C_HAS_DPO => 0,
@@ -161,7 +161,7 @@ BEGIN
     PORT MAP (
       a => a,
       d => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32)),
-      dpra => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 6)),
+      dpra => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 12)),
       clk => '0',
       we => '0',
       i_ce => '1',
