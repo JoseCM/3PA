@@ -95,6 +95,8 @@ module processor(
     wire [31:0] ID_IAddr;
     wire [33:0] ID_PPCCB;
     wire [31:0] w_CHJumpAddr;
+
+	wire [4:0] IFid__Rs2;
     
     /**********VIC*************/
     wire i_VIC_ctrl;            //signal that goes to the mux in fetch stage and to branch unit(to flush)
@@ -354,14 +356,15 @@ module processor(
         .o_wb_reg_dst_s(WB_RDst_s),// select mux out <-------------------------------------- <------------------------------------
         .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
         .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
-        .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
+        .o_vwb_mux(o_vwb_mux),        // Output of the WB one clock late
+        .stall(MAWB_Stall) // virtual write back stalls when memmory access stalls
     );
 
 
         
     HazardUnit HazardU(
          .clk(Clk),
-         .rst(rst),
+         .rst(Rst),
          //FORWARD UNIT
          
          .IDex__RW_MEM(EX_MA[`MA_RW]),
