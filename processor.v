@@ -94,6 +94,8 @@ module processor(
     wire [31:0] ID_IAddr;
     wire [33:0] ID_PPCCB;
     wire [31:0] w_CHJumpAddr;
+    
+    wire [4:0] IFid__Rs2;
 
     IF fetch(
         //General

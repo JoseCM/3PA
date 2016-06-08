@@ -521,8 +521,7 @@
 	wire hit1 = (valid[slave_address[index_msb:index_lsb]] && (tag[slave_address[index_msb:index_lsb]] == slave_address[31:tag_lsb]));
 	wire hit2 = (burst_read_active && read_cache_lines[slave_address[index_lsb-1:2]]) && (slave_address[31:index_lsb] == slave_addr[31:index_lsb] );
 	wire hit3 = (M_AXI_RVALID && (slave_address[index_lsb-1:0] == my_read_index) && (slave_address[31:index_lsb] == slave_addr[31:index_lsb] ));
-	assign miss =  (M_AXI_ARESETN == 0) ? 1'b0 : 
-	               (M_AXI_ACLK)         ? miss : ~( hit1 || hit2 || hit3 );
+	assign miss =  (M_AXI_ARESETN == 0) ? 1'b0 : ~( hit1 || hit2 || hit3 );
 	
 	
 	assign data = (miss) ? 32'b0 : (hit1 || hit2) ? {cache[slave_address[index_msb:index_lsb]][slave_address[index_lsb-1:0] + 3],
