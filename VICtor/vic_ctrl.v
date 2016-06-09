@@ -40,25 +40,24 @@ module vic_ctrl(
     reg CC_PC_NotSaved;
     reg delay;
     
-    always @(posedge i_IRQ) //Assim que se sinalize uma interrup��o pelo vic_irq
-    begin  
-        o_IRQ_VIC <= 1'b1;
-            
+    always @(posedge i_IRQ) //Assim que se sinalize uma interrupt pelo vic_irq
+    begin
+           
+        o_IRQ_VIC <= 1'b1;            
         if(i_reti) // Consecutive Interruptions
         begin  
             CommonITHandle(saved_CC, saved_PC);
         end
-        else 
-            if (i_NOT_FLUSH)
-                CommonITHandle(i_CCodes, i_PC);
-            else
-                CC_PC_NotSaved <= 1'b1;          
+        else
+        if (i_NOT_FLUSH)
+            CommonITHandle(i_CCodes, i_PC);
+        else
+            CC_PC_NotSaved <= 1'b1;          
     end       
    
     always @(negedge clk)
     begin
-        //delay = i_NOT_FLUSH;
-                 
+        //delay = i_NOT_FLUSH;         
         if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
         begin
                CommonITHandle(i_CCodes, i_PC);
