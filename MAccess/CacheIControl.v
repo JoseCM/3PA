@@ -124,6 +124,7 @@ module CacheIControl(
         case(WriteState)
             IDLE: 
             begin
+               FromStoreBuffer <= 0;
                if(!C_Miss && RW && En) begin //TODO verify if the atual state is writecache
                     if(SameLine) begin
                         //Wait one cycle
@@ -199,9 +200,8 @@ module CacheIControl(
                     WBusy <= 1;
                     WC_OEn <= 0;
                     Merge <= 1;
-                    WriteType <= 1;
+                    WriteType <= 1;                    
                     StoreBuff_Enable <= 0;
-                    FromStoreBuffer <= 0;
                 end   
             end
             START_AXI_R:
@@ -217,7 +217,6 @@ module CacheIControl(
                  WriteType <= 1;
                  LB_Enable <= 0;
                  StoreBuff_Enable <= 0;
-                 FromStoreBuffer <= 0;
                end
             end
             MERGE_RESULTS:
@@ -227,8 +226,8 @@ module CacheIControl(
                WC_OEn <= 1;
                Merge <= 0;
                WriteType <= 0;
-               StoreBuff_Enable <= 1;
-               FromStoreBuffer <= 0;
+               StoreBuff_Enable <= 0;
+               FromStoreBuffer <= 1;
             end
         endcase
     end
