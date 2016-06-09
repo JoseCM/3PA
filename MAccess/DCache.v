@@ -34,7 +34,7 @@ module DCache(
         output LW_Enable,
         input  LW_Completed,
         output [255:0] oLineData,
-        input [31:0] LineWriteBufAddr,
+        output[31:0] LineWriteBufAddr,
     //Line Fill Buffer Signals
         output LB_Enable,
         input LB_Completed,
@@ -44,23 +44,18 @@ module DCache(
         output RWordSelect
     );
     
-    wire [31:0] OAddress;
-    wire Miss;
-    wire [31:0] OData;
-    wire [31:0] IData;
     wire W_Enable;
     wire R_Enable;
-   // wire C_RW;
+    // wire C_RW;
     wire Merge;
     wire dirty;
     wire writeType;
-    wire [31:0] AddrMux;
-    wire [31:0] IDataMux;
     wire StoreBuff_Enable;
-    wire RWLine;
-   // assign Stall = CtrlStall || C_Ctrl;
+    // assign Stall = CtrlStall || C_Ctrl;
     reg [31:0] StoreBuff;
     reg [31:0] StoreBuffAddr;
+    wire[31:0] WordAddress;
+    wire [31:0] WordWrite;
     
     
     /*Store buffer for writes*/
@@ -84,7 +79,7 @@ module DCache(
         .RW(RW),
         /*Cache*/        
         .Stall(Stall),
-        .WordAddress(WordAddress),
+        .WordAddress(Address),
         .LineAddress(LB_LineAddr),
         .C_Dirty(dirty),
         .WriteType(writeType),
@@ -109,6 +104,8 @@ module DCache(
     /*Merge Unit, gets word from StoreBuffer and merges with
     cache line read from memory*/
     wire[255:0] MergedLine;
+    wire[255:0] WCacheLine;
+    
     MergeUnit MU (
        .Address_LSBs(StoreBuffAddr[2:0]),
        .WriteData(StoreBuff),
@@ -131,7 +128,7 @@ module DCache(
         .R_Enable(R_Enable),
         /*Word related cache signals*/
         .word(WordWrite),
-        .addr(WordWriteAddress),
+        .addr(WordAddress),
         .inst(RData),
         .hit(hit),
         .dirty(dirty),

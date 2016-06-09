@@ -28,6 +28,11 @@ defined for the convenience of the assembler.				*/
 #define  XOR_OP         21
 #define  MUL_OP		22     //* new operation MUL
 #define  DIV_OP     23     //* new operation DIV
+#define  ASR_OP		24
+#define  ASL_OP		25
+#define  LSR_OP		26
+#define  LSL_OP		27
+#define  RETI_OP        28
 
 /* Define all of the op-code values.  Note that there are fewer
 op-codes than there are operations visible to the assembler.  These
@@ -49,6 +54,11 @@ are the values that will actually appear in the object code file.	*/
 #define	STX_CODE	14
 #define MUL_CODE	15  //* new instruction MUL
 #define DIV_CODE	16  //* new instruction DIV
+#define ASR_CODE	17
+#define ASL_CODE	18
+#define LSR_CODE	19
+#define LSL_CODE	20
+#define RETI_CODE   	21
 #define	HLT_CODE	31
 
 /* Define all of the possible branch conditions.  Stored in stmt[].misc	*/

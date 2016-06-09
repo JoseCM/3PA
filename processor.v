@@ -19,11 +19,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 module processor(
        input Clk,
        input Rst,
+       input [30:0] i_ext, // input vic peripheral
        
        /***************************/
        output [65:0] Dcache_bus_out,
@@ -95,6 +96,23 @@ module processor(
     wire [33:0] ID_PPCCB;
     wire [31:0] w_CHJumpAddr;
 
+	wire [4:0] IFid__Rs2;
+    
+    /**********VIC*************/
+    wire i_VIC_ctrl;            //signal that goes to the mux in fetch stage and to branch unit(to flush)
+    wire [31:0] i_VIC_iaddr;    //input address for the mux in fetch stage        
+    wire i_VIC_CCodes_ctrl;     //control signal to execute stage (for ccodes store logic)
+    wire [3:0] i_VIC_CCodes;    //CCodes stored before interrupt
+    wire RETI_Inst;             //RETI signal
+    wire NOT_FLUSH;             
+    wire VIC_NOT_FLUSH;
+    wire [31:0] PC_EX_VIC;
+    /*********VIC2**************/
+    wire [4:0] o_vic_index;
+    wire [3:0] o_vic_data;
+    wire o_vic_WRe;
+    wire [3:0] i_vic_data;
+
     IF fetch(
         //General
          .Clk(Clk),
@@ -120,7 +138,12 @@ module processor(
          .PPCCB(ID_PPCCB),
                 
          .Icache_bus_out(Icache_bus_out),
-         .Icache_bus_in(Icache_bus_in)
+         .Icache_bus_in(Icache_bus_in),
+         
+         /**********VIC*************/
+         .i_VIC_ctrl(i_VIC_ctrl),
+         .i_VIC_iaddr(i_VIC_iaddr),        
+         .o_IFID_NOT_FLUSH(NOT_FLUSH)
     );
 
     //wire WB_RWE;
@@ -136,9 +159,9 @@ module processor(
     wire [31:0] EX_Op1;
     wire [31:0] EX_Op2;
     wire [31:0] EX_Im;
-    wire [14:0] EX_ExCtrl;
+    wire [`EX_WIDTH-1:0] EX_ExCtrl;
     wire [1:0] EX_MA;
-    wire [2:0] EX_WB;
+    wire [2:0] EX_WB;   
     
     IDControlUnit decode(
          .Clk(Clk),
@@ -154,6 +177,7 @@ module processor(
          .iPC(ID_PC), 
          .iValid(ID_PCSrc),
          .iIR(ID_IR),
+ 
          /*Input to stall or flush*/
          .stall(IDEX_Stall),
          .flush(IDEX_Flush),
@@ -180,7 +204,12 @@ module processor(
 
          .oEX(EX_ExCtrl),
          .oMA(EX_MA),
-         .oWB(EX_WB)
+         .oWB(EX_WB),
+         
+         /************VIC****************/
+         .o_RETI(RETI_Inst), //RETI Signal        
+         .i_NOT_FLUSH(NOT_FLUSH),
+         .o_NOT_FLUSH(VIC_NOT_FLUSH)//later for vic
     );
 
 
@@ -222,6 +251,11 @@ module processor(
         .i_PC(EX_PC), 
         .i_PPCCB(EX_PPCCB),
         .i_IC(EX_IC),
+       
+        /****************VIC*****************/
+        .i_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),
+        .i_VIC_CCodes(i_VIC_CCodes),
+        .o_PC_VIC(PC_EX_VIC),
         
         /*External Outputs data and signals(No Connection to the Pipeline Register)*/
         .o_CB(BR_CBI),
@@ -247,7 +281,13 @@ module processor(
         .o_EXMA_Rs2_val(Rs2val_EX_MA),
         .o_EXMA_Rs2_addr(Rs2addr_EX_MA), //Not necessary anymore
         .o_EXMA_PC(PC_EX_MA),
-        .o_EXMA_Rds_addr(Rdsaddr_EX_MA)
+        .o_EXMA_Rds_addr(Rdsaddr_EX_MA),
+        
+        
+        /*******FROM BRANCH**********/
+        .BranchInstr(BR_BranchCtrl),
+        .JumpInstr(BR_JmpCtrl)
+          
         );
 
         /*wire [2:0] WB_EX_MA;
@@ -290,7 +330,13 @@ module processor(
         .o_ma_mem_out(Data_Mem_MA_WB),
         
         .Dcache_bus_out(Dcache_bus_out),
-        .Dcache_bus_in(Dcache_bus_in)
+        .Dcache_bus_in(Dcache_bus_in),
+        
+         /*****************VIC2******************/ 
+       .o_vic_index(o_vic_index),
+       .o_vic_data(o_vic_data),
+       .o_vic_WRe(o_vic_WRe),
+       .i_vic_data(i_vic_data)    
     );
     
         wire [1:0] WB_RDst_s;
@@ -310,14 +356,15 @@ module processor(
         .o_wb_reg_dst_s(WB_RDst_s),// select mux out <-------------------------------------- <------------------------------------
         .o_vwb_rdst(o_vwb_rdst),               // Register to save data in RegFile one clock late
         .o_vwb_reg_write_rf(o_vwb_reg_write_rf),            // Control signal that allows the writing in the RegFile one clock late
-        .o_vwb_mux(o_vwb_mux)        // Output of the WB one clock late
+        .o_vwb_mux(o_vwb_mux),        // Output of the WB one clock late
+        .stall(MAWB_Stall) // virtual write back stalls when memmory access stalls
     );
 
 
         
     HazardUnit HazardU(
          .clk(Clk),
-         .rst(rst),
+         .rst(Rst),
          //FORWARD UNIT
          
          .IDex__RW_MEM(EX_MA[`MA_RW]),
@@ -352,10 +399,12 @@ module processor(
          .JumpInstr(BR_JmpCtrl),
          .PredicEqRes(PPC_Eq),
          .CtrlIn(BR_CBI),
+         .i_VIC_ctrl(i_VIC_ctrl),
          .CtrlOut(ID_CB_o),
          .FlushPipePC(ID_FlushPipeandPC),
          .WriteEnable(ID_WriteEnable),
          .NPC(EX_NPC),
+         
 
           //CHECK CC
          .cc4(condCodes),            // The condition code bits
@@ -377,6 +426,34 @@ module processor(
          .Flush_ID_EX(IDEX_Flush)
         );
 
-
-
+    Vic vic(           
+            .clk(Clk),
+            .rst(Rst),         
+                          
+            /*Execute Signals*/
+            .i_PC(PC_EX_VIC),
+            .i_CCodes(condCodes), //saving cc from execute stage            
+            .i_reti(RETI_Inst),   //Reti value from Decode          
+            .i_NOT_FLUSH(VIC_NOT_FLUSH),      
+                      
+             /*Memory Stage*/
+            .i_VIC_data(o_vic_data), 
+            .i_VIC_regaddr(o_vic_index),
+            .i_VIC_we(o_vic_WRe),  
+                
+             /*Peripherals*/
+            .i_ext(i_ext), // input peripheral    
+               
+            /*Execute Signals*/
+            .o_CCodes(i_VIC_CCodes),
+            .o_VIC_CCodes_ctrl(i_VIC_CCodes_ctrl),     
+                  
+            /*Memory Stage*/
+            .o_VIC_data(i_vic_data),           
+            
+            /*Fetch Stage*/
+            .o_VIC_iaddr(i_VIC_iaddr),
+            .o_VIC_ctrl(i_VIC_ctrl)           
+            );
+            
 endmodule

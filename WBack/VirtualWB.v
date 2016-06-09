@@ -19,13 +19,14 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 `define WIDTH 32
 
 module VirtualWB(
         input clk,
         input rst,
+        input stall,
         input [4:0]i_vwb_rdst,               // Register to save data in RegFile
         input i_vwb_reg_write_rf,            // Control signal that allows the writing in the RegFile
         input [`WIDTH-1:0] i_vwb_mux,        // Output of the WB
@@ -41,10 +42,15 @@ module VirtualWB(
             o_vwb_reg_write_rf <= 0;
             o_vwb_mux <= 0;
             end
+        else if(stall) begin
+            o_vwb_rdst <= o_vwb_rdst;
+            o_vwb_reg_write_rf <= o_vwb_reg_write_rf;
+            o_vwb_mux <= o_vwb_mux;
+        end
         else begin
             o_vwb_rdst <= i_vwb_rdst;
             o_vwb_reg_write_rf <= i_vwb_reg_write_rf;
             o_vwb_mux <= i_vwb_mux;
-            end
+        end
     end
 endmodule

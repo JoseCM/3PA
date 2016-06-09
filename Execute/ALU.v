@@ -22,13 +22,19 @@
 `define WIDTH 32
 
 //Operations Signal Specification
-`define ALU_NOP 3'b000 
-`define ALU_ADD 3'b001
-`define ALU_SUB 3'b010
-`define ALU_OR  3'b011
-`define ALU_AND 3'b100
-`define ALU_NOT 3'b101
-`define ALU_XOR 3'b110
+`define ALU_NOP     4'b0000 
+`define ALU_ADD     4'b0001
+`define ALU_SUB     4'b0010
+`define ALU_OR      4'b0011
+`define ALU_AND     4'b0100
+`define ALU_NOT     4'b0101
+`define ALU_XOR     4'b0110
+`define ALU_MUL     4'b0111
+`define ALU_DIV     4'b1000
+`define ALU_ASR     4'b1001
+`define ALU_ASL     4'b1010
+`define ALU_LSR     4'b1011
+`define ALU_LSL     4'b1100
 
 //Condition Codes Index Definition
 `define ZERO 0
@@ -44,18 +50,25 @@ module ALU(
     
     /* Ctrl Signals */
     input i_CC_WE,           // Condition Code Write Enable
-    input [2:0] i_ALU_Ctrl, // Alu operation control signals
+    input [3:0] i_ALU_Ctrl, // Alu operation control signals
     
     /*reset signal*/
     input reset,
+    
+    /****************VIC*****************/
+    input i_VIC_CCodes_ctrl,
+    input [3:0] i_VIC_CCodes,
 
     /* Outputs */
     output reg [`WIDTH-1:0] ro_ALU_rslt, 
     output reg [3:0] ro_CCodes
     );
     
-    reg c; //Auxiliar to carry out determination
+    //reg c; //Auxiliar to carry out determination
+    reg [`WIDTH-1:0] AUX_SL ; //Substitute of the previous c register. 
     wire subt = (i_ALU_Ctrl == `ALU_SUB); //In case it's a subb operation
+    wire mul = (i_ALU_Ctrl == `ALU_MUL);
+    wire div = (i_ALU_Ctrl == `ALU_DIV);
  
 
    
@@ -69,25 +82,39 @@ module ALU(
             ro_CCodes[`OVERFLOW]    <= 0;        
         end
         /*CARRY -> UNSIGNEDS........OVERFLOWS -> SIGNEDS*/
-        else if(i_CC_WE)
+        else if(i_CC_WE || i_VIC_CCodes_ctrl)
         begin
-            ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
-            ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
-            ro_CCodes[`CARRY] <= c & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
-            ro_CCodes[`OVERFLOW] <=  ((ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])));        
-            //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
+            if(i_VIC_CCodes_ctrl)
+            begin
+                ro_CCodes <= i_VIC_CCodes;
+            end
+            else begin
+                ro_CCodes[`ZERO] <= (~( |ro_ALU_rslt[`WIDTH-1:0]));
+                ro_CCodes[`NEGATIVE] <=  ro_ALU_rslt[`WIDTH-1];
+                ro_CCodes[`CARRY] <= ((|AUX_SL[`WIDTH-1:0]) & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB) | (i_ALU_Ctrl == `ALU_ASL) | (i_ALU_Ctrl == `ALU_MUL)));
+                ro_CCodes[`OVERFLOW] <=  ((~div & (ro_ALU_rslt[`WIDTH-1] & ((~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1]))^(i_Op1[`WIDTH-1]&i_Op2[`WIDTH-1]&mul))) 
+                                         | (~ro_ALU_rslt[`WIDTH-1] & ((i_Op1[`WIDTH-1] & ((subt^mul)^i_Op2[`WIDTH-1]))^(~i_Op1[`WIDTH-1]& i_Op2[`WIDTH-1]&mul))))
+                                         | (div & (i_Op2[`WIDTH-1]==0)));        
+                //~reset & ( (ro_ALU_rslt[`WIDTH-1] & ~i_Op1[`WIDTH-1] & ~(subt^i_Op2[`WIDTH-1])) | (~ro_ALU_rslt[`WIDTH-1] & i_Op1[`WIDTH-1] & (subt^i_Op2[`WIDTH-1])))  & ((i_ALU_Ctrl == `ALU_ADD) | (i_ALU_Ctrl == `ALU_SUB));
+            end
         end
     end
     
     always@(*)
-     case (i_ALU_Ctrl)
-        `ALU_NOP: ro_ALU_rslt <= 32'b0;
-        `ALU_ADD: {c,ro_ALU_rslt} <= i_Op1 + i_Op2;
-        `ALU_SUB: {c,ro_ALU_rslt} <= i_Op1 - i_Op2;
-        `ALU_OR: ro_ALU_rslt <= i_Op1 | i_Op2;
-        `ALU_AND: ro_ALU_rslt <= i_Op1 & i_Op2;
-        `ALU_NOT: ro_ALU_rslt <= ~i_Op1;
-        `ALU_XOR: ro_ALU_rslt <= i_Op1 ^ i_Op2;
-        default: ro_ALU_rslt <= 32'b0;
-     endcase
+        case (i_ALU_Ctrl)
+            `ALU_NOP: ro_ALU_rslt           <= 32'b0;
+            `ALU_ADD: {AUX_SL,ro_ALU_rslt}  <= i_Op1 + i_Op2;
+            `ALU_SUB: {AUX_SL,ro_ALU_rslt}  <= i_Op1 - i_Op2;
+            `ALU_OR : ro_ALU_rslt           <= i_Op1 | i_Op2;
+            `ALU_AND: ro_ALU_rslt           <= i_Op1 & i_Op2;
+            `ALU_NOT: ro_ALU_rslt           <= ~i_Op1;
+            `ALU_XOR: ro_ALU_rslt           <= i_Op1 ^ i_Op2;
+            `ALU_MUL: {AUX_SL,ro_ALU_rslt}  <= i_Op1 * i_Op2;
+            `ALU_DIV: ro_ALU_rslt           <= i_Op1 / i_Op2;
+            `ALU_ASR: ro_ALU_rslt           <= $signed(i_Op1) >>> i_Op2[4:0]; //$signed task is synthetizable. Check Coding Guidelines for Datapath Synthesis (Synopsys)
+            `ALU_ASL: {AUX_SL,ro_ALU_rslt}  <= $signed(i_Op1) <<< i_Op2[4:0];
+            `ALU_LSR: ro_ALU_rslt           <= i_Op1 >> i_Op2;
+            `ALU_LSL: ro_ALU_rslt           <= i_Op1 << i_Op2;
+            default:  ro_ALU_rslt           <= 32'b0;
+        endcase
 endmodule

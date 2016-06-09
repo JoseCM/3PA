@@ -1,0 +1,7 @@
+LD r1,#100
+LD r2,#3
+NOP
+NOP
+NOP
+ASL r3,r1,r2
+HLT

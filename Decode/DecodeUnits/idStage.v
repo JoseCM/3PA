@@ -19,8 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.v"
-`include "defines.v"
+`include "pipelinedefs.vh"
+`include "defines.vh"
 
 module idStage(
     input [`INST_WIDTH-1:0] iIR,
