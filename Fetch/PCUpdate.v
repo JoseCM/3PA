@@ -102,7 +102,6 @@ module PCUpdate(
    
    /**************************/
     output [31:0] Icache_bus_out,
-<<<<<<< HEAD
     input [32:0] Icache_bus_in,
 
     /**********VIC*************/
@@ -145,41 +144,3 @@ module PCUpdate(
                                            
        
 endmodule
-=======
-    input [32:0] Icache_bus_in
-    
-    );
-    
-    reg [31:0] new_InstrAddr;
-    wire [31:0] new_IR;   
-
-    assign Icache_bus_out =  new_InstrAddr;
-    assign Imiss = Icache_bus_in[32];
-    assign new_IR = Rst ? 32'b0 : Icache_bus_in[31:0];
-    
-    always @(posedge Clk)
-    begin
-    
-        if(Rst)
-        begin
-                new_InstrAddr <= 0;
-        end
-        else
-        begin
-              new_InstrAddr <= (FlushPipeandPC)               ?  JmpAddr:
-                               (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
-                               (PCSource)                     ?  Predict:
-                                                                 PC ;
-        end                         
-        
-    end
-    
-    assign InstrAddr = Rst ? 32'b0 : new_InstrAddr;
-    assign IR = Rst? 32'b0 : new_IR;
-    assign PC = Rst? 32'b0 : 
-                (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush)) ? new_InstrAddr + 4'b0100 :
-                PC;
-                                        
-
-    endmodule
->>>>>>> upstream/cache_vic_merge
