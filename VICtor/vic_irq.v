@@ -41,14 +41,16 @@ generate //verificar a necessidade de generate
             irq_x[i] =  (i_rst)  ?                                                           0 : 
                         (~aux_IRQ[i] && irq_x[i] && i_en)?                                   0 :
                         (i_reg[4*i+3:4*i+1]==3'b100 && i_reg[4*i]==i_ext[i])?                1 : 
-                        (i_reg[4*i+3] && i_ext[i] && i_ext[i]!=aux_IRQ[i] && i_reg[4*i+2])?  1 : 
-                        (i_reg[4*i+3] && ~i_ext[i] && i_ext[i]!=aux_IRQ[i] && i_reg[4*i+1])? 1 : 
+                        (i_reg[4*i+3] && i_ext[i] && ~aux_ext[i] && i_reg[4*i+2])?           1 : 
+                        (i_reg[4*i+3] && ~i_ext[i] && aux_ext[i] && i_reg[4*i+1])?           1 : 
                                                                                              irq_x[i];
+            aux_ext[i]=i_ext[i];
         end 
     end
 endgenerate
 //No reset as interrupcoes ativas ao nivel sao ignoradas até acontecer uma transicao
 //isto acontece porque os perifericos devem ser configurados antes de poderem interromper o CPU
+reg [30:0]aux_ext=0;
 reg aux_i_irq=0;
 reg [30:0] aux_IRQ=0;
 always@(irq_x or i_IRQ or i_en) begin //A interrupcao atual terminou o processamento
@@ -80,4 +82,3 @@ task new_interrupt;
 endtask    
    
 endmodule
-
