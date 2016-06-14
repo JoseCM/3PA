@@ -269,8 +269,6 @@ module soc # (
     .LB_CriticalWord(LB_CriticalWord)
     );
     
-
-    
    //Cache & Cache Controller
    DCache datacache(
    .Clk(Clk),
@@ -296,7 +294,7 @@ module soc # (
    .RWordSelect(RWordSelect)
    );
    
-   //assign RData = (RWordSelect) ? LB_CriticalWord : C_ReadData;
+   assign RData = (RWordSelect) ? LB_CriticalWord : C_ReadData;
 
     reg [31:0] AddressDelay;
     always@ (posedge Clk) begin
