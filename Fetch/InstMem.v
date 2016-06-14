@@ -36,7 +36,7 @@ wire [5:0] Address_LSBs;
 //assign Address_LSBs = Addr[5:0] / 32'h4;
 
 rom rom(
-    .a(Addr[7:2]),
+    .a(Addr[13:2]),
     .spo(o_rom)
 );
  

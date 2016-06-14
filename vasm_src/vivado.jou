@@ -1,0 +1,61 @@
+#-----------------------------------------------------------
+# Vivado v2015.4 (64-bit)
+# SW Build 1412921 on Wed Nov 18 09:44:32 MST 2015
+# IP Build 1412160 on Tue Nov 17 13:47:24 MST 2015
+# Start of session at: Tue Jun  7 15:30:25 2016
+# Process ID: 10318
+# Current directory: /home/pedro/GITHUB/Processador/3PA/vasm_src
+# Command line: vivado
+# Log file: /home/pedro/GITHUB/Processador/3PA/vasm_src/vivado.log
+# Journal file: /home/pedro/GITHUB/Processador/3PA/vasm_src/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.xpr}
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+launch_simulation
+source soc_tb.tcl
+relaunch_sim
+save_wave_config {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/Vic_SOC.wcfg}
+add_files -fileset sim_1 -norecurse {{/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/Vic_SOC.wcfg}}
+set_property xsim.view {{/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/Vic_SOC.wcfg}} [get_filesets sim_1]
+relaunch_sim
+relaunch_sim
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+relaunch_sim
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+relaunch_sim
+relaunch_sim
+relaunch_sim
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+relaunch_sim
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+relaunch_sim
+relaunch_sim
+relaunch_sim
+reset_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects  [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -sync -no_script -force -quiet
+generate_target all [get_files  /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci]
+export_ip_user_files -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -no_script -force -quiet
+export_simulation -of_objects [get_files /home/pedro/GITHUB/Processador/3PA/IPs/rom/rom.xci] -directory {/home/pedro/GITHUB/Processador/VeSPA Pipeline Processor/VeSPA Pipeline Processor.ip_user_files/sim_scripts} -force -quiet
+relaunch_sim
+close_sim

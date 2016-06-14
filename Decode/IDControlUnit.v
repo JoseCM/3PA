@@ -19,8 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.v"
-`include "defines.v"
+`include "pipelinedefs.vh"
+`include "defines.vh"
 
 module IDControlUnit(
     input Clk,
@@ -41,6 +41,8 @@ module IDControlUnit(
     /*input forward unit*/
     input [31:0]fwdRS2,
     input fwdRS2_Sel,
+    input i_NOT_FLUSH,
+    
     
     /*Output pipeline registers to execute*/
         /*Fowarded from fetch*/
@@ -59,10 +61,14 @@ module IDControlUnit(
     output [`EX_WIDTH-1:0] oEX,   
     output [`MA_WIDTH-1:0] oMA,
     output [`WB_WIDTH-1:0] oWB,
+
     
     /*forward unit signal*/
     output IFid__Need_Rs2,
-    output [4:0] IFid__Rs2
+    output [4:0] IFid__Rs2,
+        /*RETI signal*/
+    output [`RETI_WIDTH-1:0] o_RETI,
+    output o_NOT_FLUSH
     );
     
     wire [`IDEX_WIDTH-1:0] idStageOutBus;
@@ -78,9 +84,9 @@ module IDControlUnit(
     .RS2_Sel(iR2Select),
     .EXStage(idStageOutBus[`IDEX_EX]),
     .MAStage(idStageOutBus[`IDEX_MA]),
-    .WBStage(idStageOutBus[`IDEX_WB]),
-    
-    .IFid__Need_Rs2(IFid__Need_Rs2)
+    .WBStage(idStageOutBus[`IDEX_WB]),   
+    .IFid__Need_Rs2(IFid__Need_Rs2),
+    .RETI_Inst(idStageOutBus[`IDEX_RETI])
     );
     
     idStage idStage(
@@ -110,6 +116,8 @@ module IDControlUnit(
     assign idStageOutBus[`IDEX_PC]    = iPC;
     assign idStageOutBus[`IDEX_PPCCB] = iPPCCB;
     assign idStageOutBus[`IDEX_IC]    = iIC;
+    assign idStageOutBus[`IDEX_NOT_FLUSH  ]= i_NOT_FLUSH;
+ 
     
     pipereg #(.WIDTH(`IDEX_WIDTH)) IDEXRegs(
      .clk(Clk),
@@ -134,6 +142,8 @@ module IDControlUnit(
     assign oOP1   = oEXStage[`IDEX_OP1];
     assign oOP2   = oEXStage[`IDEX_OP2];
     assign oIM    = oEXStage[`IDEX_IM];
+    assign o_RETI = oEXStage[`IDEX_RETI];
+    assign o_NOT_FLUSH =  oEXStage[`IDEX_NOT_FLUSH];
 
 endmodule
 

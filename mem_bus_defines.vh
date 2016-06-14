@@ -1,7 +1,7 @@
 `ifndef __MEM_BUS_DEF__
 `define __MEM_BUS_DEF__
 
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 // ESTES NOMES (IN / OUT) SAO DA PERSPECTIVA DA CACHE
 

@@ -1,0 +1,9 @@
+	LDI R0, #3
+	LDI R1, #100
+	NOP
+	NOP
+	NOP
+	NOP
+	ASR R2, R1, #2
+	RETI
+	HLT

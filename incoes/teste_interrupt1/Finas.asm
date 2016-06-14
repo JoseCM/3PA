@@ -1,0 +1,21 @@
+LDI r0, #12
+LDI r1, #10
+LDI r2, #9
+LDI r3, #8
+LDI r3, #15
+ST IR1, r0
+ST IR8, r1
+ST IR2, r2
+ST IR3, r3
+ST IR_ENABLE, r4
+NOP
+NOP
+NOP
+HLT
+
+
+IR1 .equ 12289
+IR8 .equ 12296
+IR2 .equ 12290
+IR3 .equ 12288
+IR_ENABLE .equ 12319

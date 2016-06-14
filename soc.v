@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 `include "mem_bus_defines.vh"
-`include "pipelinedefs.v"
+`include "pipelinedefs.vh"
 
 module soc # (
     // Parameters of Axi Master Bus Interface PAXI
@@ -186,7 +186,8 @@ module soc # (
       input [1 : 0] m02_axi_rresp,
       input m02_axi_rlast,
       input m02_axi_rvalid,
-      output m02_axi_rready
+      output m02_axi_rready,
+	  input [30:0] i_ext
     );
     
     wire [`DBUSO_WIDTH - 1 : 0] dcache_bus_i; 
@@ -200,7 +201,7 @@ module soc # (
     processor  cpu(
            .Clk(Clk),
            .Rst(Rst),
-           
+           .i_ext(i_ext), // input vic peripheral
            /***************************/
            .Dcache_bus_out(dcache_bus_o),
            .Dcache_bus_in(dcache_bus_i),

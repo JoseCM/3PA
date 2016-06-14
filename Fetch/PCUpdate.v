@@ -99,42 +99,48 @@ module PCUpdate(
     input IF_ID_Stall,
     output  [31:0]IR,
     output Imiss,
-    
-    /**************************/
+   
+   /**************************/
     output [31:0] Icache_bus_out,
-    input [32:0] Icache_bus_in
-    
-    );
-    
-    reg [31:0] new_InstrAddr;
-    wire [31:0] new_IR;   
+    input [32:0] Icache_bus_in,
 
-    assign Icache_bus_out =  new_InstrAddr;
-    assign Imiss = Icache_bus_in[32];
-    assign new_IR = Rst ? 32'b0 : Icache_bus_in[31:0];
+    /**********VIC*************/
+    input i_VIC_ctrl,
+    input [31:0] i_VIC_iaddr
     
-    always @(posedge Clk)
-    begin
-    
-        if(Rst)
-        begin
-                new_InstrAddr <= 0;
-        end
-        else
-        begin
-              new_InstrAddr <= (FlushPipeandPC)               ?  JmpAddr:
-                               (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
-                               (PCSource)                     ?  Predict:
-                                                                 PC ;
-        end                         
-        
-    end
-    
-    assign InstrAddr = Rst ? 32'b0 : new_InstrAddr;
-    assign IR = Rst? 32'b0 : new_IR;
-    assign PC = Rst? 32'b0 : 
-                (!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush)) ? new_InstrAddr + 4'b0100 :
-                PC;
-                                        
-
-    endmodule
+    );                                              
+     
+       reg [31:0] new_InstrAddr;
+       wire [31:0] new_IR;
+       
+   
+       assign Icache_bus_out =  new_InstrAddr;
+       assign Imiss = Icache_bus_in[32];
+       assign new_IR = Rst ? 32'b0 : Icache_bus_in[31:0];
+       
+       always @(posedge Clk)
+       begin
+       
+           if(Rst)
+           begin
+                   new_InstrAddr <= 0;
+           end
+           else
+           begin
+                 new_InstrAddr <=  (i_VIC_ctrl)                             ?  i_VIC_iaddr:
+                                                       (FlushPipeandPC)               ?  JmpAddr:
+                                                       (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
+                                                       (PCSource)                     ?  Predict:
+                                                                    PC ;
+           end                         
+           
+       end
+       
+       assign InstrAddr = Rst ? 32'b0 : new_InstrAddr;
+       assign IR = Rst? 32'b0 : new_IR;
+       assign PC = Rst? 32'b0 : 
+                   (i_VIC_ctrl ||(!IF_ID_Stall && (FlushPipeandPC || !IF_ID_Flush))) ? new_InstrAddr + 4'b0100 :
+                   PC;
+                                           
+       
+endmodule

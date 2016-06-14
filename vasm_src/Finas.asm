@@ -1,0 +1,44 @@
+.org 0x0
+BRA BEGIN
+
+.org 0x10
+ADD r5, r0, #10
+RETI
+
+.org 0x20
+ADD r6, r0, #10
+RETI
+
+.org 0x30
+ADD r5, r0, #10
+RETI
+
+.org 0x80
+ADD r6, r0, #10
+RETI
+
+.org 0x100
+LDI r0, #12
+LDI r1, #10
+LDI r2, #9
+LDI r3, #8
+LDI r4, #15
+ST IR1, r0
+ST IR8, r1
+ST IR2, r2
+ST IR3, r3
+ST IR_ENABLE, r4
+NOP
+NOP
+NOP
+LABEL:
+ADD r0, r1, #10
+BRA LABEL
+
+
+IR1 .equ 0x30001
+IR8 .equ 0x30008
+IR2 .equ 0x30002
+IR3 .equ 0x30003
+IR_ENABLE .equ 0x3001f
+BEGIN .equ 0x100
