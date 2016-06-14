@@ -632,8 +632,10 @@
       always @(posedge M_AXI_ACLK)                                          
           begin                                                        
             //Only check data when RVALID and RREADY are active                             
-            if(M_AXI_ARESETN == 0)
+            if(M_AXI_ARESETN == 0) begin
                 ReadData <= 0;
+                ValidReadData <= 0;
+            end
             else if (rnext) begin  
               ReadData <= M_AXI_RDATA;
               ValidReadData <= 1;    
@@ -699,8 +701,7 @@
             temp_read_error <= 0;                                                                      
             
             write_completed <= 0;
-            read_completed <= 0; 
-            ValidReadData <= 0;
+            read_completed <= 0;
           end                                                                                                   
         else                                                                                                    
           begin
