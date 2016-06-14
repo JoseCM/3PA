@@ -19,7 +19,11 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+TODO: tb cache control
+TODO: Stall logic
+TODO: fill and store buffer outputs/inputs
+*/
 module CacheIControl(
     input Clk,
     input Rst,
@@ -116,6 +120,10 @@ module CacheIControl(
     assign WStall = En && (!C_Miss && RW && SameLine) || //Stalls if the write tries to write on the same cache line of the LineBuffer
                     En && (C_Miss && RW && RBusy) || //Stalls if there's a write miss and the LineBuffer is occupied by previous misses
                     En && (RW && WBusy);    //Stalls if there's a write and the previous one hasn't finished
+
+
+
+
 
 //----------------------------WRITE STATE MACHINE-------------------------
 
@@ -239,8 +247,13 @@ module CacheIControl(
                WBusy <= 0;
                WC_OEn <= 1;
                Merge <= 0;
+<<<<<<< HEAD
+               WriteType <= 0;
+               StoreBuff_Enable <= 1;
+=======
                WriteTypeW <= 0;
                StoreBuff_Enable <= 0;
+>>>>>>> DataAccess
                FromStoreBuffer <= 1;
             end
         endcase

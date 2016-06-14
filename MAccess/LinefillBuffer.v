@@ -51,32 +51,7 @@ module LinefillBuffer(
     assign CriticalWord = Data & {32{FirstDataAcquired}};//word is determined by LSB of address
     
     wire [2:0] wordIndex = (Counter + WordAddress) & 32'b111; //store only the 3 LSB of the sum, so it wraps
-    
-    /*Write in the correct buffer*/
-    always @(posedge Clk) begin
-        if(!Enable) begin
-            Counter <= 0; 
-        end
-        else if(RequestAttended) begin
-            if(Counter == 7 && RequestAttended) begin
-                LineReadCompleted <= 1;
-            end
-            if(!LineReadCompleted) begin
-                Buff[wordIndex] <= Data;
-                Counter <= Counter + 1;
-            end
-        end
-    end
-    
-//    //Check all words read
-//    always @(posedge Clk) begin
-//        if(!Enable) begin
-//        end
-//        else if(Counter == 7 && state == RUNNING) begin
-//            Counter <= 0; //reset counter
-//        end
-//    end
-    
+        
     //check that the first word is read
     assign FirstDataAcquired = Enable && (Counter == 0 && RequestAttended );
     //state machine
@@ -87,7 +62,7 @@ module LinefillBuffer(
             FirstEnable <= 1;
             Counter <= 0;
             LineReadCompleted <= 0;
-        end
+        end 
         else begin
             case(state)
                 IDLE:
@@ -116,6 +91,17 @@ module LinefillBuffer(
                         state <= RUNNING;
                     end
             endcase
+        end
+        
+        /* Write in the correct buffer */
+        if(RequestAttended && Enable) begin
+            if(Counter == 7 && RequestAttended) begin
+                LineReadCompleted <= 1;
+            end
+            if(!LineReadCompleted) begin
+                Buff[wordIndex] <= Data;
+                Counter <= Counter + 1;
+            end
         end
     end         
 endmodule
