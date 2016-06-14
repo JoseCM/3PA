@@ -551,10 +551,10 @@
 	wire is_reading = init_txn_pulse | start_single_burst_read | burst_read_active;
     assign  start_read = ((miss & ~prev_miss)  || dup_miss) & ~is_reading;
 
-    always @(posedge start_read)
-    begin
-        valid[slave_address[index_msb:index_lsb]] <= 0;
-    end
+//    always @(posedge start_read)
+//    begin
+//        valid[slave_address[index_msb:index_lsb]] <= 0;
+//    end
 
     integer i;
 	always @(posedge M_AXI_ACLK)
@@ -567,6 +567,10 @@
 	           valid[i] <= 0;
 	       end
 	   end
+	   else if(start_read)
+       begin
+            valid[slave_address[index_msb:index_lsb]] <= 0;
+       end
 	   else if(M_AXI_RLAST & M_AXI_RVALID & M_AXI_RREADY) 
 	   begin
 	      tag[slave_addr[index_msb:index_lsb]] <= slave_addr[31:tag_lsb];
@@ -576,7 +580,12 @@
 	
 	always @(posedge M_AXI_ACLK) 
 	begin
-	if(rnext && burst_read_active)
+	if (~axi_arvalid && ~burst_read_active && ~start_single_burst_read && init_txn_pulse)
+     begin
+        for(j = 0; j < CACHE_LINE_SIZE/4; j=j+1)
+            read_cache_lines[j] <= 1'b0;    
+     end   
+    else if(rnext && burst_read_active)
 	begin
         cache[slave_addr[index_msb:index_lsb]][(my_read_index) + 3] <= M_AXI_RDATA[31:24];
         cache[slave_addr[index_msb:index_lsb]][(my_read_index) + 2] <= M_AXI_RDATA[23:16];
@@ -591,9 +600,7 @@
     begin 
         if (~axi_arvalid && ~burst_read_active && ~start_single_burst_read && init_txn_pulse)     
         begin                                                                                                       
-            start_single_burst_read <= 1'b1;          
-            for(j = 0; j < CACHE_LINE_SIZE/4; j=j+1)
-                read_cache_lines[j] <= 1'b0;       
+            start_single_burst_read <= 1'b1;               
         end                                                                                                                     
         else                                                                                                                                                                              
             start_single_burst_read <= 1'b0; //Negate to generate a pulse                            
