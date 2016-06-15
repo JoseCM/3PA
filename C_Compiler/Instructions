@@ -1,0 +1,12 @@
+1) Download C Front-end
+sudo apt-get install clang
+
+2) Compile C to Intermediate representation (Do not use optmizations)
+clang -S -emit-llvm main.c -o main.ll
+
+3) Compile to get assembly representation
+./llc main.ll -march=leg
+
+4) Remove .text and .section directive from the assembly file
+
+5) Put main function first in the assembly file (To be optmized)

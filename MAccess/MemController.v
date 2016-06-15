@@ -69,7 +69,7 @@ module MemController(
                                                      `AccType_None;
                                                        
         assign Stall = (AccessType == `AccType_Periph) ? P_Stall : 
-                       (AccessType == `AccType_Mem) ? C_Stall : 0 ; //Stall não vai impedir o funcioamento?
+                       (AccessType == `AccType_Mem) ? C_Stall : 0 ;
                        
         assign OData = (AccessType  == `AccType_Periph) ? P_ReadData :
                        (AccessType  == `AccType_Mem && RWordSelect)  ? LB_CriticalWord : 

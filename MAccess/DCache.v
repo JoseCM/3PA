@@ -56,7 +56,10 @@ module DCache(
     reg [31:0] StoreBuffAddr;
     wire[31:0] WordAddress;
     wire [31:0] WordWrite;
+    wire [31:0] C_RData;
+
     
+    assign RData = (FromStoreBuffer) ? WordWrite : C_RData;
     
     /*Store buffer for writes*/
     always @(posedge Clk) begin
@@ -115,10 +118,10 @@ module DCache(
 
     /*Mux to use merge, in case of a write miss or just Line Fill buffer
     in case of a read miss*/
-    assign WCacheLine = (Merge == 1)? MergedLine : LB_LineData; 
+    assign WCacheLine = (Merge)? MergedLine : LB_LineData; 
     /*Mux to use address from store buffer or directly from CPU*/
-    assign WordAddress = (FromStoreBuffer == 1) ? StoreBuffAddr : Address;
-    assign WordWrite = (FromStoreBuffer == 1) ? StoreBuff : WData;
+    assign WordAddress = (FromStoreBuffer) ? StoreBuffAddr : Address;
+    assign WordWrite = (FromStoreBuffer) ? StoreBuff : WData;
     
     DCacheMem DCMem(
         .clk(Clk),
@@ -129,7 +132,7 @@ module DCache(
         /*Word related cache signals*/
         .word(WordWrite),
         .addr(WordAddress),
-        .inst(RData),
+        .inst(C_RData),
         .hit(hit),
         .dirty(dirty),
         /*Line related cache signals*/
