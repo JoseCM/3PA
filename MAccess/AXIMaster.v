@@ -528,12 +528,7 @@
                                                                             
                                                                             
     //Flag any write response errors                                        
-    assign write_resp_error = axi_bready & M_AXI_BVALID & M_AXI_BRESP[1]; 
-    
-    always @(posedge M_AXI_ACLK) begin
-        if(axi_bready & M_AXI_BVALID)
-            write_completed <= 1;
-    end
+    assign write_resp_error = axi_bready & M_AXI_BVALID & M_AXI_BRESP[1];
     
     //----------------------------
     //Read Address Channel
@@ -637,7 +632,11 @@
       always @(posedge M_AXI_ACLK)                                          
           begin                                                        
             //Only check data when RVALID and RREADY are active                             
-            if (rnext) begin  
+            if(M_AXI_ARESETN == 0) begin
+                ReadData <= 0;
+                ValidReadData <= 0;
+            end
+            else if (rnext) begin  
               ReadData <= M_AXI_RDATA;
               ValidReadData <= 1;    
             end
@@ -647,8 +646,7 @@
           end    
        
       always @(posedge M_AXI_ACLK) begin   
-        if (M_AXI_RVALID && axi_rready && M_AXI_RLAST) 
-            read_completed <= 1;
+        
       end                             
                                                                            
     //Flag any read response errors                                         
@@ -657,7 +655,8 @@
     always @(posedge M_AXI_ACLK) begin
         if (M_AXI_ARESETN == 0)                                          
           begin                                                          
-            ReadError <= 2'b0;                                           
+            ReadError <= 2'b0; 
+                                                      
           end                                                            
         else if(read_resp_error) 
           begin
@@ -690,7 +689,7 @@
       //implement master command interface state machine                                                        
                                                                                                                 
       always @ ( posedge M_AXI_ACLK)                                                                            
-      begin                                                                                                     
+      begin
         if (M_AXI_ARESETN == 1'b0 )                                                                             
           begin                                                                                                 
             // reset condition                                                                                  
@@ -700,13 +699,19 @@
             start_single_burst_read  <= 1'b0;                                                                   
             compare_done      <= 1'b0;    
             temp_read_error <= 0;                                                                      
+            
             write_completed <= 0;
-            read_completed <= 0; 
-            ValidReadData <= 0;
-            ReadData <= 0;
+            read_completed <= 0;
           end                                                                                                   
         else                                                                                                    
-          begin                                                                                                                                                                                                                                                                                      
+          begin
+            
+            if(axi_bready & M_AXI_BVALID)
+               write_completed <= 1;
+            
+            if (M_AXI_RVALID && axi_rready && M_AXI_RLAST) 
+               read_completed <= 1; 
+                                                                                                                                                                                                                                                                                                
             case (mst_exec_rstate)                                                                                                                                                                                  
               IDLE:                                                                                     
                 // This state is responsible to wait for user defined C_M_START_COUNT                           
@@ -733,7 +738,8 @@
                    mst_exec_rstate <= IDLE;
                    read_completed <= 0;
                    temp_read_error <= 0;
-                end                                                                                                                                                                                    
+                end 
+                                                                                                                                                                                
             endcase 
             
             case(mst_exec_wstate) 
@@ -760,7 +766,7 @@
                        write_completed <= 0;
                     end                
             endcase                                                                                  
-         end                                                                                                
+         end
       end //MASTER_EXECUTION_PROC                                                                               
                                                                                                                 
                                                                                                                 
