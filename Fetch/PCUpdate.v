@@ -127,10 +127,10 @@ module PCUpdate(
            end
            else
            begin
-                 new_InstrAddr <=  (i_VIC_ctrl)                             ?  i_VIC_iaddr:
-                                                       (FlushPipeandPC)               ?  JmpAddr:
-                                                       (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
-                                                       (PCSource)                     ?  Predict:
+                 new_InstrAddr <=  (i_VIC_ctrl)                   ?  i_VIC_iaddr:
+                                   (FlushPipeandPC)               ?  JmpAddr:
+                                   (PCStall || IF_ID_Stall)       ?  InstrAddr:                           
+                                   (PCSource)                     ?  Predict:
                                                                     PC ;
            end                         
            

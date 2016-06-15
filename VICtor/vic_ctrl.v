@@ -35,19 +35,16 @@ module vic_ctrl(
    output reg o_VIC_CCodes_ctrl
    );
     
-    //wire antonio;
     
     reg [31:0]saved_PC; // stores the PC value   
     reg [3:0] saved_CC;
     reg CC_PC_NotSaved;
     reg delay;
-    
-<<<<<<< HEAD
+
     reg r_irq;
     reg r_clk;
     reg r_reti;
-    
-    //assign antonio=clk;
+
     wire dummy=1'b1;
     
     always @(i_IRQ or clk or i_reti) //Assim que se sinalize uma interrup��o pelo vic_irq
@@ -99,27 +96,6 @@ module vic_ctrl(
         end
         
         if(~clk && r_clk==1) // negedge clk
-=======
-    always @(posedge i_IRQ) //Assim que se sinalize uma interrupt pelo vic_irq
-    begin
-           
-        o_IRQ_VIC <= 1'b1;            
-        if(i_reti) // Consecutive Interruptions
-        begin  
-            CommonITHandle(saved_CC, saved_PC);
-        end
-        else
-        if (i_NOT_FLUSH)
-            CommonITHandle(i_CCodes, i_PC);
-        else
-            CC_PC_NotSaved <= 1'b1;          
-    end       
-   
-    always @(negedge clk)
-    begin
-        //delay = i_NOT_FLUSH;         
-        if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
->>>>>>> 2f5175773e9a390c3ecb1ccb29b50f73c041b0ad
         begin
             if(CC_PC_NotSaved && i_NOT_FLUSH) // If There's not a bubble on the Execute Stage
             begin

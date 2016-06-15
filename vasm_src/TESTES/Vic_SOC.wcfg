@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="soc_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="soc_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="109470000fs"></ZoomStartTime>
+      <ZoomEndTime time="140170001fs"></ZoomEndTime>
+      <Cursor1Time time="125020000fs"></Cursor1Time>
+   </zoom_setting>
+   <WVObjectSize size="23" />
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/Clk">
+      <obj_property name="ElementShortName">Clk</obj_property>
+      <obj_property name="ObjectShortName">Clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/Rst">
+      <obj_property name="ElementShortName">Rst</obj_property>
+      <obj_property name="ObjectShortName">Rst</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/i_ext">
+      <obj_property name="ElementShortName">i_ext[30:0]</obj_property>
+      <obj_property name="ObjectShortName">i_ext[30:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider8" type="divider">
+      <obj_property name="label">FETCH</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/PC">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/new_InstrAddr">
+      <obj_property name="ElementShortName">new_InstrAddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">new_InstrAddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/InstrAddr">
+      <obj_property name="ElementShortName">InstrAddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">InstrAddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/IR">
+      <obj_property name="ElementShortName">IR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IR[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="vbus" fp_name="vbus9">
+      <obj_property name="label">signals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/i_VIC_ctrl">
+         <obj_property name="ElementShortName">i_VIC_ctrl</obj_property>
+         <obj_property name="ObjectShortName">i_VIC_ctrl</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/FlushPipeandPC">
+         <obj_property name="ElementShortName">FlushPipeandPC</obj_property>
+         <obj_property name="ObjectShortName">FlushPipeandPC</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/PCStall">
+         <obj_property name="ElementShortName">PCStall</obj_property>
+         <obj_property name="ObjectShortName">PCStall</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/IF_ID_Stall">
+         <obj_property name="ElementShortName">IF_ID_Stall</obj_property>
+         <obj_property name="ObjectShortName">IF_ID_Stall</obj_property>
+      </wvobject>
+      <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/fetch/fetchlogic/pcupdate/PCSource">
+         <obj_property name="ElementShortName">PCSource</obj_property>
+         <obj_property name="ObjectShortName">PCSource</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="divider10" type="divider">
+      <obj_property name="label">ALU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/execute/new_pc/i_ALU_rslt">
+      <obj_property name="ElementShortName">i_ALU_rslt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i_ALU_rslt[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/execute/new_pc/i_PC">
+      <obj_property name="ElementShortName">i_PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i_PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/execute/new_pc/o_PC_VIC">
+      <obj_property name="ElementShortName">o_PC_VIC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">o_PC_VIC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">VIC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/i_IRQ">
+      <obj_property name="ElementShortName">i_IRQ</obj_property>
+      <obj_property name="ObjectShortName">i_IRQ</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/o_IRQ_VIC">
+      <obj_property name="ElementShortName">o_IRQ_VIC</obj_property>
+      <obj_property name="ObjectShortName">o_IRQ_VIC</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/o_IRQ_PC">
+      <obj_property name="ElementShortName">o_IRQ_PC</obj_property>
+      <obj_property name="ObjectShortName">o_IRQ_PC</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/i_NOT_FLUSH">
+      <obj_property name="ElementShortName">i_NOT_FLUSH</obj_property>
+      <obj_property name="ObjectShortName">i_NOT_FLUSH</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/i_reti">
+      <obj_property name="ElementShortName">i_reti</obj_property>
+      <obj_property name="ObjectShortName">i_reti</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="logic" fp_name="/soc_tb/uut/cpu/vic/vcu/o_VIC_CCodes_ctrl">
+      <obj_property name="ElementShortName">o_VIC_CCodes_ctrl</obj_property>
+      <obj_property name="ObjectShortName">o_VIC_CCodes_ctrl</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/vic/vcu/o_VIC_iaddr">
+      <obj_property name="ElementShortName">o_VIC_iaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">o_VIC_iaddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/vic/vcu/saved_PC">
+      <obj_property name="ElementShortName">saved_PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">saved_PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" type="array" fp_name="/soc_tb/uut/cpu/vic/vr/buffer_store_data">
+      <obj_property name="ElementShortName">buffer_store_data[31:0][3:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer_store_data[31:0][3:0]</obj_property>
+   </wvobject>
+</wave_config>
