@@ -38,7 +38,7 @@ module branch_unit(
     );
     
     //changed here
-    wire [6:0] inputcat = {IRQ,PcMatchValid,JumpTaken,BranchInstr,JumpInstr,PredicEqRes,CtrlIn};  
+    wire [6:0] inputcat = {PcMatchValid,JumpTaken,BranchInstr,JumpInstr,PredicEqRes,CtrlIn};  
     
     //Could be reg?
     reg [1:0] Flush;   //auxiliar wire to determine if FlushPipePC should be asserted. Flush[1] is modified by the IRQ and Flush[0] is modified by the switch case
@@ -48,7 +48,7 @@ module branch_unit(
     //If any of the bits the Flush bus is asserted then the Flush of the Fetch and Decode must happen    
     assign FlushPipePC = (|Flush);
     
-    always @(inputcat)
+    always @(inputcat or IRQ)
     begin  
    
     // If there is an IRQ to be attended, the fetch and the decode should be flushed
