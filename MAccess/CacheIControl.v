@@ -241,7 +241,7 @@ module CacheIControl(
                Merge <= 0;
                WriteTypeW <= 0;
                StoreBuff_Enable <= 0;
-               FromStoreBuffer <= 1;
+               //FromStoreBuffer <= 1;
             end
         endcase
     end

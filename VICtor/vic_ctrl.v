@@ -1,4 +1,4 @@
-﻿`timescale 1ns / 1ps
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: RassIndustries & BL(B�ias Lindo) LDA
 // Engineers: Grupo 2/4

@@ -75,7 +75,7 @@ module FU(
     assign OP2_IdS = 0;/*(MEMwb__R_WE && IFid__Need_Rs2 && (MEMwb__Rdst==IFid__Rs2))  ? 1'b1 : //forward RS2 from write back to decde
                                                                                     1'b0;*/
                                                                                                                             
-    assign Need_Stall = ( !(IDex__RW_MEM && IDex__MemEnable) && (!EXmem__RW_MEM && EXmem__MemEnable) && ( ((IDex__Need_Rs1) && (EXmem__Rdst==IDex__Rs1)) || ((IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2)) ))     ?   1'b1:
+    assign Need_Stall = ( !(IDex__RW_MEM && IDex__MemEnable && !IDex__Need_Rs1) && (!EXmem__RW_MEM && EXmem__MemEnable) && ( ((IDex__Need_Rs1) && (EXmem__Rdst==IDex__Rs1)) || ((IDex__Need_Rs2) && (EXmem__Rdst==IDex__Rs2)) ))     ?   1'b1:
                                                                                                                                                                                                                       1'b0;
                         //!(IDex__RW_MEM && IDex__MemEnable) was added to prevent a stall when there's a Load followed by a store  
     always @(posedge clk)
