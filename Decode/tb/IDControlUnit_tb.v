@@ -20,8 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-`include "pipelinedefs.v"
-`include "defines.v"
+`include "pipelinedefs.vh"
+`include "defines.vh"
 
 module IDControlUnit_tb(
 

@@ -19,8 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`include "pipelinedefs.vh"
 `include "defines.vh"
+`include "pipelinedefs.vh"
 
 module ControlUnit(
         input [4:0] opcode,
