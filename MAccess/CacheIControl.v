@@ -57,8 +57,8 @@ module CacheIControl(
     parameter [2:0] READ_MISS_DIRTY = 1, READ_MISS_NOT_DIRTY = 2,
                     WAIT_COMPLETION_DIRTY = 3, WAIT_COMPLETION_NON_DIRTY = 4, WRITE_CACHE = 5;
        
-    `define LINE_T	11
-    `define LINE_B  5        //7 bits to address 128 lines
+    `define LINE_T	7
+    `define LINE_B  5        //3 bits to address 8 lines
                                 
     reg [2:0] ReadState;
     reg [2:0] WriteState;
@@ -216,6 +216,7 @@ module CacheIControl(
                     Merge <= 1;
                     WriteTypeW <= 1;                    
                     StoreBuff_Enable <= 0;
+                    FromStoreBuffer <= 0;
                 end   
             end
             START_AXI_R:
@@ -231,6 +232,7 @@ module CacheIControl(
                  WriteTypeW <= 1;
                  LB_EnableW <= 0;
                  StoreBuff_Enable <= 0;
+                 FromStoreBuffer <= 0;
                end
             end
             MERGE_RESULTS:
@@ -240,8 +242,8 @@ module CacheIControl(
                WC_OEn <= 1;
                Merge <= 0;
                WriteTypeW <= 0;
-               StoreBuff_Enable <= 0;
-               //FromStoreBuffer <= 1;
+               StoreBuff_Enable <= 1;
+               FromStoreBuffer <= 0;
             end
         endcase
     end
@@ -253,6 +255,7 @@ module CacheIControl(
             ReadState  <= IDLE;
             LB_OccupiedR <= 0;
             LW_OccupiedR <= 0;
+            LW_EnableR <= 0;
             RC_OEn <= 1;
             WriteTypeR <= 0;
             RBusy <= 0;
