@@ -28,6 +28,7 @@ module vic_ctrl(
    input i_IRQ,
    input [3:0] i_CCodes,
    input i_NOT_FLUSH,
+   input i_FlushPipeAndPC,          // this is not flushpipeandpc but pcstall | ifidstall
    output reg o_IRQ_PC,
    output reg [31:0] o_VIC_iaddr,
    output reg [3:0] o_VIC_CCodes,
@@ -80,7 +81,7 @@ module vic_ctrl(
             end
             else
             begin          
-                if(o_IRQ_PC)
+                if(o_IRQ_PC && ~i_FlushPipeAndPC)
                     begin
                         o_IRQ_PC <= 0;               
                     end

@@ -109,12 +109,12 @@ module ALU(
             `ALU_AND: ro_ALU_rslt           <= i_Op1 & i_Op2;
             `ALU_NOT: ro_ALU_rslt           <= ~i_Op1;
             `ALU_XOR: ro_ALU_rslt           <= i_Op1 ^ i_Op2;
-            `ALU_MUL: {AUX_SL,ro_ALU_rslt}  <= i_Op1 * i_Op2;
-            `ALU_DIV: ro_ALU_rslt           <= i_Op1 / i_Op2;
-            `ALU_ASR: ro_ALU_rslt           <= $signed(i_Op1) >>> i_Op2[4:0]; //$signed task is synthetizable. Check Coding Guidelines for Datapath Synthesis (Synopsys)
-            `ALU_ASL: {AUX_SL,ro_ALU_rslt}  <= $signed(i_Op1) <<< i_Op2[4:0];
-            `ALU_LSR: ro_ALU_rslt           <= i_Op1 >> i_Op2;
-            `ALU_LSL: ro_ALU_rslt           <= i_Op1 << i_Op2;
+//            `ALU_MUL: {AUX_SL,ro_ALU_rslt}  <= i_Op1 * i_Op2;
+//            `ALU_DIV: ro_ALU_rslt           <= i_Op1 / i_Op2;
+//            `ALU_ASR: ro_ALU_rslt           <= $signed(i_Op1) >>> i_Op2[4:0]; //$signed task is synthetizable. Check Coding Guidelines for Datapath Synthesis (Synopsys)
+//            `ALU_ASL: {AUX_SL,ro_ALU_rslt}  <= $signed(i_Op1) <<< i_Op2[4:0];
+//            `ALU_LSR: ro_ALU_rslt           <= i_Op1 >> i_Op2;
+//            `ALU_LSL: ro_ALU_rslt           <= i_Op1 << i_Op2;
             default:  ro_ALU_rslt           <= 32'b0;
         endcase
 endmodule

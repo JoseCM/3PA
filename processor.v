@@ -453,7 +453,10 @@ module processor(
             
             /*Fetch Stage*/
             .o_VIC_iaddr(i_VIC_iaddr),
-            .o_VIC_ctrl(i_VIC_ctrl)           
+            .o_VIC_ctrl(i_VIC_ctrl),    
+            
+            /*Branch Unit Signals*/
+            .FlushPipeAndPC(PCStall || IF_ID_Stall)       
             );
             
 endmodule

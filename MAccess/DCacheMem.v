@@ -51,13 +51,19 @@
 
 
 `define TAG_T	31
-`define TAG_B	8       //24 bits but only 6 bits are used to address 64 tags
+`define TAG_B	7       //25 bits but only 6 bits are used to address 64 tags
 
-`define LINE_T	7
-`define LINE_B	5        //3 bits to address 8 lines
+`define LINE_T	6
+`define LINE_B	5        //2 bits to address 4 lines
 
 `define WORD_T	4
 `define WORD_B  2       //3 bits to address 8 words
+
+`define LINES   4
+
+`define TAGSIZE (`TAG_T - `LINE_T)
+`define LINESIZE (`LINE_T - `WORD_T)
+`define WORDSIZE (`WORD_T - 1)
 
 module DCacheMem(
 //PROCESSOR INTERFACE
@@ -80,15 +86,15 @@ module DCacheMem(
 	output [255:0] cache_write_data //Data to write on memory on a cache miss with dirty=1
     );
  
-reg[255:0] cache_set[7:0];    //cache_set with 8 lines, and 32bytes each line
-reg[255:0] cache_set2[7:0];   //cache_set2 with 8 lines, and 32bytes each line
-reg[255:0] cache_set3[7:0];    //cache_set3 with 8 lines, and 32bytes each line
-reg[255:0] cache_set4[7:0];   //cache_set4 with 8 lines, and 32bytes each line
-reg[25:0]  cache_tag[7:0];    //dirty+valid+tag bits for set 1
-reg[25:0]  cache_tag2[7:0];   //dirty+valid+tag bits for set 2
-reg[25:0]  cache_tag3[7:0];   //dirty+valid+tag bits for set 3
-reg[25:0]  cache_tag4[7:0];   //dirty+valid+tag bits for set 4
-reg[2:0]   cache_lru[7:0];    //LRU bits
+reg[255:0] cache_set[`LINES-1:0];    //cache_set with 8 lines, and 32bytes each line
+reg[255:0] cache_set2[`LINES-1:0];   //cache_set2 with 8 lines, and 32bytes each line
+reg[255:0] cache_set3[`LINES-1:0];    //cache_set3 with 8 lines, and 32bytes each line
+reg[255:0] cache_set4[`LINES-1:0];   //cache_set4 with 8 lines, and 32bytes each line
+reg[`TAGSIZE+1:0]  cache_tag[`LINES-1:0];    //dirty+valid+tag bits for set 1
+reg[`TAGSIZE+1:0]  cache_tag2[`LINES-1:0];   //dirty+valid+tag bits for set 2
+reg[`TAGSIZE+1:0]  cache_tag3[`LINES-1:0];   //dirty+valid+tag bits for set 3
+reg[`TAGSIZE+1:0]  cache_tag4[`LINES-1:0];   //dirty+valid+tag bits for set 4
+reg[2:0]   cache_lru[`LINES-1:0];    //LRU bits
 
  
  //Wires for reads and writes from CPU
@@ -97,10 +103,10 @@ wire[255:0]	new_cache_set;
 wire[255:0]	new_cache_set2;
 wire[255:0]	new_cache_set3;
 wire[255:0]	new_cache_set4;
-wire[25:0]	new_cache_tag;
-wire[25:0]	new_cache_tag2;
-wire[25:0]	new_cache_tag3;
-wire[25:0]	new_cache_tag4;
+wire[`TAGSIZE+1:0]	new_cache_tag;
+wire[`TAGSIZE+1:0]	new_cache_tag2;
+wire[`TAGSIZE+1:0]	new_cache_tag3;
+wire[`TAGSIZE+1:0]	new_cache_tag4;
 
 wire[2:0]   new_cache_lru;
 
@@ -112,10 +118,10 @@ wire cache_hit_set3;
 wire cache_hit_set4;
 
 wire[255:0] line_source;
-wire[25:0] cache_tag_temp;
-wire[25:0] cache_tag2_temp;
-wire[25:0] cache_tag3_temp;
-wire[25:0] cache_tag4_temp;
+wire[`TAGSIZE+1:0] cache_tag_temp;
+wire[`TAGSIZE+1:0] cache_tag2_temp;
+wire[`TAGSIZE+1:0] cache_tag3_temp;
+wire[`TAGSIZE+1:0] cache_tag4_temp;
 wire[2:0]  cache_lru_temp;
 
  //Wires for reads and writes from Mem
@@ -124,29 +130,29 @@ wire[255:0]	new_cache_set_mem;
 wire[255:0]	new_cache_set2_mem;
 wire[255:0]	new_cache_set3_mem;
 wire[255:0]	new_cache_set4_mem;
-wire[25:0]	new_cache_tag_mem;
-wire[25:0]	new_cache_tag2_mem;
-wire[25:0]	new_cache_tag3_mem;
-wire[25:0]	new_cache_tag4_mem;
+wire[`TAGSIZE+1:0]	new_cache_tag_mem;
+wire[`TAGSIZE+1:0]	new_cache_tag2_mem;
+wire[`TAGSIZE+1:0]	new_cache_tag3_mem;
+wire[`TAGSIZE+1:0]	new_cache_tag4_mem;
 
 wire[2:0]   new_cache_lru_mem;
 
 //wire[255:0] line_source_mem;
-wire[25:0] cache_tag_temp_mem;
-wire[25:0] cache_tag2_temp_mem;
-wire[25:0] cache_tag3_temp_mem;
-wire[25:0] cache_tag4_temp_mem;
+wire[`TAGSIZE+1:0] cache_tag_temp_mem;
+wire[`TAGSIZE+1:0] cache_tag2_temp_mem;
+wire[`TAGSIZE+1:0] cache_tag3_temp_mem;
+wire[`TAGSIZE+1:0] cache_tag4_temp_mem;
 wire[2:0]  cache_lru_temp_mem;
 integer i;
 
 //////ALIAS/////////
-wire[2:0] line_addr;
+wire[`LINESIZE-1:0] line_addr;
 assign line_addr = addr[`LINE_T:`LINE_B];
 
-wire[2:0] word_addr;
+wire[`WORDSIZE-1:0] word_addr;
 assign word_addr = addr[`WORD_T:`WORD_B];
 
-wire[2:0] line_addr_mem;
+wire[`LINESIZE-1:0] line_addr_mem;
 assign line_addr_mem = LineAddr[`LINE_T:`LINE_B];
 
 /*
@@ -157,7 +163,7 @@ assign word_addr_mem = LineAddr[`WORD_T:`WORD_B];*/
 
 always @(posedge clk) begin
 	if (rst) begin
-		for (i=0; i<128 ; i=i+1  ) begin
+		for (i=0; i<`LINES ; i=i+1  ) begin
 		    cache_set[i] <= 256'b0;
 		    cache_set2[i] <= 256'b0;
 		    cache_set3[i] <= 256'b0;
@@ -212,16 +218,16 @@ assign cache_tag3_temp_mem = cache_tag3[line_addr_mem];
 assign cache_tag4_temp_mem = cache_tag4[line_addr_mem];
 assign cache_lru_temp_mem = cache_lru[line_addr_mem];
 
-assign cache_hit_set  = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag_temp[24:0]) && (W_Enable || R_Enable))?	1'b1	:
+assign cache_hit_set  = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag_temp[`TAGSIZE:0]) && (W_Enable || R_Enable))?	1'b1	:
           																		1'b0	;
       
-assign cache_hit_set2 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag2_temp[24:0]) && (W_Enable || R_Enable))?	1'b1	:
+assign cache_hit_set2 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag2_temp[`TAGSIZE:0]) && (W_Enable || R_Enable))?	1'b1	:
                                                                                 1'b0    ;    	
                                                                                 
-assign cache_hit_set3 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag3_temp[24:0]) && (W_Enable || R_Enable))?	1'b1	:
+assign cache_hit_set3 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag3_temp[`TAGSIZE:0]) && (W_Enable || R_Enable))?	1'b1	:
                                                                                 1'b0    ;  																	
 
-assign cache_hit_set4 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag4_temp[24:0]) && (W_Enable || R_Enable))?	1'b1	:
+assign cache_hit_set4 = (({1'b1,addr[`TAG_T:`TAG_B]} == cache_tag4_temp[`TAGSIZE:0]) && (W_Enable || R_Enable))?	1'b1	:
                                                                                 1'b0    ;  	
           																		  
 assign cache_hit = (cache_hit_set || cache_hit_set2 || cache_hit_set3 || cache_hit_set4) ? 1'b1:
@@ -231,8 +237,8 @@ assign new_cache_set =  (W_Enable && cache_hit_set)?                         wri
                         (write_type && line_addr == line_addr_mem)?          new_cache_set_mem   :
                                                                              cache_set[line_addr];
 
-assign new_cache_set2 = (W_Enable && cache_hit_set2)?                         write_cache        :
-                        (write_type && line_addr == line_addr_mem)?                   new_cache_set2_mem:
+assign new_cache_set2 = (W_Enable && cache_hit_set2)?                        write_cache        :
+                        (write_type && line_addr == line_addr_mem)?          new_cache_set2_mem:
 									                                         cache_set2[line_addr] ;
 
 assign new_cache_set3 = (W_Enable && cache_hit_set3)?                         write_cache        :
@@ -259,8 +265,7 @@ assign new_cache_tag3 = (W_Enable && cache_hit_set3)?	{2'b11,addr[`TAG_T:`TAG_B]
 assign new_cache_tag4 = (W_Enable && cache_hit_set4)?	{2'b11,addr[`TAG_T:`TAG_B]}	:
                          (write_type && line_addr == line_addr_mem)?    new_cache_tag4_mem:
                                                          cache_tag4[line_addr]      ;	
-	
-																                                
+									                                
 //New sets and tags for a write or read from Mem																							
 assign new_cache_set_mem = ( write_type && !(W_Enable && cache_hit_set) && !cache_lru_temp_mem[0] 
                             && !cache_lru_temp_mem[1] )    ?   mem_data                :
@@ -372,10 +377,10 @@ assign new_cache_lru_mem[2] = ( cache_lru_temp_mem[0] &&  write_type && !(W_Enab
 //end
 
 //Only used in a write or read miss from CPU
-wire [33:0] temp =  ( !cache_lru_temp[0] && !cache_lru_temp[1] ) ? {cache_tag_temp[25:0],line_addr,5'b0}  :
-                    ( !cache_lru_temp[0] && cache_lru_temp[1] )  ? {cache_tag2_temp[25:0],line_addr,5'b0} :
-                    ( cache_lru_temp[0] && !cache_lru_temp[2] )  ? {cache_tag3_temp[25:0],line_addr,5'b0} :
-                    ( cache_lru_temp[0] && cache_lru_temp[2] )   ? {cache_tag4_temp[25:0],line_addr,5'b0} :
+wire [33:0] temp =  ( !cache_lru_temp[0] && !cache_lru_temp[1] ) ? {cache_tag_temp[`TAGSIZE+1:0],line_addr,5'b0}  :
+                    ( !cache_lru_temp[0] && cache_lru_temp[1] )  ? {cache_tag2_temp[`TAGSIZE+1:0],line_addr,5'b0} :
+                    ( cache_lru_temp[0] && !cache_lru_temp[2] )  ? {cache_tag3_temp[`TAGSIZE+1:0],line_addr,5'b0} :
+                    ( cache_lru_temp[0] && cache_lru_temp[2] )   ? {cache_tag4_temp[`TAGSIZE+1:0],line_addr,5'b0} :
                                                                                                          0;
 
 assign cache_write_data = ( !cache_lru_temp[0] && !cache_lru_temp[1] ) ? cache_set[line_addr]  :

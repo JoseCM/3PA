@@ -57,7 +57,7 @@ module CacheIControl(
     parameter [2:0] READ_MISS_DIRTY = 1, READ_MISS_NOT_DIRTY = 2,
                     WAIT_COMPLETION_DIRTY = 3, WAIT_COMPLETION_NON_DIRTY = 4, WRITE_CACHE = 5;
        
-    `define LINE_T	7
+    `define LINE_T	6
     `define LINE_B  5        //3 bits to address 8 lines
                                 
     reg [2:0] ReadState;

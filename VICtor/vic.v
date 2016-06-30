@@ -31,6 +31,7 @@ module Vic(
     input i_reti,
     input [3:0] i_CCodes,
     input i_NOT_FLUSH,
+    input FlushPipeAndPC,
     
     output [3:0] o_CCodes,
     output [3:0] o_VIC_data,
@@ -55,6 +56,7 @@ module Vic(
         .i_IRQ(o_IRQ),                          //IRQ signal from vic_irq (interrupt occured)
         .i_CCodes(i_CCodes),                    //condition codes from execute stage
         .i_NOT_FLUSH(i_NOT_FLUSH),              //signal from execute stage that tells if its present an instruction or a bubble in that stage
+        .i_FlushPipeAndPC(FlushPipeAndPC),
         .o_IRQ_PC(o_VIC_ctrl),                  //signal to select the mux in the fetch stage and to flush the pipeline (flush IF/ID and ID/EX)
         .o_VIC_iaddr(o_VIC_iaddr),              //address that goes in to the new mux in the fetch stage
         .o_VIC_CCodes(o_CCodes),                //output condition codes (when reti occurs and when the context before interrupt must be re-established)
