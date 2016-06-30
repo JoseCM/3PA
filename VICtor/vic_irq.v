@@ -48,12 +48,16 @@ generate //verificar a necessidade de generate
         end 
     end
 endgenerate
-//No reset as interrupcoes ativas ao nivel sao ignoradas até acontecer uma transicao
-//isto acontece porque os perifericos devem ser configurados antes de poderem interromper o CPU
+
 reg [30:0]aux_ext=0;
 reg aux_i_irq=0;
 reg [30:0] aux_IRQ=0;
-always@(irq_x or i_IRQ or i_en) begin //A interrupcao atual terminou o processamento
+
+always@(irq_x or i_IRQ or i_en or o_IRQ) begin 
+    if(o_IRQ==1)begin
+        #1
+        o_IRQ=0;
+    end
     if(~i_IRQ && aux_i_irq && i_en)begin
         if(i_reg[4*o_irq_addr+2]!=0 || i_reg[4*o_irq_addr+1]!=0 || i_reg[4*o_irq_addr]!=i_ext[o_irq_addr]) //Se nao estiver ativa ao nivel
             aux_IRQ[o_irq_addr] = 0; //apaga a interrupcao individual a ser atendida
@@ -76,8 +80,6 @@ task new_interrupt;
                 o_irq_addr = k;
         end
         o_IRQ = 1;
-        #1
-        o_IRQ = 0;
     end
 endtask    
    
