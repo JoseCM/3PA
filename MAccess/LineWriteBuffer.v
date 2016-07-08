@@ -47,6 +47,8 @@ module LineWriteBuffer(
         State <= IDLE;
         StartWrite <= 0;
         FirstEnable <= 1;
+        AXIAddr <= Address;
+        AXIData <= Data;
      end
      else begin
         case(State)
@@ -54,8 +56,6 @@ module LineWriteBuffer(
                 if(FirstEnable) begin
                     State <= WAITING;
                     StartWrite <=1;
-                    AXIData <= Data;
-                    AXIAddr <= Address;
                     FirstEnable <= 0;
                 end
             end

@@ -110,7 +110,7 @@ module DCache(
     wire[255:0] WCacheLine;
     
     MergeUnit MU (
-       .Address_LSBs(StoreBuffAddr[2:0]),
+       .Address_LSBs(StoreBuffAddr[4:2]),
        .WriteData(StoreBuff),
        .CacheLine(LB_LineData),
        .MergeOutput(MergedLine)

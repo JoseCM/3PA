@@ -57,7 +57,7 @@ module CacheIControl(
     parameter [2:0] READ_MISS_DIRTY = 1, READ_MISS_NOT_DIRTY = 2,
                     WAIT_COMPLETION_DIRTY = 3, WAIT_COMPLETION_NON_DIRTY = 4, WRITE_CACHE = 5;
        
-    `define LINE_T	6
+    `define LINE_T	7
     `define LINE_B  5        //3 bits to address 8 lines
                                 
     reg [2:0] ReadState;
@@ -90,7 +90,7 @@ module CacheIControl(
     reg WriteTypeR;
     assign WriteType = WriteTypeW | WriteTypeR;
 
-    wire SameLine = (LineAddress[`LINE_T:`LINE_B] == WordAddress[`LINE_T:`LINE_B]) && RBusy;
+    wire SameLine = (LineAddress[`LINE_T:`LINE_B] == WordAddress[`LINE_T:`LINE_B]) && (RBusy || WBusy);
     
     //If Read/Write and Read/WriteState is Idle use Idle Values
     //Else use Write or Read State Machine Values.
@@ -129,6 +129,8 @@ module CacheIControl(
         WriteTypeW <= 0;
         LW_EnableW <= 0;
         LB_EnableW <= 0;
+        LB_OccupiedW <= 0;
+        LW_OccupiedW <= 0;
         StoreBuff_Enable <= 1;
         FromStoreBuffer <= 0;
         WBusy <= 0;
@@ -260,6 +262,8 @@ module CacheIControl(
             WriteTypeR <= 0;
             RBusy <= 0;
             LB_EnableR <= 0;
+            LB_OccupiedR <= 0;
+            LW_OccupiedR <= 0;
             WriteCacheDummy <= 0;
         end
         else
